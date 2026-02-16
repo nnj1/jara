@@ -39,6 +39,7 @@ extends Node3D
 @onready var chest_scene: PackedScene = preload('res://scenes/model_scenes/Chest.tscn')
 @onready var box_scene: PackedScene = preload('res://scenes/model_scenes/Box.tscn')
 @onready var spike_scene: PackedScene = preload('res://scenes/model_scenes/Spikes.tscn')
+@onready var skull_scene: PackedScene = preload('res://scenes/model_scenes/Skull.tscn')
 
 # PILLARS
 @onready var pillar_scene: PackedScene = preload('res://scenes/model_scenes/Pillar.tscn')
@@ -64,10 +65,17 @@ func _ready() -> void:
 			place_block(x_unit, z_unit, 2.0)
 			if randf() < 0.1:
 				place_chandelier(x_unit, z_unit, 1.0)
+			
+			# add random amount of skulls in the unit square
+			if randf() < 0.05:
+				for i in randi_range(0, 4):
+					place_skull(x_unit, z_unit)
 				
 			# make things a little more sparse
 			if x_unit % 2 == 0 and z_unit % 2 == 0:
-				if randf() < 0.3:
+				if randf() < 0.1:
+					place_hexagon(x_unit, z_unit)
+				elif randf() < 0.3:
 					if randf() < 0.5:
 						place_pillar(x_unit, z_unit)
 					elif randf() < 0.5:
@@ -124,6 +132,16 @@ func place_floor_tile(x_unit, z_unit, y_unit = 0.0):
 	var y_offset = 0.0
 	floor_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
 	self.add_child(floor_instance)
+	
+func place_hexagon(x_unit, z_unit, y_unit = 0.0):
+	var hexagon_instance = hexagon_scene.instantiate()
+	var aabb_size = get_first_mesh_size(hexagon_instance)
+	var x_offset = aabb_size.x / 2.0
+	var z_offset = aabb_size.z / 2.0
+	var y_offset = aabb_size.y / 2.0
+	hexagon_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
+	#hexagon_instance.rotation.y = randf_range(0, 2*PI)
+	self.add_child(hexagon_instance)
 
 func place_arch_roof(x_unit, z_unit, y_unit = 1.0):
 	var arch_roof_instance = arch_roof_scene.instantiate()
@@ -195,6 +213,18 @@ func place_box(x_unit, z_unit, y_unit = 0.0):
 	box_instance.position = Vector3(x_unit * unit_size + x_offset + randf_range(0, 20), y_unit * unit_size + y_offset, z_unit * unit_size + z_offset + randf_range(0, 20))
 	box_instance.rotation.y = randf_range(0, 2*PI)
 	self.add_child(box_instance)
+	
+func place_skull(x_unit, z_unit, y_unit = 0.0):
+	var skull_instance = skull_scene.instantiate()
+	var aabb_size = get_first_mesh_size(skull_instance)
+	var x_offset = aabb_size.x / 2.0
+	var z_offset = aabb_size.z / 2.0
+	var y_offset = aabb_size.y / 2.0
+	skull_instance.position = Vector3(x_unit * unit_size + x_offset + randf_range(0, 20), y_unit * unit_size + y_offset + 5, z_unit * unit_size + z_offset + randf_range(0, 20))
+	skull_instance.rotation.y = randf_range(0, 2*PI)
+	skull_instance.rotation.x = randf_range(0, 2*PI)
+	skull_instance.rotation.z = randf_range(0, 2*PI)
+	self.add_child(skull_instance)
 	
 func place_x_arch(x_unit, z_unit, y_unit = 1.0):
 	var arch_instance = arch_scene.instantiate()

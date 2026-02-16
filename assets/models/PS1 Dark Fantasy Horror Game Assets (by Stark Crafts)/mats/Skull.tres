@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://s08bsevn47oq"]
+
+[ext_resource type="Texture2D" uid="uid://hue7atwji3xb" path="res://assets/models/PS1 Dark Fantasy Horror Game Assets (by Stark Crafts)/PS1_Skull/ps1_skull_256x256.png" id="1_cm36o"]
+
+[resource]
+resource_name = "Skull"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.9063318, 0.9063318, 0.9063318, 1)
+albedo_texture = ExtResource("1_cm36o")
+emission_enabled = true

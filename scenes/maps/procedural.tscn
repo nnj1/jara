@@ -12,6 +12,9 @@
 
 [node name="Procedural" type="Node3D" unique_id=2063806412]
 script = ExtResource("1_6ptlr")
+unit_size = null
+height_units = null
+width_units = null
 
 [node name="Floor_Tiles" parent="." unique_id=571386383 instance=ExtResource("2_e5la6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 10)

@@ -37,7 +37,15 @@ import_script/path=""
 materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
-_subresources={}
+_subresources={
+"materials": {
+"Skull": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/models/PS1 Dark Fantasy Horror Game Assets (by Stark Crafts)/mats/Skull.tres",
+"use_external/path": "uid://s08bsevn47oq"
+}
+}
+}
 fbx/importer=0
 fbx/allow_geometry_helper_nodes=false
 fbx/embedded_image_handling=1

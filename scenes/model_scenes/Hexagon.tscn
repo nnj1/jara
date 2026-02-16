@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://brm8a6hfdrt8t"]
 
 [ext_resource type="Material" uid="uid://csj0kp6mhs3of" path="res://assets/models/PSX_Dungeon/mats/N64.tres" id="2_qjhj4"]
+[ext_resource type="PackedScene" uid="uid://bgal71avftxdv" path="res://scenes/model_scenes/Obelisk.tscn" id="2_yveb4"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_3dlpd"]
 _surfaces = [{
@@ -38,6 +39,7 @@ shadow_mesh = SubResource("ArrayMesh_3dlpd")
 points = PackedVector3Array(17.320509, 8, -10, 17.320509, 0, -10, 0, 8, -20, 17.317118, 8, 10, 0, 0, -20, 17.317118, 0, 10, -17.320509, 8, -10, -0.0033893585, 8, 20, 0, 0, 20, -17.320509, 0, -10, -17.320509, 8, 9.996084, -17.320509, 0, 9.996084)
 
 [node name="Hexagon" type="Node3D" unique_id=1340504476]
+transform = Transform3D(1, 0, 0, 0, 0.25, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Cylinder_018" type="MeshInstance3D" parent="." unique_id=1580188048]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 0)
@@ -47,3 +49,6 @@ mesh = SubResource("ArrayMesh_conv7")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Cylinder_018/StaticBody3D" unique_id=885822878]
 shape = SubResource("ConvexPolygonShape3D_udvbw")
+
+[node name="Obelisk" parent="." unique_id=1660070329 instance=ExtResource("2_yveb4")]
+transform = Transform3D(3, 0, 0, 0, 10, 0, 0, 0, 3, 0, 15.132408, 0)
