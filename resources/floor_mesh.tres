@@ -1,0 +1,35 @@
+[gd_resource type="ArrayMesh" format=4 uid="uid://djhukwkwjyi03"]
+
+[ext_resource type="Material" uid="uid://csj0kp6mhs3of" path="res://assets/models/PSX_Dungeon/mats/N64.tres" id="1_rdfsw"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_7reb8"]
+_surfaces = [{
+"aabb": AABB(-10, 0, -10, 20, 1e-05, 20),
+"format": 34359742465,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAgADAAAA"),
+"name": "N64",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("AAAgQQAAAAAAACDBAAAgQQAAAAAAACBBAAAgwQAAAAAAACBBAAAgwQAAAAAAACDB")
+}]
+blend_shape_mode = 0
+
+[resource]
+resource_name = "Plane_003"
+_surfaces = [{
+"aabb": AABB(-10, 0, -10, 20, 1e-05, 20),
+"attribute_data": PackedByteArray("AACAPgAAgD4AAIA+AAAAPwAAAAAAAAA/AAAAAAAAgD4="),
+"format": 34359742487,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAgADAAAA"),
+"material": ExtResource("1_rdfsw"),
+"name": "N64",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("AAAgQQAAAAAAACDBAAAgQQAAAAAAACBBAAAgwQAAAAAAACBBAAAgwQAAAAAAACDB/3///////7//f///////v/9///////+//3///////78=")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_7reb8")

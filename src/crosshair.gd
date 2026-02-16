@@ -47,7 +47,8 @@ func change_crosshair(direction: int) -> void:
 		return
 		
 	# Cycle to the next index and wrap around to 0 at the end
-	current_index = (current_index + direction) % crosshair_textures.size()
+	#current_index = (current_index + direction) % crosshair_textures.size()
+	current_index = (current_index + direction) % 8
 	update_sprite()
 
 func update_sprite() -> void:

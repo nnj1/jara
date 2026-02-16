@@ -55,9 +55,9 @@ extends Node3D
 @onready var block_scene: PackedScene = preload('res://scenes/model_scenes/Block.tscn')
 @onready var chandelier_scene: PackedScene = preload('res://scenes/model_scenes/Chandelier.tscn')
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	
 	for x_unit in range(width_units):
 		for z_unit in range(height_units):
 			# every unit should have a floor tile and a roof tile with occasional chandelier
