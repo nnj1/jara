@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://d11crqikdatic"]
+
+[ext_resource type="Script" uid="uid://cwcro66du3h12" path="res://src/crosshair.gd" id="1_ifh15"]
+[ext_resource type="Script" uid="uid://brf6n6wrmar8f" path="res://src/game.gd" id="1_ks7w8"]
+[ext_resource type="PackedScene" uid="uid://5jg1vxu72s30" path="res://scenes/maps/procedural.tscn" id="2_ks7w8"]
+[ext_resource type="Script" uid="uid://bdk3doktgdrxf" path="res://src/flying_camera.gd" id="3_3wwfn"]
+[ext_resource type="PackedScene" uid="uid://br8v26jp51jkj" path="res://scenes/main_scenes/player.tscn" id="3_t5sjj"]
+[ext_resource type="Script" uid="uid://bt88vj1vvfen" path="res://src/fps.gd" id="4_t5sjj"]
+
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_lnu2h"]
+
+[sub_resource type="Sky" id="Sky_lbhrr"]
+sky_material = SubResource("PhysicalSkyMaterial_lnu2h")
+
+[sub_resource type="Environment" id="Environment_yqjtg"]
+background_mode = 2
+background_color = Color(1, 1, 1, 1)
+sky = SubResource("Sky_lbhrr")
+
+[node name="Game" type="Node3D" unique_id=390812690]
+script = ExtResource("1_ks7w8")
+
+[node name="flying_camera" type="Camera3D" parent="." unique_id=245619590]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 33.865936, 0)
+script = ExtResource("3_3wwfn")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=2009129899]
+layer = 2
+
+[node name="crosshair" type="Sprite2D" parent="UI" unique_id=1700244909]
+position = Vector2(576, 324)
+script = ExtResource("1_ifh15")
+
+[node name="fps" type="Label" parent="UI" unique_id=289384848]
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 20
+script = ExtResource("4_t5sjj")
+
+[node name="raycast_target" type="Label" parent="UI" unique_id=85306808]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 2
+
+[node name="raycast_center_message" type="Label" parent="UI" unique_id=616178951]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -19.0
+offset_top = 24.0
+offset_right = 21.0
+offset_bottom = 45.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+horizontal_alignment = 1
+
+[node name="players" type="Node3D" parent="." unique_id=508872652]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="players" unique_id=1967284312]
+spawn_path = NodePath("..")
+
+[node name="Player" parent="players" unique_id=1876983122 instance=ExtResource("3_t5sjj")]
+
+[node name="entities" type="Node3D" parent="." unique_id=173960560]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="entities" unique_id=527765206]
+spawn_path = NodePath("..")
+
+[node name="map" type="Node3D" parent="." unique_id=2028757765]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="map" unique_id=807090328]
+spawn_path = NodePath("..")
+
+[node name="Procedural" parent="map" unique_id=2063806412 instance=ExtResource("2_ks7w8")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1948907850]
+environment = SubResource("Environment_yqjtg")

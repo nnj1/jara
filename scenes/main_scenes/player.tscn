@@ -1,0 +1,93 @@
+[gd_scene format=3 uid="uid://br8v26jp51jkj"]
+
+[ext_resource type="Script" uid="uid://ct1dhxdmjardl" path="res://src/player.gd" id="1_40gj3"]
+[ext_resource type="AudioStream" uid="uid://bsit8dae4qwo4" path="res://assets/sfx/40 Free PSX Footsteps/Concrete/Footstep Concrete 1.ogg" id="2_jpq18"]
+[ext_resource type="Script" uid="uid://k52wjwjkrg27" path="res://src/flashlight.gd" id="2_n1f87"]
+[ext_resource type="AudioStream" uid="uid://csm0wpf215cvx" path="res://assets/sfx/40 Free PSX Footsteps/Stone/Footstep Stone 1.ogg" id="3_800tr"]
+[ext_resource type="PackedScene" uid="uid://cncp72hu1nx1b" path="res://assets/models/PSX_Weapons_GLTF/longsword.glb" id="4_mjmhq"]
+[ext_resource type="PackedScene" uid="uid://dev1mw227pf5k" path="res://assets/models/PSX_Weapons_GLTF/halberd.glb" id="5_qb6h1"]
+[ext_resource type="PackedScene" uid="uid://xi5omlmbgfqm" path="res://assets/models/PSX_Weapons_GLTF/dagger.glb" id="6_4jhke"]
+[ext_resource type="PackedScene" uid="uid://7patnof872p1" path="res://assets/models/PSX_Weapons_GLTF/katana.glb" id="7_n1f87"]
+[ext_resource type="PackedScene" uid="uid://dt6sxfkvqyr13" path="res://assets/models/PSX_Weapons_GLTF/mace.glb" id="8_imse2"]
+[ext_resource type="PackedScene" uid="uid://btwk82uak375c" path="res://assets/models/PSX_Weapons_GLTF/spear.glb" id="9_b5fxs"]
+[ext_resource type="PackedScene" uid="uid://b2cb0oo3ploep" path="res://assets/models/PSX_Weapons_GLTF/war_hammer.glb" id="10_bqlr7"]
+[ext_resource type="PackedScene" uid="uid://ce20v5msw6es3" path="res://assets/models/PSX_Weapons_GLTF/zweinhander.glb" id="11_1h5rl"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_40gj3"]
+radius = 2.0
+height = 10.0
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_40gj3"]
+radius = 2.0
+height = 10.0
+
+[node name="Player" type="CharacterBody3D" unique_id=1876983122]
+collision_layer = 2
+collision_mask = 7
+script = ExtResource("1_40gj3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1136665813]
+shape = SubResource("CapsuleShape3D_40gj3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2078191582]
+mesh = SubResource("CapsuleMesh_40gj3")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=763268410]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+current = true
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Camera3D" unique_id=1466011008]
+light_energy = 5.0
+light_size = 1.0
+spot_range = 100.0
+spot_angle = 63.1754
+script = ExtResource("2_n1f87")
+
+[node name="RayCast3D" type="RayCast3D" parent="Camera3D" unique_id=393012894]
+target_position = Vector3(0, 0, -5)
+collision_mask = 7
+collide_with_areas = true
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Camera3D" unique_id=2048237190]
+remote_path = NodePath("../../right_arm")
+update_position = false
+update_scale = false
+
+[node name="footstepsSound" type="AudioStreamPlayer3D" parent="." unique_id=1408197173]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.8012185, 0)
+stream = ExtResource("2_jpq18")
+volume_db = -3.0
+
+[node name="jumpSound" type="AudioStreamPlayer3D" parent="." unique_id=1402638227]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.8012185, 0)
+stream = ExtResource("3_800tr")
+volume_db = -3.0
+
+[node name="right_arm" type="Node3D" parent="." unique_id=841048407]
+
+[node name="weapons" type="Node3D" parent="right_arm" unique_id=1626193374]
+transform = Transform3D(1, 0, 0, 0, 0.9103517, 0.41383544, 0, -0.41383544, 0.9103517, 2.054556, 1.3014469, -1.877273)
+
+[node name="longsword2" parent="right_arm/weapons" unique_id=431304681 instance=ExtResource("4_mjmhq")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 2.1731, 0)
+
+[node name="halberd2" parent="right_arm/weapons" unique_id=1154285870 instance=ExtResource("5_qb6h1")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+
+[node name="dagger2" parent="right_arm/weapons" unique_id=1060598487 instance=ExtResource("6_4jhke")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+
+[node name="katana2" parent="right_arm/weapons" unique_id=644194978 instance=ExtResource("7_n1f87")]
+transform = Transform3D(-3, 0, 2.6226832e-07, 0, 3, 0, -2.6226832e-07, 0, -3, 0, 0, 0)
+
+[node name="mace2" parent="right_arm/weapons" unique_id=1650576448 instance=ExtResource("8_imse2")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+
+[node name="spear2" parent="right_arm/weapons" unique_id=767408421 instance=ExtResource("9_b5fxs")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+
+[node name="war_hammer2" parent="right_arm/weapons" unique_id=1053840818 instance=ExtResource("10_bqlr7")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+
+[node name="zweinhander" parent="right_arm/weapons" unique_id=1346877206 instance=ExtResource("11_1h5rl")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)

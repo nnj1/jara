@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dlrm8nt8aw1jc"
+path="res://.godot/imported/7- Eilen.ogg-3673c868d8a79fdbe6644bcc80642e1e.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/Mind's Eye Pack/Pack/7- Eilen.ogg"
+dest_files=["res://.godot/imported/7- Eilen.ogg-3673c868d8a79fdbe6644bcc80642e1e.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

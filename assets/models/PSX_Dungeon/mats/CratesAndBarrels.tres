@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bhjgl025d0k5n"]
+
+[ext_resource type="Texture2D" uid="uid://2sgx55nk8p8p" path="res://assets/models/PSX_Dungeon/Textures/CratesAndBarrels_Map.png" id="1_8101y"]
+
+[resource]
+resource_name = "CratesAndBarrels"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.9063318, 0.9063318, 0.9063318, 1)
+albedo_texture = ExtResource("1_8101y")
+emission_enabled = true

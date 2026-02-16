@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://cidp6guyk3ufi"]
+
+[ext_resource type="Shader" uid="uid://dq35jjhfmysv2" path="res://shaders/psx.gdshader" id="1_387q4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p6kf1"]
+shader = ExtResource("1_387q4")
+shader_parameter/grain_intensity = 0.1
+shader_parameter/min_lum = 0.0
+shader_parameter/max_lum = 1.0
+shader_parameter/time_scale = 0.5
+shader_parameter/vignette_darkness = 0.0
+shader_parameter/vignette_outer_radius = 0.7
+shader_parameter/vignette_inner_radius = 0.2
+shader_parameter/scanline_intensity = 0.2
+shader_parameter/barrel_distortion = 0.0
+shader_parameter/chromatic_aberration = 0.0010000000475
+shader_parameter/crt_vignette_power = 0.2000000095
+shader_parameter/pixel_resolution_x = 1280
+shader_parameter/pixel_resolution_y = 648
+shader_parameter/enable_color_quantization = true
+shader_parameter/color_quant_steps = 32.0
+shader_parameter/warble_amount = 0.0
+shader_parameter/warble_speed = 5.0
+
+[node name="PostProcessor" type="CanvasLayer" unique_id=1878421992]
+layer = 5
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1129439287]
+material = SubResource("ShaderMaterial_p6kf1")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)

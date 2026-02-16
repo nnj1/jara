@@ -1,0 +1,46 @@
+[gd_scene format=4 uid="uid://ilesyvvern2n"]
+
+[ext_resource type="Material" uid="uid://bhjgl025d0k5n" path="res://assets/models/PSX_Dungeon/mats/CratesAndBarrels.tres" id="2_7ufkm"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_rvga3"]
+_surfaces = [{
+"aabb": AABB(-4, -4, -4, 8, 8, 8),
+"format": 34359742465,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAQAAAAQABAAAAAMABQACAAEAAwACAAUABAAGAAEAAQAGAAUAAwAHAAQABgAEAAcABQAHAAMABwAFAAYA"),
+"name": "CratesAndBarrels",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AACAwAAAgEAAAIDAAACAwAAAgEAAAIBAAACAwAAAgMAAAIBAAACAwAAAgMAAAIDAAACAQAAAgEAAAIDAAACAQAAAgMAAAIBAAACAQAAAgEAAAIBAAACAQAAAgMAAAIDA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_3f4ot"]
+resource_name = "Cube_052"
+_surfaces = [{
+"aabb": AABB(-4, -4, -4, 8, 8, 8),
+"attribute_data": PackedByteArray("AACAPwAAAAAAAIA/AAAAPwAAAD8AAAA/AAAAPwAAAAAAAIA/AAAAAAAAgD8AAAA/AAAAPwAAAD8AAAA/AAAAAAAAgD8AAAAAAACAPwAAAD8AAAA/AAAAPwAAAD8AAAAAAACAPwAAAAAAAIA/AAAAPwAAAD8AAAA/AAAAPwAAAAAAAIA/AAAAAAAAgD8AAAA/AAAAPwAAAD8AAAA/AAAAAAAAgD8AAAAAAACAPwAAAD8AAAA/AAAAPwAAAD8AAAAA"),
+"format": 34359742487,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAgADAAAABAAFAAYABgAHAAQACAAJAAoACgALAAgADAANAA4ADgAPAAwAEAARABIAEgATABAAFAAVABYAFgAXABQA"),
+"material": ExtResource("2_7ufkm"),
+"name": "CratesAndBarrels",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AACAwAAAgEAAAIDAAACAwAAAgEAAAIBAAACAwAAAgMAAAIBAAACAwAAAgMAAAIDAAACAQAAAgEAAAIDAAACAwAAAgEAAAIDAAACAwAAAgMAAAIDAAACAQAAAgMAAAIDAAACAQAAAgEAAAIBAAACAQAAAgEAAAIDAAACAQAAAgMAAAIDAAACAQAAAgMAAAIBAAACAwAAAgEAAAIBAAACAQAAAgEAAAIBAAACAQAAAgMAAAIBAAACAwAAAgMAAAIBAAACAQAAAgMAAAIBAAACAQAAAgMAAAIDAAACAwAAAgMAAAIDAAACAwAAAgMAAAIBAAACAwAAAgEAAAIBAAACAwAAAgEAAAIDAAACAQAAAgEAAAIDAAACAQAAAgEAAAIBAAAD/f/9///8AAP9//3///wAA/3//f///AAD/f/9//////////3//////////f/////////9//////////3///////3//f///////f/9///////9//3///////3//f////3//f/9/////f/9//3////9//3//f////3//f/9/////fwAA////v/9/AAD///+//38AAP///7//fwAA////v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_rvga3")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mh4bm"]
+size = Vector3(8, 8, 8)
+
+[node name="Box" type="RigidBody3D" unique_id=1446971119]
+
+[node name="Cube_044" type="MeshInstance3D" parent="." unique_id=618606296]
+mesh = SubResource("ArrayMesh_3f4ot")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=723830973]
+shape = SubResource("BoxShape3D_mh4bm")

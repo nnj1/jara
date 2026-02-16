@@ -1,0 +1,53 @@
+[gd_scene format=4 uid="uid://co6cn47e8gt0"]
+
+[ext_resource type="Script" uid="uid://b5voaf5ueou2g" path="res://src/tools/show_mesh_dimensions.gd" id="2_a53gt"]
+[ext_resource type="Material" uid="uid://csj0kp6mhs3of" path="res://assets/models/PSX_Dungeon/mats/N64.tres" id="2_diaxo"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_7reb8"]
+_surfaces = [{
+"aabb": AABB(-10, 0, -10, 20, 1e-05, 20),
+"format": 34359742465,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAgADAAAA"),
+"name": "N64",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("AAAgQQAAAAAAACDBAAAgQQAAAAAAACBBAAAgwQAAAAAAACBBAAAgwQAAAAAAACDB")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_emplh"]
+resource_name = "Plane_003"
+_surfaces = [{
+"aabb": AABB(-10, 0, -10, 20, 1e-05, 20),
+"attribute_data": PackedByteArray("AACAPgAAgD4AAIA+AAAAPwAAAAAAAAA/AAAAAAAAgD4="),
+"format": 34359742487,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAgADAAAA"),
+"material": ExtResource("2_diaxo"),
+"name": "N64",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("AAAgQQAAAAAAACDBAAAgQQAAAAAAACBBAAAgwQAAAAAAACBBAAAgwQAAAAAAACDB/3///////7//f///////v/9///////+//3///////78=")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_7reb8")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_diaxo"]
+size = Vector3(20, 0.001, 20)
+
+[node name="Floor_Tiles" type="Node3D" unique_id=571386383]
+
+[node name="Plane_003" type="MeshInstance3D" parent="." unique_id=305501370]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5e-06, 0)
+mesh = SubResource("ArrayMesh_emplh")
+script = ExtResource("2_a53gt")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Plane_003" unique_id=47746269]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5e-06, 0)
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Plane_003/StaticBody3D" unique_id=1059235320]
+shape = SubResource("BoxShape3D_diaxo")

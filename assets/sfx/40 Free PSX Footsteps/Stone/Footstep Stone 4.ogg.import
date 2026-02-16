@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://yabv6la52a8x"
+path="res://.godot/imported/Footstep Stone 4.ogg-10bd6d3f3ba9b4ec346f5942eadffc3e.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/sfx/40 Free PSX Footsteps/Stone/Footstep Stone 4.ogg"
+dest_files=["res://.godot/imported/Footstep Stone 4.ogg-10bd6d3f3ba9b4ec346f5942eadffc3e.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

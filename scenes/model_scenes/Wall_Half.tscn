@@ -1,0 +1,41 @@
+[gd_scene format=4 uid="uid://bb8j0n3a7k8hx"]
+
+[ext_resource type="Material" uid="uid://csj0kp6mhs3of" path="res://assets/models/PSX_Dungeon/mats/N64.tres" id="2_vf5ir"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ffw36"]
+_surfaces = [{
+"aabb": AABB(-5.000001, -9.536743e-07, -2.5000005, 10.000002, 20, 5.000001),
+"format": 34359742465,
+"index_count": 60,
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAAADAAQABAADAAIABAAFAAAAAQAAAAUABgAFAAQABQAGAAEAAgAHAAQABAAHAAYABwACAAgACAACAAEABgAHAAkACAAJAAcACQAKAAYAAQAGAAoACQAIAAsAAQALAAgACwAKAAkACgALAAEA"),
+"name": "N64",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("AACgwAAAoEEAACBAAACgwAAAIEECACBAAACgwAAAIEH+/x/AAgCgwAAAoEH+/x/A/v+fQAAAoEEAACDAAACgQAAAoEEAACBAAgCgQAAAIEH+/x9A/v+fQAAAIEEAACDAAACgwAAAgDUCACDAAACgQAAAgDUCACDAAgCgQAAAAAD+/x9AAACgwAAAgLUAACBA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_omvm1"]
+resource_name = "Cube_089"
+_surfaces = [{
+"aabb": AABB(-5.000001, -9.536743e-07, -2.5000005, 10.000002, 20, 5.000001),
+"attribute_data": PackedByteArray("AADgPgAAgD4AAOA+AAAAPwAAoD4AAAA/AACgPvz/fz4AAIA+AADAPgAAgD4AAAA/AAAAAAAAAD8AAAAAAADAPilc/z4oXP8+2KOAPihc/z7Xo4A+2KOAPihc/z7Yo4A+KVz/PtijgD4pXP8+KFz/PtejgD4oXP8+16OAPtijgD4AAKA+AAAAPwAAoD4AAIA+AADgPgAAgD4AAOA+AQAAPylc/z4oXP8+2KOAPihc/z7Xo4A+2KOAPihc/z7Yo4A+AACAPgDNzDsAAAA/AM3MOwAAAD9gZmY9AACAPmBmZj3Xo4A+2KOAPilc/z7Yo4A+KVz/Pihc/z7Xo4A+KFz/PgAAoD4AAIA+AADgPgAAgD4AAOA+AQAAPwAAoD4AAAA/AADgPgAAgD4AAOA+AAAAPwAAoD4AAAA/AACgPvz/fz4="),
+"format": 34359742487,
+"index_count": 60,
+"index_data": PackedByteArray("AAABAAIAAgADAAAABAAFAAYABgAHAAQACAAJAAoACgALAAgADAANAA4ADgAPAAwAEAARABIAEgATABAAFAAVABYAFgAXABQAGAAZABoAGgAbABgAHAAdAB4AHgAfABwAIAAhACIAIgAjACAAJAAlACYAJgAnACQA"),
+"material": ExtResource("2_vf5ir"),
+"name": "N64",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 40,
+"vertex_data": PackedByteArray("AACgwAAAoEEAACBAAACgwAAAIEECACBAAACgwAAAIEH+/x/AAgCgwAAAoEH+/x/A/v+fQAAAoEEAACDAAACgQAAAoEEAACBAAACgwAAAoEEAACBAAgCgwAAAoEH+/x/AAACgwAAAIEH+/x/A/v+fQAAAIEEAACDA/v+fQAAAoEEAACDAAgCgwAAAoEH+/x/AAACgQAAAoEEAACBAAgCgQAAAIEH+/x9AAACgwAAAIEECACBAAACgwAAAoEEAACBAAgCgQAAAIEH+/x9AAACgQAAAoEEAACBA/v+fQAAAoEEAACDA/v+fQAAAIEEAACDAAACgwAAAgDUCACDAAACgQAAAgDUCACDA/v+fQAAAIEEAACDAAACgwAAAIEH+/x/AAACgwAAAgLUAACBAAgCgQAAAAAD+/x9AAACgQAAAgDUCACDAAACgwAAAgDUCACDAAACgwAAAIEECACBAAgCgQAAAIEH+/x9AAgCgQAAAAAD+/x9AAACgwAAAgLUAACBAAgCgQAAAIEH+/x9A/v+fQAAAIEEAACDAAACgQAAAgDUCACDAAgCgQAAAAAD+/x9AAACgwAAAIEECACBAAACgwAAAgLUAACBAAACgwAAAgDUCACDAAACgwAAAIEH+/x/AAAD/f/9//78AAP9//3//vwAA/3//f/+/AAD/f/9//7//f///////v/9///////+//3///////7//f///////vwAA//8AAP+/AAD//wAA/78AAP//AAD/vwAA//8AAP+//3//f////7//f/9/////v/9//3////+//3//f////7////9/AAD+/////38AAACA////fwAA/v////9/AAD+/wAA//8AAP+/AAD//wAA/78AAP//AAD/vwAA//8AAP+//38AAP///7//fwAA////v/9/AAD///+//38AAP///7//f/9/////v/9//3////+//3//f////7//f/9//v//v////38AAP7/////fwAA/v////9/AAD+/////38AAP7/AAD/f/9//78AAP9//3//vwAA/3//f/+/AAD/f/9//78=")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_ffw36")
+
+[node name="Wall_Half" type="Node3D" unique_id=1447805351]
+
+[node name="Cube_084" type="MeshInstance3D" parent="." unique_id=1055691987]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.999999, 0)
+mesh = SubResource("ArrayMesh_omvm1")

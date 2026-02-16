@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://d3yry4i2665u2"]
+
+[ext_resource type="Texture2D" uid="uid://vws6jdiem8ra" path="res://assets/models/PSX_Dungeon/Textures/Doors_Map.png" id="1_fnvja"]
+
+[resource]
+resource_name = "DoorsMap"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.9063318, 0.9063318, 0.9063318, 1)
+albedo_texture = ExtResource("1_fnvja")
+emission_enabled = true

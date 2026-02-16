@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cfdcuqhvl3mi7"]
+
+[ext_resource type="Texture2D" uid="uid://criiguy6lavnf" path="res://assets/models/PSX_Dungeon/Textures/TEX_Rusty_Metal_01.png" id="1_ajmdo"]
+
+[resource]
+resource_name = "Material"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.9063318, 0.9063318, 0.9063318, 1)
+albedo_texture = ExtResource("1_ajmdo")
+emission_enabled = true

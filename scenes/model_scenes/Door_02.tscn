@@ -1,0 +1,41 @@
+[gd_scene format=4 uid="uid://d1gud6mb4eixa"]
+
+[ext_resource type="Material" uid="uid://d3yry4i2665u2" path="res://assets/models/PSX_Dungeon/mats/DoorsMap.tres" id="2_dxfdo"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ctue8"]
+_surfaces = [{
+"aabb": AABB(-10, 0, -1, 10, 15, 2),
+"format": 34359742465,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAQAAAAQABAAAAAMABQACAAEAAwACAAUABAAGAAEAAQAGAAUAAwAHAAQABgAEAAcABQAHAAMABwAFAAYA"),
+"name": "DoorsMap",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAgwQAAcEEAAIC/AAAgwQAAcEEAAIA/AAAgwQAAAAAAAIA/AAAgwQAAAAAAAIC/AAAAAAAAcEEAAIC/AAAAAAAAAAAAAIA/AAAAAAAAcEEAAIA/AAAAAAAAAAAAAIC/")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_xfa5c"]
+resource_name = "Cube_064"
+_surfaces = [{
+"aabb": AABB(-10, 0, -1, 10, 15, 2),
+"attribute_data": PackedByteArray("Z2bmPgAAAD1I4fo+AAAAPUjh+j4AAHw/ZWbmPgAAfD9I4fo+wMzMPArXIzzAzMw8CtcjPAAAfD9I4fo+AAB8P2Zm5j4AAAA9R+H6PgD//zxJ4fo+9/97P2Zm5j4AAHw/CtcjPMDMzDxI4fo+wMzMPEjh+j4AAHw/CtcjPAAAfD86M/c+qLBxPzkz9z5hz3s/IGdmPGDPez9AZ2Y8qLBxPywz9z4AFeY8KzP3Pgh7qj1gZWY8AHuqPYBlZjzgFOY8"),
+"format": 34359742487,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAgADAAAABAAFAAYABgAHAAQACAAJAAoACgALAAgADAANAA4ADgAPAAwAEAARABIAEgATABAAFAAVABYAFgAXABQA"),
+"material": ExtResource("2_dxfdo"),
+"name": "DoorsMap",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAgwQAAcEEAAIC/AAAgwQAAcEEAAIA/AAAgwQAAAAAAAIA/AAAgwQAAAAAAAIC/AAAAAAAAcEEAAIC/AAAgwQAAcEEAAIC/AAAgwQAAAAAAAIC/AAAAAAAAAAAAAIC/AAAAAAAAcEEAAIA/AAAAAAAAcEEAAIC/AAAAAAAAAAAAAIC/AAAAAAAAAAAAAIA/AAAgwQAAcEEAAIA/AAAAAAAAcEEAAIA/AAAAAAAAAAAAAIA/AAAgwQAAAAAAAIA/AAAAAAAAAAAAAIA/AAAAAAAAAAAAAIC/AAAgwQAAAAAAAIC/AAAgwQAAAAAAAIA/AAAgwQAAcEEAAIA/AAAgwQAAcEEAAIC/AAAAAAAAcEEAAIC/AAAAAAAAcEEAAIA/AAD/f/9//78AAP9//3//vwAA/3//f/+/AAD/f/9//7//////////P/////////8//////////z//////////P////3/+/wCA////f/7/AID///9//v8AgP///3/+/wCA/3//f////7//f/9/////v/9//3////+//3//f////7//fwAA/v//v/9/AAD+//+//38AAP///7//fwAA////v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_ctue8")
+
+[node name="Door_02" type="Node3D" unique_id=1210278351]
+
+[node name="Cube_061" type="MeshInstance3D" parent="." unique_id=175616828]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -7.5, 0)
+mesh = SubResource("ArrayMesh_xfa5c")

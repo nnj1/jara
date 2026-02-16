@@ -1,0 +1,41 @@
+[gd_scene format=4 uid="uid://v4kixfqys1eq"]
+
+[ext_resource type="Material" uid="uid://csj0kp6mhs3of" path="res://assets/models/PSX_Dungeon/mats/N64.tres" id="2_m58cj"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_c24x5"]
+_surfaces = [{
+"aabb": AABB(-10, 0, -20, 20, 10, 40),
+"format": 34359742465,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAwACAAEABAAAAAIAAgADAAQABQABAAAAAQAFAAMAAAAEAAUAAwAFAAQA"),
+"name": "N64",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("AAAgQQAAAAAAAKDBAAAgQQAAIEEAAKDBAAAgwQAAAAAAAKDBAAAgwQAAAAAAAKBBAAAgQQAAAAAAAKBBAAAgQQAAIEEAAKBB")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_2yih3"]
+resource_name = "Cube_067"
+_surfaces = [{
+"aabb": AABB(-10, 0, -20, 20, 10, 40),
+"attribute_data": PackedByteArray("AABAPwAAAD8AAAA/AAAAPwAAAD8AAIA+AABAPwAAgD4AAEA/AAAAPwAAAD8AAAA/AAAAPwAAgD4AAAA/AACAPgAAQD8AAAA/AAAAPwAAAD8AAMA+AACAPgAAwD4AAAA/AAAAPgAAAD8AAAA+AACAPgAAAD8AAAAAAABAPwAAAAAAAEA/AACAPgAAAD8AAIA+"),
+"format": 34359742487,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAwAEAAUABQAGAAMABwAIAAkACgALAAwADAANAAoADgAPABAAEAARAA4A"),
+"material": ExtResource("2_m58cj"),
+"name": "N64",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 18,
+"vertex_data": PackedByteArray("AAAgQQAAAAAAAKDBAAAgQQAAIEEAAKDBAAAgwQAAAAAAAKDBAAAgQQAAIEEAAKBBAAAgQQAAIEEAAKDBAAAgQQAAAAAAAKDBAAAgQQAAAAAAAKBBAAAgwQAAAAAAAKBBAAAgQQAAIEEAAKBBAAAgQQAAAAAAAKBBAAAgQQAAAAAAAKBBAAAgQQAAAAAAAKDBAAAgwQAAAAAAAKDBAAAgwQAAAAAAAKBBAAAgwQAAAAAAAKBBAAAgwQAAAAAAAKDBAAAgQQAAIEEAAKDBAAAgQQAAIEEAAKBB//////9/AID//////38AgP//////fwCA////f/9///////9//3///////3//f///////f/9/////f/9//3////9//3//f////3//f/9/////fwAA////v/9/AAD///+//38AAP///7//fwAA////v1RVVNX/////VFVU1f////9UVVTV/////1RVVNX/////")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_c24x5")
+
+[node name="Stairs_Wide" type="Node3D" unique_id=1517381953]
+
+[node name="Cube_065" type="MeshInstance3D" parent="." unique_id=193023610]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
+mesh = SubResource("ArrayMesh_2yih3")

@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cvi743lmcs0a"]
+
+[ext_resource type="Texture2D" uid="uid://btai72jla53dq" path="res://assets/models/PSX_Dungeon/Textures/TEX_Chain_02.png" id="1_y8cj4"]
+
+[resource]
+resource_name = "Chain"
+transparency = 2
+alpha_scissor_threshold = 0.005
+alpha_antialiasing_mode = 0
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_y8cj4")
+emission_enabled = true

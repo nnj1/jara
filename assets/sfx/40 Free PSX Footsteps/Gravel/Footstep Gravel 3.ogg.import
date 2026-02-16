@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://5duwu385ibuw"
+path="res://.godot/imported/Footstep Gravel 3.ogg-29ed96b69c50745a7dbc9deeb2d833bc.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/sfx/40 Free PSX Footsteps/Gravel/Footstep Gravel 3.ogg"
+dest_files=["res://.godot/imported/Footstep Gravel 3.ogg-29ed96b69c50745a7dbc9deeb2d833bc.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

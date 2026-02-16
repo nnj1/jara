@@ -1,0 +1,41 @@
+[gd_scene format=4 uid="uid://bnyidwoe6h62"]
+
+[ext_resource type="Material" uid="uid://cvi743lmcs0a" path="res://assets/models/PSX_Dungeon/mats/Chain.tres" id="2_b164c"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_8vvbx"]
+_surfaces = [{
+"aabb": AABB(-0.50000006, -0.00012350082, -0.50000226, 1.0000002, 10.000002, 1.0000002),
+"format": 34359742465,
+"index_count": 60,
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAgABAAQABAAFAAIABQAEAAYABgAHAAUACAAHAAYABgAJAAgACAAJAAoACgALAAgADAANAA4ADgAPAAwAEAAPAA4ADgARABAADQAMABIAEgATAA0AFAATABIAEgAVABQAFAAVABYAFgAXABQA"),
+"name": "Chain",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("/f//PoD/H0GAiQ62AgAAP/7+/0CAiQa2/f//vv7+/0CAiQa2AQAAv4D/H0GAiQ62/f//Pv7+v0CAiQa2/f//vv7+v0CAiQa2/f//PgD+f0CAiQ62AQAAvwD+f0CAiQ62/f//vgD8/z8AE/21/f//PgD8/z8AE/21/f//PgCAAbmAiR62AQAAvwCAAbmAiR62AADAM/7+v0AkAAC/AAAgNP7+v0C1//8+AAAgNP7+/0C1//8+AACAM/7+/0AmAAC/AAAAs4D/H0EkAAC/AAAAAID/H0G7//8+AAAAswD+f0AkAAC/AAAAAAD+f0C7//8+AACQNAD8/z+1//8+AABgNAD8/z8kAAC/AACQtAAAAbkkAAC/AACAtAAAAbm7//8+")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_jhsvk"]
+resource_name = "Cylinder_024"
+_surfaces = [{
+"aabb": AABB(-0.50000006, -0.00012350082, -0.50000226, 1.0000002, 10.000002, 1.0000002),
+"attribute_data": PackedByteArray("AAAAAJqZmT4AAIA/mpmZPgAAgD8zMzM/AAAAADMzMz8AAIA/mpmZPgAAgD8zMzM/AAAAADMzMz8AAAAAmpmZPgAAgD+amZk+AACAPzMzMz8AAAAAMzMzPwAAAACamZk+AACAP5qZmT4AAIA/MzMzPwAAAAAzMzM/AAAAAJqZmT4AAAAAmpmZPgAAgD+amZk+AACAPzMzMz8AAAAAMzMzPwAAgD+amZk+AACAPzMzMz8AAAAAMzMzPwAAAACamZk+AAAAAJqZmT4AAIA/mpmZPgAAgD8zMzM/AAAAADMzMz8AAIA/mpmZPgAAgD8zMzM/AAAAADMzMz8AAAAAmpmZPgAAAACamZk+AACAP5qZmT4AAIA/MzMzPwAAAAAzMzM/AACAP5qZmT4AAIA/MzMzPwAAAAAzMzM/AAAAAJqZmT4="),
+"format": 34359742487,
+"index_count": 60,
+"index_data": PackedByteArray("AAABAAIAAgADAAAABAAFAAYABgAHAAQACAAJAAoACgALAAgADAANAA4ADgAPAAwAEAARABIAEgATABAAFAAVABYAFgAXABQAGAAZABoAGgAbABgAHAAdAB4AHgAfABwAIAAhACIAIgAjACAAJAAlACYAJgAnACQA"),
+"material": ExtResource("2_b164c"),
+"name": "Chain",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 40,
+"vertex_data": PackedByteArray("/f//PoD/H0GAiQ62AgAAP/7+/0CAiQa2/f//vv7+/0CAiQa2AQAAv4D/H0GAiQ62AADAM/7+v0AkAAC/AAAgNP7+v0C1//8+AAAgNP7+/0C1//8+AACAM/7+/0AmAAC//f//Pv7+v0CAiQa2/f//vv7+v0CAiQa2/f//vv7+/0CAiQa2AgAAP/7+/0CAiQa2/f//PgD+f0CAiQ62AQAAvwD+f0CAiQ62/f//vv7+v0CAiQa2/f//Pv7+v0CAiQa2/f//PgD+f0CAiQ62/f//PgD8/z8AE/21/f//vgD8/z8AE/21AQAAvwD+f0CAiQ62/f//PgCAAbmAiR62AQAAvwCAAbmAiR62/f//vgD8/z8AE/21/f//PgD8/z8AE/21AAAAs4D/H0EkAAC/AACAM/7+/0AmAAC/AAAgNP7+/0C1//8+AAAAAID/H0G7//8+AAAAswD+f0AkAAC/AAAAAAD+f0C7//8+AAAgNP7+v0C1//8+AADAM/7+v0AkAAC/AAAAswD+f0AkAAC/AABgNAD8/z8kAAC/AACQNAD8/z+1//8+AAAAAAD+f0C7//8+AACQtAAAAbkkAAC/AACAtAAAAbm7//8+AACQNAD8/z+1//8+AABgNAD8/z8kAAC//3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID///9//38AgP///3//fwCA////f/9/AID///9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA////f/9/AID///9//38AgP///3//fwCA////f/9/AID///9//38AgP///3//fwCA////f/9/AID///9//38AgP7//3//fwCA/v//f/9/AID+//9//38AgP7//3//fwCA/v//f/9/AID+//9//38AgP7//3//fwCA/v//f/9/AIA=")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_8vvbx")
+
+[node name="Chain" type="Node3D" unique_id=347782875]
+
+[node name="Cylinder_026" type="MeshInstance3D" parent="." unique_id=1906991684]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.999878, 2.1457672e-06)
+mesh = SubResource("ArrayMesh_jhsvk")
