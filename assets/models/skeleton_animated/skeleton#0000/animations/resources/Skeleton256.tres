@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://kpciaiivp25t"]
+
+[ext_resource type="Texture2D" uid="uid://crxastaevurok" path="res://assets/models/PS1 Dark Fantasy Horror Game Assets (by Stark Crafts)/PS1_Skull/ps1_skeleton_256x256_transp.png" id="1_a387c"]
+
+[resource]
+resource_name = "Skeleton256"
+transparency = 1
+albedo_color = Color(0.9063318, 0.9063318, 0.9063318, 1)
+albedo_texture = ExtResource("1_a387c")
