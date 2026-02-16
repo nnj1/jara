@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://co35kuy64e5m7"
+path="res://.godot/imported/Radio_static.wav-ba851aca0279e1b719cf0dbf3d32ee1e.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Horror SFX Free/Ambient/Radio_static.wav"
+dest_files=["res://.godot/imported/Radio_static.wav-ba851aca0279e1b719cf0dbf3d32ee1e.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

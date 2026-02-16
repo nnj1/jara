@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://btwk82uak375c" path="res://assets/models/PSX_Weapons_GLTF/spear.glb" id="9_b5fxs"]
 [ext_resource type="PackedScene" uid="uid://b2cb0oo3ploep" path="res://assets/models/PSX_Weapons_GLTF/war_hammer.glb" id="10_bqlr7"]
 [ext_resource type="PackedScene" uid="uid://ce20v5msw6es3" path="res://assets/models/PSX_Weapons_GLTF/zweinhander.glb" id="11_1h5rl"]
+[ext_resource type="AudioStream" uid="uid://bgtdqt2dttnir" path="res://assets/sfx/Minifantasy_Dungeon_SFX/07_human_atk_sword_2.wav" id="13_imse2"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_40gj3"]
 radius = 2.0
@@ -20,6 +21,81 @@ height = 10.0
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_40gj3"]
 radius = 2.0
 height = 10.0
+
+[sub_resource type="Animation" id="Animation_n1f87"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("weapons:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.4266632, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("weapons:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(2.054556, 1.3014469, -1.877273)]
+}
+
+[sub_resource type="Animation" id="Animation_imse2"]
+resource_name = "stab"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("weapons:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.26666668, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.4266632, 0, 0), Vector3(-1.300375, 0, 0), Vector3(-0.4266632, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("weapons:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.13333334, 0.43333334, 0.6, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(2.054556, 1.3014469, -1.877273), Vector3(2.054556, 0.56239367, -0.7827076), Vector3(2.054556, 1.6373546, -2.8086982), Vector3(2.054556, 1.3014469, -1.877273)]
+}
+tracks/2/type = "audio"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../gruntSound")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"clips": [{
+"end_offset": 0.39,
+"start_offset": 0.0,
+"stream": ExtResource("13_imse2")
+}],
+"times": PackedFloat32Array(0.6333333)
+}
+tracks/2/use_blend = true
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_b5fxs"]
+_data = {
+&"RESET": SubResource("Animation_n1f87"),
+&"stab": SubResource("Animation_imse2")
+}
 
 [node name="Player" type="CharacterBody3D" unique_id=1876983122]
 collision_layer = 2
@@ -63,10 +139,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.8012185, 0)
 stream = ExtResource("3_800tr")
 volume_db = -3.0
 
+[node name="gruntSound" type="AudioStreamPlayer3D" parent="." unique_id=1202619490]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.8012185, 0)
+volume_db = -3.0
+
 [node name="right_arm" type="Node3D" parent="." unique_id=841048407]
 
 [node name="weapons" type="Node3D" parent="right_arm" unique_id=1626193374]
-transform = Transform3D(1, 0, 0, 0, 0.9103517, 0.41383544, 0, -0.41383544, 0.9103517, 2.054556, 1.3014469, -1.877273)
+transform = Transform3D(1, 0, 0, 0, 0.91035146, 0.41383535, 0, -0.41383535, 0.91035146, 2.054556, 1.3014469, -1.877273)
 
 [node name="longsword2" parent="right_arm/weapons" unique_id=431304681 instance=ExtResource("4_mjmhq")]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 2.1731, 0)
@@ -91,3 +171,7 @@ transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 
 [node name="zweinhander" parent="right_arm/weapons" unique_id=1346877206 instance=ExtResource("11_1h5rl")]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="right_arm" unique_id=759360027]
+libraries/ = SubResource("AnimationLibrary_b5fxs")
+speed_scale = 2.0

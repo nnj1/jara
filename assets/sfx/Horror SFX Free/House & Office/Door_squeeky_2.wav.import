@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://c32c343s2tvmr"
+path="res://.godot/imported/Door_squeeky_2.wav-af12ac5b05e6f64246a77479e461009a.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Horror SFX Free/House & Office/Door_squeeky_2.wav"
+dest_files=["res://.godot/imported/Door_squeeky_2.wav-af12ac5b05e6f64246a77479e461009a.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

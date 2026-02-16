@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bpjx7x0txmqt"
+path="res://.godot/imported/Metal_resonance.wav-226d8e076a341307d054a2d33333fb51.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Horror SFX Free/Stingers and Spooky Triggers/Metal_resonance.wav"
+dest_files=["res://.godot/imported/Metal_resonance.wav-226d8e076a341307d054a2d33333fb51.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

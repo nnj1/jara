@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cqfhcd64akbce"
+path="res://.godot/imported/Blender_running.wav-e275bd4a18b2fe419b18d3d0a1976a0e.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Horror SFX Free/House & Office/Blender_running.wav"
+dest_files=["res://.godot/imported/Blender_running.wav-e275bd4a18b2fe419b18d3d0a1976a0e.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

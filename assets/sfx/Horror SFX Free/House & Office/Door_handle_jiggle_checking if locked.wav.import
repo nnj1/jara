@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bqcyk12nv7qmq"
+path="res://.godot/imported/Door_handle_jiggle_checking if locked.wav-91b707b83c45ae8a32169d877264ebec.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Horror SFX Free/House & Office/Door_handle_jiggle_checking if locked.wav"
+dest_files=["res://.godot/imported/Door_handle_jiggle_checking if locked.wav-91b707b83c45ae8a32169d877264ebec.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bq485drhet1nq"
+path="res://.godot/imported/Gas Stove_turning off.wav-c788db4cbac8b74b78080af31a0379e1.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Horror SFX Free/House & Office/Gas Stove_turning off.wav"
+dest_files=["res://.godot/imported/Gas Stove_turning off.wav-c788db4cbac8b74b78080af31a0379e1.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

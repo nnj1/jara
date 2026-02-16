@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bbiko6tvinpy0"
+path="res://.godot/imported/Gasp_3.wav-1112d408c2e5b1bb022b51d83f1c97aa.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Horror SFX Free/Character/Gasp_3.wav"
+dest_files=["res://.godot/imported/Gasp_3.wav-1112d408c2e5b1bb022b51d83f1c97aa.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dgvqt5di0l13s"
+path="res://.godot/imported/Zipper bag.wav-a7a3889059b8e980b628ecfbed6be9ac.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Horror SFX Free/Character/Zipper bag.wav"
+dest_files=["res://.godot/imported/Zipper bag.wav-a7a3889059b8e980b628ecfbed6be9ac.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

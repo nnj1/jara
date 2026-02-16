@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b017rhronas24"
+path="res://.godot/imported/Spooky Ambience.wav-809b5984f11f2183b3f8d167c8569fa7.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Horror SFX Free/Stingers and Spooky Triggers/Spooky Ambience.wav"
+dest_files=["res://.godot/imported/Spooky Ambience.wav-809b5984f11f2183b3f8d167c8569fa7.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b14ilw1vuk1qy"
+path="res://.godot/imported/Writing.wav-ea340d3f92c41c4840a31b9448f95368.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Horror SFX Free/House & Office/Writing.wav"
+dest_files=["res://.godot/imported/Writing.wav-ea340d3f92c41c4840a31b9448f95368.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

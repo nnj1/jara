@@ -104,6 +104,10 @@ func _physics_process(delta: float) -> void:
 	if not is_active: 
 		return
 		
+	if Input.is_action_pressed('left_click'):
+		if not $right_arm/AnimationPlayer.is_playing():
+			$right_arm/AnimationPlayer.play("stab")
+		
 	if interaction_ray.is_colliding():
 		# Returns the PhysicsBody3D or Area3D that was hit
 		var collider = interaction_ray.get_collider()

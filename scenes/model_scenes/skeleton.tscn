@@ -3,6 +3,10 @@
 [ext_resource type="AnimationLibrary" uid="uid://bmcw7v8aapb11" path="res://assets/models/skeleton_animated/skeleton#0000/animations/resources/skeleton_stuff.res" id="1_8oqki"]
 [ext_resource type="Script" uid="uid://bpotstj5ql0uy" path="res://src/skeleton.gd" id="1_hklau"]
 [ext_resource type="Material" uid="uid://kpciaiivp25t" path="res://assets/models/skeleton_animated/skeleton#0000/animations/resources/Skeleton256.tres" id="1_l1w2c"]
+[ext_resource type="PackedScene" uid="uid://bhbf4qqd8vg5e" path="res://scenes/components/CreatureSoundPlayer.tscn" id="4_rekn0"]
+[ext_resource type="AudioStream" uid="uid://bb0gp8ydmixry" path="res://assets/sfx/Horror SFX Free/Monsters & Ghosts/Monster_growl_1.wav" id="5_4vlrr"]
+[ext_resource type="AudioStream" uid="uid://cm11u8x0cpqc7" path="res://assets/sfx/Horror SFX Free/Monsters & Ghosts/Monster_grunt_long.wav" id="6_o6lj7"]
+[ext_resource type="AudioStream" uid="uid://brdj54evce1ah" path="res://assets/sfx/Horror SFX Free/Monsters & Ghosts/Monster_grunt x2 (ghmmm).wav" id="7_o8gpl"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_v2e0j"]
 resource_name = "PS1_Skeleton_PS1_Skeleton"
@@ -504,3 +508,8 @@ collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DetectionArea" unique_id=1692880066]
 shape = SubResource("SphereShape3D_hklau")
+
+[node name="CreatureSoundPlayer" parent="." unique_id=948053947 instance=ExtResource("4_rekn0")]
+volume_db = 4.0
+max_db = 6.0
+idle_sounds = Array[AudioStream]([ExtResource("5_4vlrr"), ExtResource("6_o6lj7"), ExtResource("7_o8gpl"), null])

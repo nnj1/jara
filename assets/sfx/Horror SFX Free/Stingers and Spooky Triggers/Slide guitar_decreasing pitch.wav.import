@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dndex77d3i1lr"
+path="res://.godot/imported/Slide guitar_decreasing pitch.wav-2e1c0cc18e45dd0d208c712e9655eb71.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Horror SFX Free/Stingers and Spooky Triggers/Slide guitar_decreasing pitch.wav"
+dest_files=["res://.godot/imported/Slide guitar_decreasing pitch.wav-2e1c0cc18e45dd0d208c712e9655eb71.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

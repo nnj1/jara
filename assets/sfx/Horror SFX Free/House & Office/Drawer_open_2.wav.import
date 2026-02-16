@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cg5rgs6wnbtgc"
+path="res://.godot/imported/Drawer_open_2.wav-ba5a7161b56ca772771b3ca321cab676.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Horror SFX Free/House & Office/Drawer_open_2.wav"
+dest_files=["res://.godot/imported/Drawer_open_2.wav-ba5a7161b56ca772771b3ca321cab676.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
