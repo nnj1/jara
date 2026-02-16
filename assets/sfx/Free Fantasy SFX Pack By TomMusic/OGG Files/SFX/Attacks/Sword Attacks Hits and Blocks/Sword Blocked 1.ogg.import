@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://chdn7b1nstolh"
+path="res://.godot/imported/Sword Blocked 1.ogg-50d42805757cfe1f2e70d30b63e57d0c.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/sfx/Free Fantasy SFX Pack By TomMusic/OGG Files/SFX/Attacks/Sword Attacks Hits and Blocks/Sword Blocked 1.ogg"
+dest_files=["res://.godot/imported/Sword Blocked 1.ogg-50d42805757cfe1f2e70d30b63e57d0c.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

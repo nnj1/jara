@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dnoh46bm3vlky"
+path="res://.godot/imported/Bow Take Out 1.ogg-025080f251732e582dd7cb3b32e9f3b8.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/sfx/Free Fantasy SFX Pack By TomMusic/OGG Files/SFX/Attacks/Bow Attacks Hits and Blocks/Bow Take Out 1.ogg"
+dest_files=["res://.godot/imported/Bow Take Out 1.ogg-025080f251732e582dd7cb3b32e9f3b8.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

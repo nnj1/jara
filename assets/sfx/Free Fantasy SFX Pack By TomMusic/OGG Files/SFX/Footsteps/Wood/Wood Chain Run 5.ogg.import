@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://21gx6gyvrvgu"
+path="res://.godot/imported/Wood Chain Run 5.ogg-67c5781e8ae94d76df1c7713ea24eafe.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/sfx/Free Fantasy SFX Pack By TomMusic/OGG Files/SFX/Footsteps/Wood/Wood Chain Run 5.ogg"
+dest_files=["res://.godot/imported/Wood Chain Run 5.ogg-67c5781e8ae94d76df1c7713ea24eafe.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

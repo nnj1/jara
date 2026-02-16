@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://cblgp2cqsfbnv"
+path="res://.godot/imported/Torch Impact 1.ogg-910ff7202d2fa88a99762d7647e34a13.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/sfx/Free Fantasy SFX Pack By TomMusic/OGG Files/SFX/Torch/Torch Impact 1.ogg"
+dest_files=["res://.godot/imported/Torch Impact 1.ogg-910ff7202d2fa88a99762d7647e34a13.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

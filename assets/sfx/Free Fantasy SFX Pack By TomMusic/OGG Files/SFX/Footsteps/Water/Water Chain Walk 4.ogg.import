@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dewkd3eg854cp"
+path="res://.godot/imported/Water Chain Walk 4.ogg-cf9a7758636f45c3828cdba5d400fac5.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/sfx/Free Fantasy SFX Pack By TomMusic/OGG Files/SFX/Footsteps/Water/Water Chain Walk 4.ogg"
+dest_files=["res://.godot/imported/Water Chain Walk 4.ogg-cf9a7758636f45c3828cdba5d400fac5.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

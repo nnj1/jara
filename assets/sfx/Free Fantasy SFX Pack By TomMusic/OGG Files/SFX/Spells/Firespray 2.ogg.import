@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://cacy7m3to6m1q"
+path="res://.godot/imported/Firespray 2.ogg-c69c408d2114cc5c70cb40f053c054b3.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/sfx/Free Fantasy SFX Pack By TomMusic/OGG Files/SFX/Spells/Firespray 2.ogg"
+dest_files=["res://.godot/imported/Firespray 2.ogg-c69c408d2114cc5c70cb40f053c054b3.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
