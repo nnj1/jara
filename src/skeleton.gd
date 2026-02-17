@@ -10,7 +10,7 @@ enum State { IDLE, RANDOM_WALK, AGGRO }
 
 @export_group("Smart Targeting")
 @export var chase_persistence: float = 3.0
-@export var max_chase_distance: float = 50.0
+@export var max_chase_distance: float = 100.0
 
 # --- Internal Variables ---
 var current_state: State = State.IDLE
