@@ -135,7 +135,7 @@ func lose_target():
 	change_state(State.IDLE)
 
 func _on_player_detected(body: Node3D):
-	if body is CharacterBody3D and body != self:
+	if body is CharacterBody3D and body != self and body.is_in_group('players'):
 		target_player = body
 		persistence_timer = chase_persistence
 		if current_state != State.AGGRO:

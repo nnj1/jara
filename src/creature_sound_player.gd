@@ -5,7 +5,7 @@ class_name CreatureSoundPlayer
 ## Sounds played while the creature is wandering or standing still.
 @export var idle_sounds: Array[AudioStream] = []
 @export var min_idle_wait: float = 3.0
-@export var max_idle_wait: float = 12.0
+@export var max_idle_wait: float = 6.0
 
 @export_group("Combat Sounds")
 ## Played when the creature sees the player or starts a chase.

@@ -1,5 +1,7 @@
 extends Node3D
 
+@onready var main_game_node = get_tree().get_root().get_node('Game')
+
 @export_category('Dungeon Settings')
 @export var unit_size: float = 20.0
 @export var height_units: int = 100
@@ -74,6 +76,9 @@ func _ready() -> void:
 			if randf() < 0.05:
 				for i in randi_range(0, 4):
 					place_skull(x_unit, z_unit)
+			# very low change of spawning a skeleton in the center of the tile
+			elif randf() < 0.01:
+				spawn_skeleton(x_unit, z_unit)
 				
 			# make things a little more sparse
 			if x_unit % 2 == 0 and z_unit % 2 == 0:
@@ -128,7 +133,13 @@ func _ready() -> void:
 						else:
 							place_z_door_frame(x_unit, z_unit)
 							place_z_wall(x_unit, z_unit, 1)
-				
+	
+func spawn_skeleton(x_unit, z_unit, y_unit = 0.0):
+	var skeleton_instance = preload('res://scenes/model_scenes/skeleton.tscn').instantiate()
+	skeleton_instance.position = Vector3(x_unit * unit_size + unit_size/2.0, y_unit * unit_size + 3.0, z_unit * unit_size + unit_size/2.0)
+	skeleton_instance.rotation.y = randf_range(0, 2*PI)
+	main_game_node.get_node('enemies').add_child(skeleton_instance, true)
+			
 func place_floor_tile(x_unit, z_unit, y_unit = 0.0):
 	var floor_instance = floor_tile_scene.instantiate()
 	var x_offset = 10.0
@@ -242,7 +253,7 @@ func place_skull(x_unit, z_unit, y_unit = 0.0):
 	skull_instance.rotation.y = randf_range(0, 2*PI)
 	skull_instance.rotation.x = randf_range(0, 2*PI)
 	skull_instance.rotation.z = randf_range(0, 2*PI)
-	self.add_child(skull_instance)
+	main_game_node.get_node('entities').add_child(skull_instance, true)
 	
 func place_x_arch(x_unit, z_unit, y_unit = 1.0):
 	var arch_instance = arch_scene.instantiate()

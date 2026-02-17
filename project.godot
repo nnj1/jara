@@ -28,6 +28,10 @@ PostProcessor="*uid://cidp6guyk3ufi"
 MultiplayerManager="*uid://dbxhiovb823ww"
 MusicManager="*uid://ijuhsnldgtsi"
 
+[global_group]
+
+players=""
+
 [gui]
 
 theme/custom_font="uid://bwycm7ecw4jro"

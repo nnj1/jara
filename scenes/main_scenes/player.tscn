@@ -142,7 +142,7 @@ _data = {
 &"stab": SubResource("Animation_imse2")
 }
 
-[node name="Player" type="CharacterBody3D" unique_id=1876983122]
+[node name="Player" type="CharacterBody3D" unique_id=1876983122 groups=["players"]]
 collision_layer = 2
 collision_mask = 7
 script = ExtResource("1_40gj3")
@@ -196,7 +196,7 @@ volume_db = -3.0
 [node name="right_arm" type="Node3D" parent="." unique_id=841048407]
 
 [node name="weapons" type="Node3D" parent="right_arm" unique_id=1626193374]
-transform = Transform3D(1.0000001, 0, 0, 0, 0.91035146, 0.4138353, 0, -0.41383535, 0.9103514, 2.054556, 1.3014469, -1.877273)
+transform = Transform3D(1.0000001, 0, 0, 0, 0.9103514, 0.4138353, 0, -0.4138353, 0.9103514, 2.054556, 1.3014469, -1.877273)
 
 [node name="longsword2" parent="right_arm/weapons" unique_id=431304681 instance=ExtResource("4_mjmhq")]
 transform = Transform3D(3.0000007, 0, 0, 0, 3.0000007, 2.3841858e-07, 0, -2.3841858e-07, 3.0000005, 0, 2.1731, 4.7683716e-07)
