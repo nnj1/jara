@@ -1,7 +1,7 @@
 extends Node3D
 
 @onready var player = $players/Player
-@onready var current_map = $map/Procedural
+@onready var current_map = $map.get_child(1)
 @onready var fly_cam = $flying_camera
 
 func _ready() -> void:

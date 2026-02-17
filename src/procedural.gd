@@ -4,8 +4,8 @@ extends Node3D
 
 @export_category('Dungeon Settings')
 @export var unit_size: float = 20.0
-@export var height_units: int = 100
-@export var width_units: int = 100
+@export var height_units: int = 50
+@export var width_units: int = 50
 
 @export_category('Dungeon Models')
 
@@ -62,10 +62,17 @@ extends Node3D
 enum ORIENT {POS_X, NEG_X, POS_Z, NEG_Z}
 
 # Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	
-	for x_unit in range(width_units):
-		for z_unit in range(height_units):
+func _ready() -> void:	
+	# procedurally generate the dungeon
+	for x_unit in [-1] + range(width_units + 1):
+		for z_unit in  [-1] + range(height_units + 1):
+			# create borders for the dungeon
+			if x_unit < 0 or x_unit > width_units:
+				place_block(x_unit, z_unit, 0)
+				continue
+			if z_unit < 0 or z_unit > height_units:
+				place_block(x_unit, z_unit, 0)	
+				continue
 			# every unit should have a floor tile and a roof tile with occasional chandelier
 			place_floor_tile(x_unit, z_unit)
 			place_block(x_unit, z_unit, 2.0)

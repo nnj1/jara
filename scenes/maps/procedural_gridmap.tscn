@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://sekxnch7n0nx"]
+
+[ext_resource type="Script" uid="uid://cfkj4f76lt1bh" path="res://src/procedural_gridmap.gd" id="1_0mxnm"]
+[ext_resource type="MeshLibrary" uid="uid://cfpflhcxke134" path="res://resources/dungeon_library.tres" id="2_d2rj4"]
+
+[node name="ProceduralGridmap" type="Node3D" unique_id=2063806412]
+script = ExtResource("1_0mxnm")
+
+[node name="player_spawn_point" type="Marker3D" parent="." unique_id=783691182]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 20, 10)
+
+[node name="GridMap" type="GridMap" parent="." unique_id=2073356580]
+mesh_library = ExtResource("2_d2rj4")
+cell_size = Vector3(20, 20, 20)
+cell_center_y = false
+collision_mask = 0
