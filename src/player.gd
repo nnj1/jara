@@ -15,7 +15,7 @@ extends CharacterBody3D
 ## Interaction with RigidBodies
 @export_group("Physics Interaction")
 @export var push_force: float = 1.5
-@export var attack_impulse: float = 100.0 # Force applied during start_attack()
+@export var attack_impulse: float = 50.0 # Force applied during start_attack()
 
 ## Look and State
 @export_group("Look Settings")
