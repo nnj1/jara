@@ -15,6 +15,7 @@ extends CharacterBody3D
 ## Interaction with RigidBodies
 @export_group("Physics Interaction")
 @export var push_force: float = 1.5
+@export var attack_impulse: float = 100.0 # Force applied during start_attack()
 
 ## Look and State
 @export_group("Look Settings")
@@ -31,23 +32,45 @@ extends CharacterBody3D
 # Internal variables
 var is_mouse_captured: bool = true
 var _bob_time: float = 0.0
-var _camera_rotation := Vector2.ZERO # Store X and Y rotation manually to avoid Gimbal Lock
+var _camera_rotation := Vector2.ZERO 
 var _current_weapon_index: int = 0 : set = change_weapon
+var is_attacking: bool = false # Tracked for AnimationPlayer
 
 @onready var camera: Camera3D = $Camera3D
 @onready var _default_cam_height: float = camera.position.y
 @onready var interaction_ray: RayCast3D = $Camera3D/RayCast3D
+@onready var attack_ray: RayCast3D = $Camera3D/RayCast3D2
 
 func _ready() -> void:
 	if is_active:
 		capture_mouse(true)
-	# Initialize rotation trackers from current setup
 	_camera_rotation.y = rotation.y
 	_camera_rotation.x = camera.rotation.x
-	
-	# load default weapon
 	change_weapon(0)
-	
+
+# --- NEW ATTACK METHODS FOR ANIMATION PLAYER ---
+func start_attack():
+	is_attacking = true
+
+func stop_attack():
+	is_attacking = false
+
+func apply_attack_impulse():
+	if attack_ray.is_colliding():
+		var target = attack_ray.get_collider()
+		# Push direction is based on where the camera is looking
+		var push_dir = -camera.global_transform.basis.z 
+		
+		if target is RigidBody3D:
+			target.apply_central_impulse(push_dir * attack_impulse)
+			print('Pushed entity')
+			is_attacking = false # Prevent multiple hits in one frame
+		elif target is CharacterBody3D and target.has_method("apply_knockback"):
+			target.apply_knockback(push_dir * attack_impulse)
+			print('Pushed enemy')
+			is_attacking = false
+# -----------------------------------------------
+
 func change_weapon(index):
 	_current_weapon_index = index
 	var i = 0
@@ -72,27 +95,19 @@ func prev_weapon():
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_active: 
 		return
-		
 	if event.is_action_pressed("scroll_up"):
 		next_weapon()
-		
 	if event.is_action_pressed("scroll_down"):
 		prev_weapon()
-
 	if event.is_action_pressed("ui_cancel"):
 		capture_mouse(!is_mouse_captured)
-
 	if event is InputEventMouseButton and event.pressed:
 		if not is_mouse_captured:
 			capture_mouse(true)
-
 	if is_mouse_captured and event is InputEventMouseMotion:
-		# Update internal rotation trackers
 		_camera_rotation.y -= event.relative.x * sensitivity
 		_camera_rotation.x -= event.relative.y * sensitivity
 		_camera_rotation.x = clamp(_camera_rotation.x, -deg_to_rad(85), deg_to_rad(85))
-		
-		# Apply rotations
 		rotation.y = _camera_rotation.y
 		camera.rotation.x = _camera_rotation.x
 
@@ -104,16 +119,21 @@ func _physics_process(delta: float) -> void:
 	if not is_active: 
 		return
 		
+	# Handle Attack Logic
+	if is_attacking:
+		apply_attack_impulse()
+		
 	if Input.is_action_pressed('left_click'):
 		if not $right_arm/AnimationPlayer.is_playing():
 			$right_arm/AnimationPlayer.play("stab")
+	elif Input.is_action_pressed('right_click'):
+		if not $right_arm/AnimationPlayer.is_playing():
+			$right_arm/AnimationPlayer.play("parry")
 		
 	if interaction_ray.is_colliding():
-		# Returns the PhysicsBody3D or Area3D that was hit
 		var collider = interaction_ray.get_collider()
 		if collider:
 			main_game_node.get_node('UI/raycast_target').text = str(collider.name)
-			# TODO: this could be more complex
 			if collider.has_meta('interaction_message'):
 				main_game_node.get_node('UI/raycast_center_message').text = collider.get_meta('interaction_message')
 			if Input.is_action_just_pressed("interact"):
@@ -133,17 +153,14 @@ func _physics_process(delta: float) -> void:
 	else:
 		handle_air_physics(wish_dir, delta)
 		
-	#jump sound
-	if is_on_floor() and Input.is_action_just_pressed('ui_accept'):
+	if is_on_floor() and Input.is_action_just_pressed("ui_accept"):
 		if not $jumpSound.playing:
 			$jumpSound.play()
 			
 	move_and_slide()
-	
 	_handle_view_effects(delta, input_dir)
 	
-	# footsteps sound
-	if is_on_floor() and velocity.length() > 0.1 and input_dir !=  Vector2.ZERO:
+	if is_on_floor() and velocity.length() > 0.1 and input_dir != Vector2.ZERO:
 		var horizontal_vel = Vector3(velocity.x, 0, velocity.z).length()
 		$footstepsSound.pitch_scale = (horizontal_vel / walk_speed) * 0.25 + 0.25
 		if not $footstepsSound.playing:
@@ -154,7 +171,6 @@ func _physics_process(delta: float) -> void:
 	handle_rigidbody_push()
 
 func _handle_view_effects(delta: float, input_dir: Vector2) -> void:
-	# 1. CAMERA BOB
 	if is_on_floor() and velocity.length() > 0.1:
 		_bob_time += delta * velocity.length() * 0.5
 		camera.position.y = _default_cam_height + sin(_bob_time * bob_freq) * bob_amp
@@ -164,8 +180,6 @@ func _handle_view_effects(delta: float, input_dir: Vector2) -> void:
 		camera.position.x = lerp(camera.position.x, 0.0, delta * 10.0)
 		_bob_time = 0.0
 
-	# 2. STRAFE TILT (Roll)
-	# We modify rotation.z specifically, keeping rotation.x (pitch) untouched by this calculation
 	var target_tilt = -input_dir.x * tilt_amount
 	camera.rotation.z = lerp(camera.rotation.z, target_tilt, delta * tilt_speed)
 
@@ -174,9 +188,7 @@ func handle_ground_physics(wish_dir: Vector3, delta: float) -> void:
 	if speed != 0:
 		var drop = speed * friction * delta
 		velocity *= max(speed - drop, 0) / speed
-
 	accelerate(wish_dir, walk_speed, run_acceleration, delta)
-	
 	if is_mouse_captured and Input.is_action_just_pressed("ui_accept"):
 		velocity.y = jump_velocity
 

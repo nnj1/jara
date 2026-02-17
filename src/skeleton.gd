@@ -20,6 +20,7 @@ var state_timer: float = 0.0
 var persistence_timer: float = 0.0
 var jump_cooldown: float = 0.0 
 var can_jump: bool = true 
+var knockback_velocity = Vector3.ZERO
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var detection_area: Area3D = $DetectionArea
@@ -52,7 +53,15 @@ func _physics_process(delta: float) -> void:
 			process_wander_logic(delta)
 		State.IDLE:
 			process_idle_logic(delta)
-
+	
+	# 4. APPLY KNOCKBACK OVERRIDE
+	if knockback_velocity.length() > 0.1:
+		# We blend the knockback into the velocity
+		velocity.x = knockback_velocity.x
+		velocity.z = knockback_velocity.z
+		# Decay the knockback so it doesn't slide forever
+		knockback_velocity = knockback_velocity.move_toward(Vector3.ZERO, delta * 50.0)
+		
 	move_and_slide()
 
 func process_aggro_logic(delta: float):
@@ -152,3 +161,9 @@ func safe_play(anim_name: String):
 	if anim_player.has_animation(n):
 		if anim_player.current_animation != n:
 			anim_player.play(n)
+
+func apply_knockback(force: Vector3):
+	knockback_velocity = force
+	# Optional: If you want being hit to make them "mad"
+	if current_state != State.AGGRO:
+		change_state(State.AGGRO)
