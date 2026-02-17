@@ -34,8 +34,16 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_h3msq")
 
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_t1u8d"]
+points = PackedVector3Array(-10, 0, -10, -10, 0, 10, 10, 10, -10, 10, 0, -10, 10, 0, 10, 10, 10, 10)
+
 [node name="Stairs" type="Node3D" unique_id=1092953044]
 
 [node name="Cube_037" type="MeshInstance3D" parent="." unique_id=137459332]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
 mesh = SubResource("ArrayMesh_5pmo4")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Cube_037" unique_id=1914304739]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cube_037/StaticBody3D" unique_id=1955744034]
+shape = SubResource("ConvexPolygonShape3D_t1u8d")

@@ -59,7 +59,7 @@ func apply_attack_impulse():
 	if attack_ray.is_colliding():
 		var target = attack_ray.get_collider()
 		# Push direction is based on where the camera is looking
-		var push_dir = -camera.global_transform.basis.z 
+		var push_dir = -camera.global_transform.basis.z
 		
 		if target is RigidBody3D:
 			target.apply_central_impulse(push_dir * attack_impulse)
@@ -203,6 +203,7 @@ func accelerate(wish_dir: Vector3, max_speed: float, accel: float, delta: float)
 	var accel_speed = min(accel * delta * max_speed, add_speed)
 	velocity += wish_dir * accel_speed
 
+# for pushing rigidbodies you bump into
 func handle_rigidbody_push() -> void:
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)

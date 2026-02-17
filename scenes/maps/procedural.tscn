@@ -2,46 +2,19 @@
 
 [ext_resource type="Script" uid="uid://4ypnetg80ak0" path="res://src/procedural.gd" id="1_6ptlr"]
 [ext_resource type="PackedScene" uid="uid://co6cn47e8gt0" path="res://scenes/model_scenes/Floor_Tiles.tscn" id="2_e5la6"]
-[ext_resource type="PackedScene" uid="uid://pnq4cp4um8b8" path="res://scenes/model_scenes/Arch_Roof.tscn" id="3_cxnnp"]
-[ext_resource type="PackedScene" uid="uid://du1rvr466baw3" path="res://scenes/model_scenes/Block.tscn" id="5_fs631"]
-[ext_resource type="PackedScene" uid="uid://puexfj87h0kf" path="res://scenes/model_scenes/Arch.tscn" id="5_s4w5c"]
-[ext_resource type="PackedScene" uid="uid://t7af0wxon4n2" path="res://scenes/model_scenes/Block_Arch.tscn" id="6_s4w5c"]
-[ext_resource type="PackedScene" uid="uid://c036w0x7cv5hn" path="res://scenes/model_scenes/Pillar.tscn" id="7_s4w5c"]
-[ext_resource type="PackedScene" uid="uid://cbcdp3e0tx150" path="res://scenes/model_scenes/Chandelier.tscn" id="8_2tnq4"]
+[ext_resource type="PackedScene" uid="uid://ewhc0ai7ti3t" path="res://scenes/model_scenes/Stairs.tscn" id="4_ug44p"]
 [ext_resource type="PackedScene" uid="uid://rbow3yiset5a" path="res://scenes/model_scenes/Wall_Border_01.tscn" id="9_qejwx"]
 
 [node name="Procedural" type="Node3D" unique_id=2063806412]
 script = ExtResource("1_6ptlr")
-unit_size = null
-height_units = null
-width_units = null
 
 [node name="Floor_Tiles" parent="." unique_id=571386383 instance=ExtResource("2_e5la6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 10)
 
-[node name="Arch_Roof" parent="." unique_id=71220541 instance=ExtResource("3_cxnnp")]
-visible = false
-
-[node name="Arch" parent="." unique_id=627983345 instance=ExtResource("5_s4w5c")]
-visible = false
-
-[node name="Block" parent="." unique_id=980856588 instance=ExtResource("5_fs631")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 30, 10)
-visible = false
-
-[node name="Block_Arch" parent="." unique_id=554935415 instance=ExtResource("6_s4w5c")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 10)
-visible = false
-
-[node name="Pillar" parent="." unique_id=222753591 instance=ExtResource("7_s4w5c")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.825, 15, 2.825)
-visible = false
-
-[node name="Chandelier" parent="." unique_id=1940163949 instance=ExtResource("8_2tnq4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.675, 7.25, 10)
-visible = false
+[node name="Wall_Border_01" parent="." unique_id=2109751687 instance=ExtResource("9_qejwx")]
 
 [node name="player_spawn_point" type="Marker3D" parent="." unique_id=783691182]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 10, 10)
 
-[node name="Wall_Border_01" parent="." unique_id=2109751687 instance=ExtResource("9_qejwx")]
+[node name="Stairs" parent="." unique_id=1092953044 instance=ExtResource("4_ug44p")]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 0, 0, 0)

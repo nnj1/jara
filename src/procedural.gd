@@ -55,6 +55,10 @@ extends Node3D
 @onready var block_scene: PackedScene = preload('res://scenes/model_scenes/Block.tscn')
 @onready var chandelier_scene: PackedScene = preload('res://scenes/model_scenes/Chandelier.tscn')
 
+# STAIR THINGS
+@onready var stair_scene: PackedScene = preload('res://scenes/model_scenes/Arch_Roof.tscn')
+enum ORIENT {POS_X, NEG_X, POS_Z, NEG_Z}
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	
@@ -132,6 +136,20 @@ func place_floor_tile(x_unit, z_unit, y_unit = 0.0):
 	var y_offset = 0.0
 	floor_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
 	self.add_child(floor_instance)
+	
+func place_stair(x_unit, z_unit, y_unit = 0.0, orientation = ORIENT.POS_X):
+	var stair_instance = stair_scene.instantiate()
+	var aabb_size = get_first_mesh_size(stair_instance)
+	var x_offset = aabb_size.z / 2.0
+	var z_offset = aabb_size.x / 2.0
+	var y_offset = aabb_size.y / 2.0
+	match orientation:
+		ORIENT.POS_X: pass
+		ORIENT.NEG_X: stair_instance.rotation.y = PI
+		ORIENT.POS_Z: stair_instance.rotation.y = 3*PI/2
+		ORIENT.NEG_Z: stair_instance.rotation.y = PI/2
+	stair_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
+	self.add_child(stair_instance)
 	
 func place_hexagon(x_unit, z_unit, y_unit = 0.0):
 	var hexagon_instance = hexagon_scene.instantiate()
