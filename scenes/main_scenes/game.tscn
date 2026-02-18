@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://bdk3doktgdrxf" path="res://src/flying_camera.gd" id="3_3wwfn"]
 [ext_resource type="Script" uid="uid://bt88vj1vvfen" path="res://src/fps.gd" id="4_t5sjj"]
 [ext_resource type="Script" uid="uid://fkldrqw0lm67" path="res://src/multiplayer_spawner.gd" id="5_t5sjj"]
+[ext_resource type="PackedScene" uid="uid://d173umj203wf0" path="res://scenes/main_scenes/chat_box.tscn" id="6_leqql"]
 [ext_resource type="PackedScene" uid="uid://5jg1vxu72s30" path="res://scenes/maps/procedural.tscn" id="7_leqql"]
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_lnu2h"]
@@ -68,6 +69,8 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 32
 horizontal_alignment = 1
+
+[node name="ChatBox" parent="UI" unique_id=685031447 instance=ExtResource("6_leqql")]
 
 [node name="players" type="Node3D" parent="." unique_id=508872652]
 

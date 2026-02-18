@@ -5,6 +5,20 @@ extends Node3D
 @onready var fly_cam = $flying_camera
 @onready var map_node = $map
 
+# internal variables
+var settings_menu = null
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		if not settings_menu:
+			settings_menu = preload('res://scenes/main_scenes/settings.tscn').instantiate()
+			$UI.add_child(settings_menu)
+		else:
+			settings_menu.queue_free()
+			settings_menu = false
+			# make player recapture mouse
+			players_container.get_node(str(multiplayer.get_unique_id())).capture_mouse(true)
+
 func _ready() -> void:
 	fly_cam.active = false
 

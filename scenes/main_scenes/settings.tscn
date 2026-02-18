@@ -1,0 +1,100 @@
+[gd_scene format=3 uid="uid://b0w3feq0g7sa"]
+
+[ext_resource type="Script" uid="uid://daefqhs0b1u4v" path="res://src/settings.gd" id="1_s2vjq"]
+
+[node name="Settings" type="Panel" unique_id=483183316]
+custom_minimum_size = Vector2(600, 300)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_s2vjq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1643266323]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -75.0
+offset_top = -121.5
+offset_right = 75.0
+offset_bottom = 121.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1551650042]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1472394902]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1921313623]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Music Volume"
+
+[node name="HSlider" type="HSlider" parent="VBoxContainer/HBoxContainer" unique_id=1138384135]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=1906384948]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2" unique_id=1239308016]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Sound Volume"
+
+[node name="HSlider" type="HSlider" parent="VBoxContainer/HBoxContainer2" unique_id=838765151]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer" unique_id=265646029]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer3" unique_id=277402336]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Master Volume"
+
+[node name="HSlider" type="HSlider" parent="VBoxContainer/HBoxContainer3" unique_id=833969080]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer" unique_id=767245737]
+layout_mode = 2
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/HBoxContainer4" unique_id=1772212529]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer4" unique_id=1383654474]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Fullscreen"
+
+[node name="CheckBox" type="CheckBox" parent="VBoxContainer/HBoxContainer4" unique_id=2014794080]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer" unique_id=1355860103]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Exit to Menu"
+
+[node name="Button2" type="Button" parent="VBoxContainer" unique_id=974536260]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Exit to Desktop"

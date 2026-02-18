@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://bqk5nu00jbfjt"]
+
+[ext_resource type="Script" uid="uid://c4bx0k1bygde3" path="res://src/popup_window.gd" id="1_fhgwo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fhgwo"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+expand_margin_left = 4.0
+expand_margin_top = 4.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
+anti_aliasing = false
+
+[node name="PopupWindow" type="Control" unique_id=212338648]
+z_index = 4
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_fhgwo")
+
+[node name="Panel" type="Panel" parent="." unique_id=1002249232]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -188.0
+offset_right = 320.0
+offset_bottom = 188.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fhgwo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=719159803]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer" unique_id=1958811159]
+layout_mode = 2
+
+[node name="window_title" type="Label" parent="Panel/VBoxContainer/HBoxContainer" unique_id=624489656]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+mouse_filter = 0
+mouse_default_cursor_shape = 6
+theme_override_font_sizes/font_size = 32
+text = "Lore"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="Panel/VBoxContainer/HBoxContainer" unique_id=941774425]
+layout_mode = 2
+size_flags_horizontal = 8
+text = " X "
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel/VBoxContainer" unique_id=287270351]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 24
+theme_override_font_sizes/bold_italics_font_size = 24
+theme_override_font_sizes/italics_font_size = 24
+theme_override_font_sizes/mono_font_size = 24
+bbcode_enabled = true
+
+[connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/Button" to="." method="_on_button_pressed"]

@@ -119,8 +119,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		next_weapon()
 	if event.is_action_pressed("scroll_down"):
 		prev_weapon()
-	if event.is_action_pressed("ui_cancel"):
+	if event.is_action_pressed("ui_cancel") and not main_game_node.settings_menu:
 		capture_mouse(!is_mouse_captured)
+		
 	if event is InputEventMouseButton and event.pressed:
 		if not is_mouse_captured:
 			capture_mouse(true)
@@ -178,7 +179,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		handle_air_physics(wish_dir, delta)
 		
-	if is_on_floor() and Input.is_action_just_pressed("ui_accept"):
+	if is_on_floor() and Input.is_action_just_pressed("jump"):
 		if not $jumpSound.playing:
 			$jumpSound.play()
 			
@@ -218,7 +219,7 @@ func handle_ground_physics(wish_dir: Vector3, delta: float) -> void:
 		var drop = speed * friction * delta
 		velocity *= max(speed - drop, 0) / speed
 	accelerate(wish_dir, walk_speed, run_acceleration, delta)
-	if is_mouse_captured and Input.is_action_just_pressed("ui_accept"):
+	if is_mouse_captured and Input.is_action_just_pressed("jump"):
 		velocity.y = jump_velocity
 
 func handle_air_physics(wish_dir: Vector3, delta: float) -> void:

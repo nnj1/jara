@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://d173umj203wf0"]
+
+[ext_resource type="Script" uid="uid://dpf43f6qs27fq" path="res://src/chat_box.gd" id="1_w6t58"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qpaxy"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0, 0, 0, 0.101960786)
+
+[node name="ChatBox" type="Control" unique_id=685031447]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_w6t58")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=800105156]
+self_modulate = Color(1, 1, 1, 0.11100001)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -487.0
+offset_top = -148.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=1426153660]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/VBoxContainer" unique_id=1724343261]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 24
+theme_override_font_sizes/bold_italics_font_size = 24
+theme_override_font_sizes/italics_font_size = 24
+theme_override_font_sizes/mono_font_size = 24
+bbcode_enabled = true
+scroll_following = true
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer" unique_id=1940844683]
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_qpaxy")
+placeholder_text = "Press enter to chat"
+alignment = 2
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2123287317]
+bus = &"Sfx"
