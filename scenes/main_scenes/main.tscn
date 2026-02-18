@@ -44,10 +44,10 @@ script = ExtResource("1_e6bjw")
 layer = 2
 
 [node name="Label" type="Label" parent="CanvasLayer" unique_id=547864900]
-offset_left = 304.0
-offset_top = 120.0
-offset_right = 888.0
-offset_bottom = 230.0
+offset_left = 306.0
+offset_top = 95.00001
+offset_right = 890.0
+offset_bottom = 258.0
 scale = Vector2(1.0141722, 1.0141722)
 pivot_offset = Vector2(292, 55)
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -66,10 +66,9 @@ theme = SubResource("Theme_e6bjw")
 [node name="TabContainer" type="TabContainer" parent="CanvasLayer/VBoxContainer" unique_id=88205432]
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 1
+current_tab = 0
 
 [node name="Join Game" type="Panel" parent="CanvasLayer/VBoxContainer/TabContainer" unique_id=464794047]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -82,6 +81,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Create Server" type="Panel" parent="CanvasLayer/VBoxContainer/TabContainer" unique_id=1166670200]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
