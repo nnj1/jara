@@ -28,6 +28,11 @@ PostProcessor="*uid://cidp6guyk3ufi"
 MultiplayerManager="*uid://dbxhiovb823ww"
 MusicManager="*uid://ijuhsnldgtsi"
 
+[display]
+
+window/stretch/mode="canvas_items"
+mouse_cursor/custom_image="uid://gv1guba2563a"
+
 [global_group]
 
 players=""

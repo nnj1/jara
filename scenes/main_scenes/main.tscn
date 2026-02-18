@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://drnicp18cogrs"]
 
 [ext_resource type="Script" uid="uid://db6h1hkjrodsq" path="res://src/main.gd" id="1_e6bjw"]
+[ext_resource type="Texture2D" uid="uid://b6hvrv17f6e78" path="res://assets/backgrounds/2.png" id="2_gru0p"]
 
 [sub_resource type="Theme" id="Theme_e6bjw"]
 Button/font_sizes/font_size = 24
@@ -43,25 +44,29 @@ script = ExtResource("1_e6bjw")
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=834391773]
 layer = 2
 
-[node name="Label" type="Label" parent="CanvasLayer" unique_id=547864900]
-offset_left = 306.0
-offset_top = 95.00001
-offset_right = 890.0
-offset_bottom = 258.0
-scale = Vector2(1.0141722, 1.0141722)
-pivot_offset = Vector2(292, 55)
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer" unique_id=274480683]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -359.0
+offset_top = -207.25
+offset_right = 359.0
+offset_bottom = 207.25
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_e6bjw")
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer" unique_id=547864900]
+layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 9
 theme_override_font_sizes/font_size = 128
 text = "JARA"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer" unique_id=274480683]
-offset_left = 298.0
-offset_top = 274.0
-offset_right = 1016.0
-offset_bottom = 526.0
-theme = SubResource("Theme_e6bjw")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="TabContainer" type="TabContainer" parent="CanvasLayer/VBoxContainer" unique_id=88205432]
 layout_mode = 2
@@ -125,6 +130,17 @@ text = "Start Server"
 
 [node name="Timer" type="Timer" parent="." unique_id=731085026]
 autostart = true
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="." unique_id=215162315]
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer2" unique_id=1939241638]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_gru0p")
+expand_mode = 2
 
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/ClientButton" to="." method="_on_join_manual_pressed"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/ServerButton" to="." method="_on_host_button_pressed"]
