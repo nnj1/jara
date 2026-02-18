@@ -10,55 +10,55 @@ extends Node3D
 @export_category('Dungeon Models')
 
 # FLOORS
-@onready var floor_tile_scene: PackedScene = preload('res://scenes/model_scenes/Floor_Tiles.tscn')
+@onready var floor_tile_scene: PackedScene = preload('res://scenes/model_scenes/structures/Floor_Tiles.tscn')
 
 # WALLS
-@onready var wall_01_scene: PackedScene = preload('res://scenes/model_scenes/Wall_01.tscn')
-@onready var wall_02_scene: PackedScene = preload('res://scenes/model_scenes/Wall_02.tscn')
-@onready var wall_border_01_scene: PackedScene = preload('res://scenes/model_scenes/Wall_Border_01.tscn')
-@onready var wall_border_02_scene: PackedScene = preload('res://scenes/model_scenes/Wall_Border_02.tscn')
-@onready var wall_ruin_scene: PackedScene = preload('res://scenes/model_scenes/Wall_Ruin.tscn')
-@onready var wall_windowed_01_scene: PackedScene = preload('res://scenes/model_scenes/Windowed_Wall_01.tscn')
-@onready var wall_windowed_02_scene: PackedScene = preload('res://scenes/model_scenes/Windowed_Wall_02.tscn')
-@onready var wall_skull_scene: PackedScene = preload('res://scenes/model_scenes/Skull_Wall.tscn')
+@onready var wall_01_scene: PackedScene = preload('res://scenes/model_scenes/structures/Wall_01.tscn')
+@onready var wall_02_scene: PackedScene = preload('res://scenes/model_scenes/structures/Wall_02.tscn')
+@onready var wall_border_01_scene: PackedScene = preload('res://scenes/model_scenes/structures/Wall_Border_01.tscn')
+@onready var wall_border_02_scene: PackedScene = preload('res://scenes/model_scenes/structures/Wall_Border_02.tscn')
+@onready var wall_ruin_scene: PackedScene = preload('res://scenes/model_scenes/structures/Wall_Ruin.tscn')
+@onready var wall_windowed_01_scene: PackedScene = preload('res://scenes/model_scenes/structures/Windowed_Wall_01.tscn')
+@onready var wall_windowed_02_scene: PackedScene = preload('res://scenes/model_scenes/structures/Windowed_Wall_02.tscn')
+@onready var wall_skull_scene: PackedScene = preload('res://scenes/model_scenes/structures/Skull_Wall.tscn')
 @onready var all_walls = [wall_01_scene, wall_02_scene, wall_ruin_scene, wall_windowed_01_scene, wall_windowed_02_scene, wall_skull_scene]
 @onready var all_non_window_walls = [wall_01_scene, wall_02_scene, wall_ruin_scene, wall_skull_scene]
 @onready var all_window_walls = [wall_windowed_01_scene, wall_windowed_02_scene]
 @onready var all_wall_borders = [wall_border_01_scene, wall_border_02_scene]
 
 # WALL DECORATORS
-@onready var wall_table_scene: PackedScene = preload('res://scenes/model_scenes/Wall_Table.tscn')
+@onready var wall_table_scene: PackedScene = preload('res://scenes/model_scenes/structures/Wall_Table.tscn')
 
 # DOORS
-@onready var door_frame_01_scene: PackedScene = preload('res://scenes/model_scenes/Door_Frame_01.tscn')
-@onready var door_frame_02_scene: PackedScene = preload('res://scenes/model_scenes/Door_Frame_02.tscn')
+@onready var door_frame_01_scene: PackedScene = preload('res://scenes/model_scenes/structures/Door_Frame_01.tscn')
+@onready var door_frame_02_scene: PackedScene = preload('res://scenes/model_scenes/structures/Door_Frame_02.tscn')
 @onready var all_door_frames = [door_frame_01_scene, door_frame_02_scene]
 
 # FLOOR DECORATORS
-@onready var hexagon_scene: PackedScene = preload('res://scenes/model_scenes/Hexagon.tscn')
-@onready var debris_scene: PackedScene = preload('res://scenes/model_scenes/Debris.tscn')
-@onready var barrel_scene: PackedScene = preload('res://scenes/model_scenes/Barrel.tscn')
-@onready var chest_scene: PackedScene = preload('res://scenes/model_scenes/Chest.tscn')
-@onready var box_scene: PackedScene = preload('res://scenes/model_scenes/Box.tscn')
-@onready var spike_scene: PackedScene = preload('res://scenes/model_scenes/Spikes.tscn')
-@onready var skull_scene: PackedScene = preload('res://scenes/model_scenes/Skull.tscn')
+@onready var hexagon_scene: PackedScene = preload('res://scenes/model_scenes/structures/Hexagon.tscn')
+@onready var debris_scene: PackedScene = preload('res://scenes/model_scenes/structures/Debris.tscn')
+@onready var barrel_scene: PackedScene = preload('res://scenes/model_scenes/entities/Barrel.tscn')
+@onready var chest_scene: PackedScene = preload('res://scenes/model_scenes/entities/Chest.tscn')
+@onready var box_scene: PackedScene = preload('res://scenes/model_scenes/entities/Box.tscn')
+@onready var spike_scene: PackedScene = preload('res://scenes/model_scenes/structures/Spikes.tscn')
+@onready var skull_scene: PackedScene = preload('res://scenes/model_scenes/entities/Skull.tscn')
 
 # PILLARS
-@onready var pillar_scene: PackedScene = preload('res://scenes/model_scenes/Pillar.tscn')
-@onready var pillar_collapsed_1_scene: PackedScene = preload('res://scenes/model_scenes/Pillar_Collapsed_01.tscn')
-@onready var pillar_collapsed_2_scene: PackedScene = preload('res://scenes/model_scenes/Pillar_Collapsed_02.tscn')
+@onready var pillar_scene: PackedScene = preload('res://scenes/model_scenes/structures/Pillar.tscn')
+@onready var pillar_collapsed_1_scene: PackedScene = preload('res://scenes/model_scenes/structures/Pillar_Collapsed_01.tscn')
+@onready var pillar_collapsed_2_scene: PackedScene = preload('res://scenes/model_scenes/structures/Pillar_Collapsed_02.tscn')
 @onready var all_pillars = [pillar_scene, pillar_collapsed_1_scene, pillar_collapsed_2_scene]
 
 # ROOF THINGS
-@onready var arch_roof_scene: PackedScene = preload('res://scenes/model_scenes/Arch_Roof.tscn')
-@onready var arch_scene: PackedScene = preload('res://scenes/model_scenes/Arch.tscn')
-@onready var arch_fence_scene: PackedScene = preload('res://scenes/model_scenes/Arch_Fence.tscn')
-@onready var block_arch_scene: PackedScene = preload('res://scenes/model_scenes/Block_Arch.tscn')
-@onready var block_scene: PackedScene = preload('res://scenes/model_scenes/Block.tscn')
-@onready var chandelier_scene: PackedScene = preload('res://scenes/model_scenes/Chandelier.tscn')
+@onready var arch_roof_scene: PackedScene = preload('res://scenes/model_scenes/structures/Arch_Roof.tscn')
+@onready var arch_scene: PackedScene = preload('res://scenes/model_scenes/structures/Arch.tscn')
+@onready var arch_fence_scene: PackedScene = preload('res://scenes/model_scenes/structures/Arch_Fence.tscn')
+@onready var block_arch_scene: PackedScene = preload('res://scenes/model_scenes/structures/Block_Arch.tscn')
+@onready var block_scene: PackedScene = preload('res://scenes/model_scenes/structures/Block.tscn')
+@onready var chandelier_scene: PackedScene = preload('res://scenes/model_scenes/structures/Chandelier.tscn')
 
 # STAIR THINGS
-@onready var stair_scene: PackedScene = preload('res://scenes/model_scenes/Arch_Roof.tscn')
+@onready var stair_scene: PackedScene = preload('res://scenes/model_scenes/structures/Arch_Roof.tscn')
 enum ORIENT {POS_X, NEG_X, POS_Z, NEG_Z}
 
 # Called when the node enters the scene tree for the first time.
@@ -142,7 +142,7 @@ func _ready() -> void:
 							place_z_wall(x_unit, z_unit, 1)
 	
 func spawn_skeleton(x_unit, z_unit, y_unit = 0.0):
-	var skeleton_instance = preload('res://scenes/model_scenes/skeleton.tscn').instantiate()
+	var skeleton_instance = preload('res://scenes/model_scenes/enemies/skeleton.tscn').instantiate()
 	skeleton_instance.position = Vector3(x_unit * unit_size + unit_size/2.0, y_unit * unit_size + 3.0, z_unit * unit_size + unit_size/2.0)
 	skeleton_instance.rotation.y = randf_range(0, 2*PI)
 	main_game_node.get_node('enemies').add_child(skeleton_instance, true)

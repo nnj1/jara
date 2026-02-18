@@ -29,6 +29,12 @@ extends CharacterBody3D
 @export var tilt_amount: float = 0.05
 @export var tilt_speed: float = 5.0
 
+## Spell Settings
+@export var fireball_scene: PackedScene = preload('res://scenes/model_scenes/entities/Fireball.tscn')
+@export var lob_strength: float = 30.0
+@export var upward_bias: float = 0.3 # Adds the "lob" arch
+@onready var muzzle = $Camera3D/Muzzle
+
 # Internal variables
 var is_mouse_captured: bool = true
 var _bob_time: float = 0.0
@@ -118,6 +124,10 @@ func capture_mouse(capture: bool) -> void:
 func _physics_process(delta: float) -> void:
 	if not is_active: 
 		return
+		
+	# Handle spellcasting
+	if Input.is_action_pressed("spell_q"):
+		lob_fireball()
 		
 	# Handle Attack Logic
 	if is_attacking:
@@ -213,3 +223,17 @@ func handle_rigidbody_push() -> void:
 			push_dir.y = 0 
 			var impact_strength = velocity.length() * push_force
 			collider.apply_central_impulse(push_dir * impact_strength)
+
+func lob_fireball():
+	var fireball = fireball_scene.instantiate()
+	# Add fireball to the root scene so it doesn't move with the player
+	main_game_node.get_node('entities').add_child(fireball, true)
+	# Position it at the wizard's hand/staff
+	fireball.global_position = muzzle.global_position
+	# 1. Get the direction from the RayCast
+	# If raycast isn't hitting anything, we use the target_position (forward)
+	var target_dir = -attack_ray.global_transform.basis.z 
+	# 2. Add the "Lob" (Angle it up slightly)
+	var launch_velocity = (target_dir + Vector3.UP * upward_bias).normalized() * lob_strength
+	# 3. Apply the force
+	fireball.linear_velocity = launch_velocity

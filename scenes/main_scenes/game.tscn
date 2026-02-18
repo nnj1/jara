@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://bdk3doktgdrxf" path="res://src/flying_camera.gd" id="3_3wwfn"]
 [ext_resource type="PackedScene" uid="uid://br8v26jp51jkj" path="res://scenes/main_scenes/player.tscn" id="3_t5sjj"]
 [ext_resource type="Script" uid="uid://bt88vj1vvfen" path="res://src/fps.gd" id="4_t5sjj"]
-[ext_resource type="PackedScene" uid="uid://bt5kw3117d1lr" path="res://scenes/model_scenes/skeleton.tscn" id="6_leqql"]
+[ext_resource type="PackedScene" uid="uid://bt5kw3117d1lr" path="res://scenes/model_scenes/enemies/skeleton.tscn" id="6_leqql"]
 [ext_resource type="PackedScene" uid="uid://5jg1vxu72s30" path="res://scenes/maps/procedural.tscn" id="7_leqql"]
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_lnu2h"]
@@ -17,6 +17,8 @@ sky_material = SubResource("PhysicalSkyMaterial_lnu2h")
 background_mode = 2
 background_color = Color(1, 1, 1, 1)
 sky = SubResource("Sky_lbhrr")
+glow_enabled = true
+glow_hdr_threshold = 1.5
 
 [node name="Game" type="Node3D" unique_id=390812690]
 script = ExtResource("1_ks7w8")
@@ -74,7 +76,6 @@ spawn_path = NodePath("..")
 [node name="entities" type="Node3D" parent="." unique_id=173960560]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="entities" unique_id=527765206]
-_spawnable_scenes = PackedStringArray("uid://bjjm5qn5tnrap")
 spawn_path = NodePath("..")
 
 [node name="enemies" type="Node3D" parent="." unique_id=700377337]

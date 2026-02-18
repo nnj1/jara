@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://5jg1vxu72s30"]
 
 [ext_resource type="Script" uid="uid://4ypnetg80ak0" path="res://src/procedural.gd" id="1_6ptlr"]
-[ext_resource type="PackedScene" uid="uid://co6cn47e8gt0" path="res://scenes/model_scenes/Floor_Tiles.tscn" id="2_e5la6"]
-[ext_resource type="PackedScene" uid="uid://ewhc0ai7ti3t" path="res://scenes/model_scenes/Stairs.tscn" id="4_ug44p"]
-[ext_resource type="PackedScene" uid="uid://rbow3yiset5a" path="res://scenes/model_scenes/Wall_Border_01.tscn" id="9_qejwx"]
+[ext_resource type="PackedScene" uid="uid://co6cn47e8gt0" path="res://scenes/model_scenes/structures/Floor_Tiles.tscn" id="2_e5la6"]
+[ext_resource type="PackedScene" uid="uid://ewhc0ai7ti3t" path="res://scenes/model_scenes/structures/Stairs.tscn" id="4_ug44p"]
+[ext_resource type="PackedScene" uid="uid://rbow3yiset5a" path="res://scenes/model_scenes/structures/Wall_Border_01.tscn" id="9_qejwx"]
 
 [node name="Procedural" type="Node3D" unique_id=2063806412]
 script = ExtResource("1_6ptlr")

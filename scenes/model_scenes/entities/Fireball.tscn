@@ -1,0 +1,91 @@
+[gd_scene format=3 uid="uid://boagnrysleo5p"]
+
+[ext_resource type="Script" uid="uid://cwqglfresnqpv" path="res://src/fireball.gd" id="1_en363"]
+[ext_resource type="Texture2D" uid="uid://dh5noh68sfcl" path="res://resources/fireball_noise_texture.tres" id="2_nqms4"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_en363"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_en363"]
+transparency = 1
+albedo_texture = ExtResource("2_nqms4")
+emission_enabled = true
+emission = Color(2.454227, 0.7100566, 0, 1)
+emission_energy_multiplier = 10.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_nqms4"]
+material = SubResource("StandardMaterial3D_en363")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_en363"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_nqms4"]
+
+[sub_resource type="Gradient" id="Gradient_en363"]
+offsets = PackedFloat32Array(0, 0.36065573, 1)
+colors = PackedColorArray(1, 1, 0, 1, 0.4812734, 1.0709092e-06, 3.6098064e-07, 1, 0.23921569, 0.23921569, 0.23921569, 0.84313726)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_nqms4"]
+gradient = SubResource("Gradient_en363")
+
+[sub_resource type="Curve" id="Curve_emyhp"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_m53f1"]
+curve = SubResource("Curve_emyhp")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_en363"]
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 0, 1)
+spread = 19.588
+initial_velocity_min = 5.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 2, 0)
+scale_min = 0.0
+scale_curve = SubResource("CurveTexture_m53f1")
+color_ramp = SubResource("GradientTexture1D_nqms4")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wfnvf"]
+vertex_color_use_as_albedo = true
+emission_enabled = true
+emission = Color(1.4369954, 0.38881353, 0, 1)
+emission_energy_multiplier = 10.0
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_emyhp"]
+material = SubResource("StandardMaterial3D_wfnvf")
+size = Vector2(0.3, 0.3)
+
+[node name="Fireball" type="RigidBody3D" unique_id=234979782]
+collision_layer = 4
+collision_mask = 0
+physics_material_override = SubResource("PhysicsMaterial_en363")
+script = ExtResource("1_en363")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1227347789]
+mesh = SubResource("SphereMesh_nqms4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1966939374]
+shape = SubResource("SphereShape3D_en363")
+
+[node name="Area3D" type="Area3D" parent="." unique_id=1465308850]
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1108324839]
+shape = SubResource("SphereShape3D_nqms4")
+
+[node name="Timer" type="Timer" parent="." unique_id=1582769026]
+wait_time = 10.0
+one_shot = true
+autostart = true
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=1223307947]
+amount = 100
+process_material = SubResource("ParticleProcessMaterial_en363")
+draw_pass_1 = SubResource("QuadMesh_emyhp")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

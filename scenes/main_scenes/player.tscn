@@ -179,6 +179,9 @@ remote_path = NodePath("../../right_arm")
 update_position = false
 update_scale = false
 
+[node name="Muzzle" type="Marker3D" parent="Camera3D" unique_id=1394739766]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.4641087)
+
 [node name="footstepsSound" type="AudioStreamPlayer3D" parent="." unique_id=1408197173]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.8012185, 0)
 stream = ExtResource("2_jpq18")
