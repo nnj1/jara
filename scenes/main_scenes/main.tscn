@@ -1,3 +1,131 @@
 [gd_scene format=3 uid="uid://drnicp18cogrs"]
 
+[ext_resource type="Script" uid="uid://db6h1hkjrodsq" path="res://src/main.gd" id="1_e6bjw"]
+
+[sub_resource type="Theme" id="Theme_e6bjw"]
+Button/font_sizes/font_size = 24
+CheckBox/font_sizes/font_size = 16
+CheckButton/font_sizes/font_size = 16
+CodeEdit/font_sizes/font_size = 16
+ColorPickerButton/font_sizes/font_size = 16
+FoldableContainer/font_sizes/font_size = 16
+GraphFrameTitleLabel/font_sizes/font_size = 22
+GraphNodeTitleLabel/font_sizes/font_size = 16
+HeaderLarge/font_sizes/font_size = 28
+HeaderMedium/font_sizes/font_size = 24
+HeaderSmall/font_sizes/font_size = 20
+ItemList/font_sizes/font_size = 16
+Label/font_sizes/font_size = 16
+LineEdit/font_sizes/font_size = 24
+LinkButton/font_sizes/font_size = 16
+MenuBar/font_sizes/font_size = 16
+MenuButton/font_sizes/font_size = 16
+OptionButton/font_sizes/font_size = 16
+PopupMenu/font_sizes/font_separator_size = 16
+PopupMenu/font_sizes/font_size = 16
+ProgressBar/font_sizes/font_size = 16
+RichTextLabel/font_sizes/bold_font_size = 16
+RichTextLabel/font_sizes/bold_italics_font_size = 16
+RichTextLabel/font_sizes/italics_font_size = 16
+RichTextLabel/font_sizes/mono_font_size = 16
+RichTextLabel/font_sizes/normal_font_size = 16
+TabBar/font_sizes/font_size = 20
+TabContainer/font_sizes/font_size = 32
+TextEdit/font_sizes/font_size = 32
+TooltipLabel/font_sizes/font_size = 16
+Tree/font_sizes/font_size = 16
+Tree/font_sizes/title_button_font_size = 16
+Window/font_sizes/title_font_size = 16
+
 [node name="Main" type="Node2D" unique_id=871325277]
+script = ExtResource("1_e6bjw")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=834391773]
+layer = 2
+
+[node name="Label" type="Label" parent="CanvasLayer" unique_id=547864900]
+offset_left = 304.0
+offset_top = 120.0
+offset_right = 888.0
+offset_bottom = 230.0
+scale = Vector2(1.0141722, 1.0141722)
+pivot_offset = Vector2(292, 55)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 9
+theme_override_font_sizes/font_size = 128
+text = "JARA"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer" unique_id=274480683]
+offset_left = 298.0
+offset_top = 274.0
+offset_right = 1016.0
+offset_bottom = 526.0
+theme = SubResource("Theme_e6bjw")
+
+[node name="TabContainer" type="TabContainer" parent="CanvasLayer/VBoxContainer" unique_id=88205432]
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 1
+
+[node name="Join Game" type="Panel" parent="CanvasLayer/VBoxContainer/TabContainer" unique_id=464794047]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="ServerList" type="ItemList" parent="CanvasLayer/VBoxContainer/TabContainer/Join Game" unique_id=2099289710]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Create Server" type="Panel" parent="CanvasLayer/VBoxContainer/TabContainer" unique_id=1166670200]
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="ServerName" type="LineEdit" parent="CanvasLayer/VBoxContainer/TabContainer/Create Server" unique_id=1685707248]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 22.0
+grow_horizontal = 2
+placeholder_text = "enter server name"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer" unique_id=1158286730]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="PlayerName" type="LineEdit" parent="CanvasLayer/VBoxContainer/HBoxContainer" unique_id=291496979]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Enter username"
+
+[node name="HostName" type="LineEdit" parent="CanvasLayer/VBoxContainer/HBoxContainer" unique_id=1978580918]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "localhost"
+placeholder_text = "hostname"
+
+[node name="PortName" type="LineEdit" parent="CanvasLayer/VBoxContainer/HBoxContainer" unique_id=807762905]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.2
+text = "9999"
+placeholder_text = "port"
+
+[node name="ClientButton" type="Button" parent="CanvasLayer/VBoxContainer/HBoxContainer" unique_id=1524808418]
+layout_mode = 2
+text = "Start Client"
+
+[node name="ServerButton" type="Button" parent="CanvasLayer/VBoxContainer/HBoxContainer" unique_id=759960469]
+layout_mode = 2
+text = "Start Server"
+
+[node name="Timer" type="Timer" parent="." unique_id=731085026]
+autostart = true
+
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/ClientButton" to="." method="_on_join_manual_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/ServerButton" to="." method="_on_host_button_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_refresh_list_timeout"]

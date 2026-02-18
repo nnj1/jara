@@ -2,6 +2,10 @@ extends Node3D
 
 @onready var main_game_node = get_tree().get_root().get_node('Game')
 
+# --- RNG & Synchronization ---
+var rng := RandomNumberGenerator.new()
+var is_generated: bool = false
+
 @export_category('Dungeon Settings')
 @export var unit_size: float = 20.0
 @export var height_units: int = 50
@@ -21,6 +25,7 @@ extends Node3D
 @onready var wall_windowed_01_scene: PackedScene = preload('res://scenes/model_scenes/structures/Windowed_Wall_01.tscn')
 @onready var wall_windowed_02_scene: PackedScene = preload('res://scenes/model_scenes/structures/Windowed_Wall_02.tscn')
 @onready var wall_skull_scene: PackedScene = preload('res://scenes/model_scenes/structures/Skull_Wall.tscn')
+
 @onready var all_walls = [wall_01_scene, wall_02_scene, wall_ruin_scene, wall_windowed_01_scene, wall_windowed_02_scene, wall_skull_scene]
 @onready var all_non_window_walls = [wall_01_scene, wall_02_scene, wall_ruin_scene, wall_skull_scene]
 @onready var all_window_walls = [wall_windowed_01_scene, wall_windowed_02_scene]
@@ -61,393 +66,308 @@ extends Node3D
 @onready var stair_scene: PackedScene = preload('res://scenes/model_scenes/structures/Arch_Roof.tscn')
 enum ORIENT {POS_X, NEG_X, POS_Z, NEG_Z}
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:	
-	# procedurally generate the dungeon
+	# Only generate if settings are already here (host), otherwise wait for signal (client)
+	if multiplayer.is_server() or (MultiplayerManager.server_settings.has("map_seed") and MultiplayerManager.server_settings["map_seed"] != 0):
+		generate_dungeon()
+	else:
+		MultiplayerManager.settings_received.connect(generate_dungeon)
+
+func generate_dungeon() -> void:
+	if is_generated: return
+	is_generated = true
+	
+	# Set the local RNG seed from the multiplayer manager
+	rng.seed = MultiplayerManager.server_settings["map_seed"]
+	
 	for x_unit in [-1] + range(width_units + 1):
-		for z_unit in  [-1] + range(height_units + 1):
-			# create borders for the dungeon
+		for z_unit in [-1] + range(height_units + 1):
 			if x_unit < 0 or x_unit > width_units:
 				place_block(x_unit, z_unit, 0)
 				continue
 			if z_unit < 0 or z_unit > height_units:
 				place_block(x_unit, z_unit, 0)	
 				continue
-			# every unit should have a floor tile and a roof tile with occasional chandelier
+
 			place_floor_tile(x_unit, z_unit)
 			place_block(x_unit, z_unit, 2.0)
-			if randf() < 0.1:
+			
+			if rng.randf() < 0.1:
 				place_chandelier(x_unit, z_unit, 1.0)
 			
-			# add random amount of skulls in the unit square
-			if randf() < 0.05:
-				for i in randi_range(0, 4):
+			if rng.randf() < 0.05:
+				for i in rng.randi_range(0, 4):
 					place_skull(x_unit, z_unit)
-			# very low change of spawning a skeleton in the center of the tile
-			elif randf() < 0.01:
+			elif rng.randf() < 0.01:
 				spawn_skeleton(x_unit, z_unit)
 				
-			# make things a little more sparse
 			if x_unit % 2 == 0 and z_unit % 2 == 0:
-				if randf() < 0.1:
+				if rng.randf() < 0.1:
 					place_hexagon(x_unit, z_unit)
-				elif randf() < 0.3:
-					if randf() < 0.5:
+				elif rng.randf() < 0.3:
+					var sub_roll = rng.randf()
+					if sub_roll < 0.33:
 						place_pillar(x_unit, z_unit)
-					elif randf() < 0.5:
-						var thing = ['barrel', 'debris', 'chest', 'box'].pick_random()
+					elif sub_roll < 0.66:
+						var things = ['barrel', 'debris', 'chest', 'box']
+						var thing = things[rng.randi() % things.size()]
 						call('place_' + thing, x_unit, z_unit)
-					elif randf() < 0.5:
+					else:
 						place_spike(x_unit, z_unit)
 				else:
-					if randf() < 0.5:
-						if randf() < 0.5:
-							if randf() < 0.5:
-								place_x_wall(x_unit, z_unit, 0.5)
-								place_x_wall(x_unit + 1, z_unit, 0.5)
-								place_x_wall_border(x_unit, z_unit)
-								place_x_wall_border(x_unit + 1, z_unit)
-							else:
-								place_x_window_wall(x_unit, z_unit, 0)
-								place_x_window_wall(x_unit + 1, z_unit, 0)
-								place_x_wall_border(x_unit, z_unit, 1.0)
-								place_x_wall_border(x_unit + 1, z_unit, 1.0)
-							place_x_arch(x_unit, z_unit, 1.5)
-							place_x_arch(x_unit + 1, z_unit, 1.5)
-							if randf() < 0.5:
-								place_x_arch_fence(x_unit, z_unit, 1.5)
-								place_x_arch_fence(x_unit + 1, z_unit, 1.5)
-						else:
-							place_x_door_frame(x_unit, z_unit)
-							place_x_wall(x_unit, z_unit, 1)
+					if rng.randf() < 0.5:
+						_gen_x_walls(x_unit, z_unit)
 					else:
-						if randf() < 0.5:
-							if randf() < 0.5:
-								place_z_wall(x_unit, z_unit, 0.5)
-								place_z_wall(x_unit, z_unit + 1, 0.5)
-								place_z_wall_border(x_unit, z_unit)
-								place_z_wall_border(x_unit, z_unit + 1)
-							else:
-								place_z_window_wall(x_unit, z_unit, 0)
-								place_z_window_wall(x_unit, z_unit + 1, 0)
-								place_z_wall_border(x_unit, z_unit, 1.0)
-								place_z_wall_border(x_unit, z_unit + 1, 1.0)
-							place_z_arch(x_unit, z_unit, 1.5)
-							place_z_arch(x_unit, z_unit + 1, 1.5)
-							if randf() < 0.5:
-								place_z_arch_fence(x_unit, z_unit, 1.5)
-								place_z_arch_fence(x_unit, z_unit + 1, 1.5)
-						else:
-							place_z_door_frame(x_unit, z_unit)
-							place_z_wall(x_unit, z_unit, 1)
-	
+						_gen_z_walls(x_unit, z_unit)
+
+# CONTIGUOUS WALL PLACEMENT FUNCTIONS
+
+func _gen_x_walls(x_unit, z_unit):
+	if rng.randf() < 0.5:
+		if rng.randf() < 0.5:
+			place_x_wall(x_unit, z_unit, 0.5)
+			place_x_wall(x_unit + 1, z_unit, 0.5)
+			place_x_wall_border(x_unit, z_unit)
+			place_x_wall_border(x_unit + 1, z_unit)
+		else:
+			place_x_window_wall(x_unit, z_unit, 0)
+			place_x_window_wall(x_unit + 1, z_unit, 0)
+			place_x_wall_border(x_unit, z_unit, 1.0)
+			place_x_wall_border(x_unit + 1, z_unit, 1.0)
+		place_x_arch(x_unit, z_unit, 1.5)
+		place_x_arch(x_unit + 1, z_unit, 1.5)
+		if rng.randf() < 0.5:
+			place_x_arch_fence(x_unit, z_unit, 1.5)
+			place_x_arch_fence(x_unit + 1, z_unit, 1.5)
+	else:
+		place_x_door_frame(x_unit, z_unit)
+		place_x_wall(x_unit, z_unit, 1)
+
+func _gen_z_walls(x_unit, z_unit):
+	if rng.randf() < 0.5:
+		if rng.randf() < 0.5:
+			place_z_wall(x_unit, z_unit, 0.5)
+			place_z_wall(x_unit, z_unit + 1, 0.5)
+			place_z_wall_border(x_unit, z_unit)
+			place_z_wall_border(x_unit, z_unit + 1)
+		else:
+			place_z_window_wall(x_unit, z_unit, 0)
+			place_z_window_wall(x_unit, z_unit + 1, 0)
+			place_z_wall_border(x_unit, z_unit, 1.0)
+			place_z_wall_border(x_unit, z_unit + 1, 1.0)
+		place_z_arch(x_unit, z_unit, 1.5)
+		place_z_arch(x_unit, z_unit + 1, 1.5)
+		if rng.randf() < 0.5:
+			place_z_arch_fence(x_unit, z_unit, 1.5)
+			place_z_arch_fence(x_unit, z_unit + 1, 1.5)
+	else:
+		place_z_door_frame(x_unit, z_unit)
+		place_z_wall(x_unit, z_unit, 1)
+
+# ENEMY PLACEMENT FUNCTIONS
+
 func spawn_skeleton(x_unit, z_unit, y_unit = 0.0):
+	# Note: Only spawn on server if these are synced enemies!
 	var skeleton_instance = preload('res://scenes/model_scenes/enemies/skeleton.tscn').instantiate()
 	skeleton_instance.position = Vector3(x_unit * unit_size + unit_size/2.0, y_unit * unit_size + 3.0, z_unit * unit_size + unit_size/2.0)
-	skeleton_instance.rotation.y = randf_range(0, 2*PI)
-	main_game_node.get_node('enemies').add_child(skeleton_instance, true)
-			
+	skeleton_instance.rotation.y = rng.randf_range(0, 2*PI)
+	if multiplayer.is_server():
+		main_game_node.get_node('enemies').add_child(skeleton_instance, true)
+
+## ENVIRONMENT PLACEMENT FUNCTIONS
+
 func place_floor_tile(x_unit, z_unit, y_unit = 0.0):
 	var floor_instance = floor_tile_scene.instantiate()
-	var x_offset = 10.0
-	var z_offset = 10.0
-	var y_offset = 0.0
-	floor_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
+	floor_instance.position = Vector3(x_unit * unit_size + 10.0, y_unit * unit_size, z_unit * unit_size + 10.0)
 	self.add_child(floor_instance)
 	
 func place_stair(x_unit, z_unit, y_unit = 0.0, orientation = ORIENT.POS_X):
 	var stair_instance = stair_scene.instantiate()
 	var aabb_size = get_first_mesh_size(stair_instance)
-	var x_offset = aabb_size.z / 2.0
-	var z_offset = aabb_size.x / 2.0
-	var y_offset = aabb_size.y / 2.0
 	match orientation:
-		ORIENT.POS_X: pass
 		ORIENT.NEG_X: stair_instance.rotation.y = PI
 		ORIENT.POS_Z: stair_instance.rotation.y = 3*PI/2
 		ORIENT.NEG_Z: stair_instance.rotation.y = PI/2
-	stair_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
+	stair_instance.position = Vector3(x_unit * unit_size + aabb_size.z/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.x/2.0)
 	self.add_child(stair_instance)
 	
 func place_hexagon(x_unit, z_unit, y_unit = 0.0):
 	var hexagon_instance = hexagon_scene.instantiate()
 	var aabb_size = get_first_mesh_size(hexagon_instance)
-	var x_offset = aabb_size.x / 2.0
-	var z_offset = aabb_size.z / 2.0
-	var y_offset = aabb_size.y / 2.0
-	hexagon_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
-	#hexagon_instance.rotation.y = randf_range(0, 2*PI)
+	hexagon_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0)
 	self.add_child(hexagon_instance)
 
 func place_arch_roof(x_unit, z_unit, y_unit = 1.0):
 	var arch_roof_instance = arch_roof_scene.instantiate()
 	var aabb_size = get_first_mesh_size(arch_roof_instance)
-	var x_offset = aabb_size.x / 2.0
-	var z_offset = aabb_size.z / 2.0
-	var y_offset = aabb_size.y / 2.0
-	arch_roof_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
+	arch_roof_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0)
 	self.add_child(arch_roof_instance)
 
 func place_pillar(x_unit, z_unit, y_unit = 0.0):
-	var selected_pillar = all_pillars.pick_random()
-	#TODO: for collapsed pillars randomize their position and rotation in the floor tile
+	var selected_pillar = all_pillars[rng.randi() % all_pillars.size()]
 	var pillar_instance = selected_pillar.instantiate()
 	var aabb_size = get_first_mesh_size(pillar_instance)
-	var x_offset = aabb_size.x / 2.0
-	var z_offset = aabb_size.z / 2.0
-	var y_offset = aabb_size.y / 2.0
-	pillar_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
+	pillar_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0)
 	if selected_pillar == pillar_collapsed_2_scene:
-		pillar_instance.rotation.y = randf_range(0, 2*PI)
+		pillar_instance.rotation.y = rng.randf_range(0, 2*PI)
 	self.add_child(pillar_instance)
 	
 func place_spike(x_unit, z_unit, y_unit = 0.0):
 	var spike_instance = spike_scene.instantiate()
 	var aabb_size = get_first_mesh_size(spike_instance)
-	var x_offset = aabb_size.x / 2.0
-	var z_offset = aabb_size.z / 2.0
-	var y_offset = aabb_size.y / 2.0
-	spike_instance.position = Vector3(x_unit * unit_size + x_offset + 3, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset + 1)
+	spike_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + 3, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0 + 1)
 	self.add_child(spike_instance)
 	
 func place_debris(x_unit, z_unit, y_unit = 0.0):
 	var debris_instance = debris_scene.instantiate()
 	var aabb_size = get_first_mesh_size(debris_instance)
-	var x_offset = aabb_size.x / 2.0
-	var z_offset = aabb_size.z / 2.0
-	var y_offset = aabb_size.y / 2.0
-	debris_instance.position = Vector3(x_unit * unit_size + x_offset + randf_range(0, 20), y_unit * unit_size + y_offset, z_unit * unit_size + z_offset + randf_range(0, 20))
-	debris_instance.rotation.y = randf_range(0, 2*PI)
+	debris_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + rng.randf_range(0, 20), y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0 + rng.randf_range(0, 20))
+	debris_instance.rotation.y = rng.randf_range(0, 2*PI)
 	self.add_child(debris_instance)
 
 func place_barrel(x_unit, z_unit, y_unit = 0.0):
 	var barrel_instance = barrel_scene.instantiate()
 	var aabb_size = get_first_mesh_size(barrel_instance)
-	var x_offset = aabb_size.x / 2.0
-	var z_offset = aabb_size.z / 2.0
-	var y_offset = aabb_size.y / 2.0
-	barrel_instance.position = Vector3(x_unit * unit_size + x_offset + randf_range(0, 20), y_unit * unit_size + y_offset, z_unit * unit_size + z_offset + randf_range(0, 20))
-	barrel_instance.rotation.y = randf_range(0, 2*PI)
-	self.add_child(barrel_instance)
+	barrel_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + rng.randf_range(0, 20), y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0 + rng.randf_range(0, 20))
+	barrel_instance.rotation.y = rng.randf_range(0, 2*PI)
+	if multiplayer.is_server():
+		self.add_child(barrel_instance)
 
 func place_chest(x_unit, z_unit, y_unit = 0.0):
 	var chest_instance = chest_scene.instantiate()
 	var aabb_size = get_first_mesh_size(chest_instance)
-	var x_offset = aabb_size.x / 2.0
-	var z_offset = aabb_size.z / 2.0
-	var y_offset = aabb_size.y / 2.0 * 2 # extra offset because there's two mesheswwwwww
-	chest_instance.position = Vector3(x_unit * unit_size + x_offset + randf_range(0, 20), y_unit * unit_size + y_offset, z_unit * unit_size + z_offset + randf_range(0, 20))
-	chest_instance.rotation.y = randf_range(0, 2*PI)
-	self.add_child(chest_instance)
+	chest_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + rng.randf_range(0, 20), y_unit * unit_size + aabb_size.y, z_unit * unit_size + aabb_size.z/2.0 + rng.randf_range(0, 20))
+	chest_instance.rotation.y = rng.randf_range(0, 2*PI)
+	if multiplayer.is_server():
+		self.add_child(chest_instance)
 	
 func place_box(x_unit, z_unit, y_unit = 0.0):
 	var box_instance = box_scene.instantiate()
 	var aabb_size = get_first_mesh_size(box_instance)
-	var x_offset = aabb_size.x / 2.0
-	var z_offset = aabb_size.z / 2.0
-	var y_offset = aabb_size.y / 2.0
-	box_instance.position = Vector3(x_unit * unit_size + x_offset + randf_range(0, 20), y_unit * unit_size + y_offset, z_unit * unit_size + z_offset + randf_range(0, 20))
-	box_instance.rotation.y = randf_range(0, 2*PI)
-	self.add_child(box_instance)
+	box_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + rng.randf_range(0, 20), y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0 + rng.randf_range(0, 20))
+	box_instance.rotation.y = rng.randf_range(0, 2*PI)
+	if multiplayer.is_server():
+		self.add_child(box_instance)
 	
 func place_skull(x_unit, z_unit, y_unit = 0.0):
 	var skull_instance = skull_scene.instantiate()
 	var aabb_size = get_first_mesh_size(skull_instance)
-	var x_offset = aabb_size.x / 2.0
-	var z_offset = aabb_size.z / 2.0
-	var y_offset = aabb_size.y / 2.0
-	skull_instance.position = Vector3(x_unit * unit_size + x_offset + randf_range(0, 20), y_unit * unit_size + y_offset + 5, z_unit * unit_size + z_offset + randf_range(0, 20))
-	skull_instance.rotation.y = randf_range(0, 2*PI)
-	skull_instance.rotation.x = randf_range(0, 2*PI)
-	skull_instance.rotation.z = randf_range(0, 2*PI)
+	skull_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + rng.randf_range(0, 20), y_unit * unit_size + 5, z_unit * unit_size + aabb_size.z/2.0 + rng.randf_range(0, 20))
+	skull_instance.rotation.y = rng.randf_range(0, 2*PI)
+	skull_instance.rotation.x = rng.randf_range(0, 2*PI)
+	skull_instance.rotation.z = rng.randf_range(0, 2*PI)
 	main_game_node.get_node('entities').add_child(skull_instance, true)
 	
 func place_x_arch(x_unit, z_unit, y_unit = 1.0):
 	var arch_instance = arch_scene.instantiate()
 	var aabb_size = get_first_mesh_size(arch_instance)
-	var x_offset = aabb_size.x / 2.0
-	var z_offset = aabb_size.z / 2.0
-	var y_offset = aabb_size.y / 2.0
-	arch_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
+	arch_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0)
 	self.add_child(arch_instance)
 
 func place_x_arch_fence(x_unit, z_unit, y_unit = 1.0):
 	var arch_fence_instance = arch_fence_scene.instantiate()
 	var aabb_size = get_first_mesh_size(arch_fence_instance)
-	var x_offset = aabb_size.x / 2.0
-	var z_offset = aabb_size.z / 2.0
-	var y_offset = aabb_size.y / 2.0
-	arch_fence_instance.position = Vector3(x_unit * unit_size + x_offset + 2, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
+	arch_fence_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + 2, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0)
 	self.add_child(arch_fence_instance)
 	
 func place_x_wall(x_unit, z_unit, y_unit = 0.0):
-	var selected_wall = all_walls.pick_random()
+	var selected_wall = all_walls[rng.randi() % all_walls.size()]
 	var wall_instance = selected_wall.instantiate()
 	var aabb_size = get_first_mesh_size(wall_instance)
-	var x_offset = aabb_size.x / 2.0
-	var z_offset = aabb_size.z / 2.0
-	var y_offset = aabb_size.y / 2.0
-	wall_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
+	wall_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0)
 	self.add_child(wall_instance)
 
 func place_x_window_wall(x_unit, z_unit, y_unit = 0.0):
-	var selected_wall = all_window_walls.pick_random()
+	var selected_wall = all_window_walls[rng.randi() % all_window_walls.size()]
 	var wall_instance = selected_wall.instantiate()
 	var aabb_size = get_first_mesh_size(wall_instance)
-	var x_offset = aabb_size.x / 2.0
-	var z_offset = aabb_size.z / 2.0
-	var y_offset = aabb_size.y / 2.0
-	wall_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
+	wall_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0)
 	self.add_child(wall_instance)
 
 func place_z_arch(x_unit, z_unit, y_unit = 1.0):
 	var arch_instance = arch_scene.instantiate()
 	var aabb_size = get_first_mesh_size(arch_instance)
-	var x_offset = aabb_size.z / 2.0
-	var z_offset = aabb_size.x / 2.0
-	var y_offset = aabb_size.y / 2.0
 	arch_instance.rotation.y = PI/2
-	arch_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
+	arch_instance.position = Vector3(x_unit * unit_size + aabb_size.z/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.x/2.0)
 	self.add_child(arch_instance)
 	
 func place_z_arch_fence(x_unit, z_unit, y_unit = 1.0):
 	var arch_fence_instance = arch_fence_scene.instantiate()
 	var aabb_size = get_first_mesh_size(arch_fence_instance)
-	var x_offset = aabb_size.z / 2.0
-	var z_offset = aabb_size.x / 2.0
-	var y_offset = aabb_size.y / 2.0
 	arch_fence_instance.rotation.y = PI/2
-	arch_fence_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset + 2)
+	arch_fence_instance.position = Vector3(x_unit * unit_size + aabb_size.z/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.x/2.0 + 2)
 	self.add_child(arch_fence_instance)
 	
 func place_z_wall(x_unit, z_unit, y_unit = 0.0):
-	var selected_wall = all_walls.pick_random()
+	var selected_wall = all_walls[rng.randi() % all_walls.size()]
 	var wall_instance = selected_wall.instantiate()
 	var aabb_size = get_first_mesh_size(wall_instance)
-	var x_offset = aabb_size.z / 2.0
-	var z_offset = aabb_size.x / 2.0
-	var y_offset = aabb_size.y / 2.0
 	wall_instance.rotation.y = PI/2
-	wall_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
+	wall_instance.position = Vector3(x_unit * unit_size + aabb_size.z/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.x/2.0)
 	self.add_child(wall_instance)
 
 func place_z_window_wall(x_unit, z_unit, y_unit = 0.0):
-	var selected_wall = all_window_walls.pick_random()
+	var selected_wall = all_window_walls[rng.randi() % all_window_walls.size()]
 	var wall_instance = selected_wall.instantiate()
 	var aabb_size = get_first_mesh_size(wall_instance)
-	var x_offset = aabb_size.z / 2.0
-	var z_offset = aabb_size.x / 2.0
-	var y_offset = aabb_size.y / 2.0
 	wall_instance.rotation.y = PI/2
-	wall_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
+	wall_instance.position = Vector3(x_unit * unit_size + aabb_size.z/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.x/2.0)
 	self.add_child(wall_instance)
 
 func place_x_wall_border(x_unit, z_unit, y_unit = 0.0):
-	var selected_wall_border = all_wall_borders.pick_random()
+	var selected_wall_border = all_wall_borders[rng.randi() % all_wall_borders.size()]
 	var wall_border_instance = selected_wall_border.instantiate()
 	var aabb_size = get_first_mesh_size(wall_border_instance)
-	var x_offset = aabb_size.x / 2.0
-	var z_offset = aabb_size.z / 2.0
-	var y_offset = aabb_size.y / 2.0
-	wall_border_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
+	wall_border_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0)
 	self.add_child(wall_border_instance)
 
 func place_z_wall_border(x_unit, z_unit, y_unit = 0.0):
-	var selected_wall_border = all_wall_borders.pick_random()
+	var selected_wall_border = all_wall_borders[rng.randi() % all_wall_borders.size()]
 	var wall_border_instance = selected_wall_border.instantiate()
 	var aabb_size = get_first_mesh_size(wall_border_instance)
-	var x_offset = aabb_size.z / 2.0
-	var z_offset = aabb_size.x / 2.0
-	var y_offset = aabb_size.y / 2.0
 	wall_border_instance.rotation.y = PI/2
-	wall_border_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
+	wall_border_instance.position = Vector3(x_unit * unit_size + aabb_size.z/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.x/2.0)
 	self.add_child(wall_border_instance)
 
 func place_x_door_frame(x_unit, z_unit, y_unit = 0.0):
-	var selected_wall = all_door_frames.pick_random()
+	var selected_wall = all_door_frames[rng.randi() % all_door_frames.size()]
 	var wall_instance = selected_wall.instantiate()
 	var aabb_size = get_first_mesh_size(wall_instance)
-	var x_offset = aabb_size.x / 2.0
-	var z_offset = aabb_size.z / 2.0
-	var y_offset = aabb_size.y / 2.0
-	wall_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
+	wall_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0)
 	self.add_child(wall_instance)
 
 func place_z_door_frame(x_unit, z_unit, y_unit = 0.0):
-	var selected_wall = all_door_frames.pick_random()
+	var selected_wall = all_door_frames[rng.randi() % all_door_frames.size()]
 	var wall_instance = selected_wall.instantiate()
 	var aabb_size = get_first_mesh_size(wall_instance)
-	var x_offset = aabb_size.z / 2.0
-	var z_offset = aabb_size.x / 2.0
-	var y_offset = aabb_size.y / 2.0
 	wall_instance.rotation.y = PI/2
-	wall_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
+	wall_instance.position = Vector3(x_unit * unit_size + aabb_size.z/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.x/2.0)
 	self.add_child(wall_instance)
 
-func place_x_block_arch(x_unit, z_unit, y_unit = 1.0):
-	var block_arch_instance = block_arch_scene.instantiate()
-	var aabb_size = get_first_mesh_size(block_arch_instance)
-	var x_offset = aabb_size.x / 2.0
-	var z_offset = aabb_size.z / 2.0
-	var y_offset = aabb_size.y / 2.0
-	block_arch_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
-	self.add_child(block_arch_instance)
-	
-func place_z_block_arch(x_unit, z_unit, y_unit = 1.0):
-	var block_arch_instance = block_arch_scene.instantiate()
-	var aabb_size = get_first_mesh_size(block_arch_instance)
-	var x_offset = aabb_size.z / 2.0
-	var z_offset = aabb_size.x / 2.0
-	var y_offset = aabb_size.y / 2.0
-	block_arch_instance.rotation.y = PI/2
-	block_arch_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
-	self.add_child(block_arch_instance)
-	
 func place_block(x_unit, z_unit, y_unit = 2.0):
 	var block_instance = block_scene.instantiate()
 	var aabb_size = get_first_mesh_size(block_instance)
-	var x_offset = aabb_size.x / 2.0
-	var z_offset = aabb_size.z / 2.0
-	var y_offset = aabb_size.y / 2.0
-	block_instance.position = Vector3(x_unit * unit_size + x_offset, y_unit * unit_size + y_offset, z_unit * unit_size + z_offset)
+	block_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0)
 	self.add_child(block_instance)
 
 func place_chandelier(x_unit, z_unit, y_unit = 2.0):
 	var chandelier_instance = chandelier_scene.instantiate()
 	var aabb_size = get_first_mesh_size(chandelier_instance)
-	var x_offset = aabb_size.x / 2.0
-	var z_offset = aabb_size.z / 2.0
-	var y_offset = aabb_size.y / 2.0
-	chandelier_instance.position = Vector3(x_unit * unit_size + x_offset + (unit_size - aabb_size.x)/2, y_unit * unit_size + y_offset + (unit_size - aabb_size.y), z_unit * unit_size + z_offset + (unit_size - aabb_size.z)/2)
+	chandelier_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + (unit_size - aabb_size.x)/2, y_unit * unit_size + aabb_size.y/2.0 + (unit_size - aabb_size.y), z_unit * unit_size + aabb_size.z/2.0 + (unit_size - aabb_size.z)/2)
 	self.add_child(chandelier_instance)
 	
-## Searches for the first MeshInstance3D child and returns its AABB size.
-## Returns Vector3.ZERO if no mesh is found.
+## HELPER FUNCTIONS
+
 func get_first_mesh_size(root_node: Node) -> Vector3:
 	var mesh_instance = _find_first_mesh_instance(root_node)
-	
 	if mesh_instance and mesh_instance.mesh:
-		# get_aabb() returns the bounding box in local space
 		var aabb: AABB = mesh_instance.get_mesh().get_aabb()
-		
-		# We multiply by scale in case the node has been resized in the editor
 		return aabb.size * root_node.scale
-	
-	print("No mesh found in: ", root_node.name)
 	return Vector3.ZERO
 
-## Helper function to recursively find the first MeshInstance3D
 func _find_first_mesh_instance(node: Node) -> MeshInstance3D:
-	if node is MeshInstance3D:
-		return node
-	
+	if node is MeshInstance3D: return node
 	for child in node.get_children():
 		var found = _find_first_mesh_instance(child)
-		if found:
-			return found
-			
+		if found: return found
 	return null
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass

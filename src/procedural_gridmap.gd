@@ -31,14 +31,14 @@ const ROT_270 = 16 # Y-Rotate 270
 
 @export_category('Dynamic Scenes')
 ## Keep scenes for items that need scripts or random sub-tile placement
-@onready var chandelier_scene: PackedScene = preload('res://scenes/model_scenes/Chandelier.tscn')
-@onready var skull_scene: PackedScene = preload('res://scenes/model_scenes/Skull.tscn')
-@onready var barrel_scene: PackedScene = preload('res://scenes/model_scenes/Barrel.tscn')
-@onready var chest_scene: PackedScene = preload('res://scenes/model_scenes/Chest.tscn')
-@onready var box_scene: PackedScene = preload('res://scenes/model_scenes/Box.tscn')
-@onready var debris_scene: PackedScene = preload('res://scenes/model_scenes/Debris.tscn')
-@onready var spike_scene: PackedScene = preload('res://scenes/model_scenes/Spikes.tscn')
-@onready var hexagon_scene: PackedScene = preload('res://scenes/model_scenes/Hexagon.tscn')
+@onready var chandelier_scene: PackedScene = preload('res://scenes/model_scenes/structures/Chandelier.tscn')
+@onready var skull_scene: PackedScene = preload('res://scenes/model_scenes/entities/Skull.tscn')
+@onready var barrel_scene: PackedScene = preload('res://scenes/model_scenes/entities/Barrel.tscn')
+@onready var chest_scene: PackedScene = preload('res://scenes/model_scenes/entities/Chest.tscn')
+@onready var box_scene: PackedScene = preload('res://scenes/model_scenes/entities/Box.tscn')
+@onready var debris_scene: PackedScene = preload('res://scenes/model_scenes/structures/Debris.tscn')
+@onready var spike_scene: PackedScene = preload('res://scenes/model_scenes/structures/Spikes.tscn')
+@onready var hexagon_scene: PackedScene = preload('res://scenes/model_scenes/structures/Hexagon.tscn')
 
 func _ready() -> void:
 	if not grid_map:

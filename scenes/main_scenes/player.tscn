@@ -142,6 +142,14 @@ _data = {
 &"stab": SubResource("Animation_imse2")
 }
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_imse2"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
 [node name="Player" type="CharacterBody3D" unique_id=1876983122 groups=["players"]]
 collision_layer = 2
 collision_mask = 7
@@ -235,3 +243,6 @@ visible = false
 [node name="AnimationPlayer" type="AnimationPlayer" parent="right_arm" unique_id=759360027]
 libraries/ = SubResource("AnimationLibrary_b5fxs")
 speed_scale = 2.0
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=904833346]
+replication_config = SubResource("SceneReplicationConfig_imse2")

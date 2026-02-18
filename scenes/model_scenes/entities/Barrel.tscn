@@ -37,6 +37,14 @@ shadow_mesh = SubResource("ArrayMesh_krl4r")
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_3vmut"]
 points = PackedVector3Array(0, -4, -3.2000785, -2.7713494, -4, -1.6004698, 0, 0, -4.4, 2.7706032, -4, -1.6004698, -3.810512, 0, -2.2, -2.7713494, -4, 1.5996084, -2.7713494, 4, -1.6004698, 0, 4, -3.2000785, 3.810512, 0, -2.2, 2.7706032, -4, 1.5996084, -3.810512, 0, 2.1991386, 0, -4, 3.1992173, -0.00074601173, 0, 4.4, -2.7713494, 4, 1.5996084, 2.7706032, 4, -1.6004698, 3.810512, 0, 2.2000003, 0, 4, 3.1992173, 2.7706032, 4, 1.5996084)
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_lob1a"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+
 [node name="Barrel" type="RigidBody3D" unique_id=2085427135]
 
 [node name="Cylinder_021" type="MeshInstance3D" parent="." unique_id=585688125]
@@ -44,3 +52,6 @@ mesh = SubResource("ArrayMesh_vlnq5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=295303402]
 shape = SubResource("ConvexPolygonShape3D_3vmut")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1299279190]
+replication_config = SubResource("SceneReplicationConfig_lob1a")

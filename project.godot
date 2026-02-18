@@ -12,7 +12,7 @@ config_version=5
 
 config/name="jara"
 config/version="0.0.1"
-run/main_scene="uid://d11crqikdatic"
+run/main_scene="uid://drnicp18cogrs"
 config/features=PackedStringArray("4.6", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/image="uid://dbmakq1ofed3v"
