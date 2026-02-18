@@ -35,6 +35,9 @@ extends CharacterBody3D
 @export var upward_bias: float = 0.3 # Adds the "lob" arch
 @onready var muzzle = $Camera3D/Muzzle
 
+## Animation Parameters
+@onready var body_animation_tree: AnimationTree = $rig/AnimationTree
+
 # Internal variables
 var is_mouse_captured: bool = true
 var _bob_time: float = 0.0
@@ -57,6 +60,8 @@ func _ready() -> void:
 	else:
 		is_active = false
 		camera.current = false
+		# make it's player model visible to the other players
+		$rig/Skeleton3D/Knight.set_layer_mask_value(1, true)
 		
 	change_weapon(0)
 
@@ -187,6 +192,10 @@ func _physics_process(delta: float) -> void:
 			$footstepsSound.play()
 	elif $footstepsSound.playing:
 		$footstepsSound.stop()
+		
+	# play animation 
+	var progress = Vector3(velocity.x, 0, velocity.z).length() / walk_speed
+	body_animation_tree.set('parameters/blend_position', progress)
 	
 	handle_rigidbody_push()
 

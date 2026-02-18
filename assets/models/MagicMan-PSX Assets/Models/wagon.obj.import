@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://buyb1w1da0xcb"
+path="res://.godot/imported/wagon.obj-2a4e7c281ebdb3447870efa7be362acd.mesh"
+
+[deps]
+
+files=["res://.godot/imported/wagon.obj-2a4e7c281ebdb3447870efa7be362acd.mesh"]
+
+source_file="res://assets/models/MagicMan-PSX Assets/Models/wagon.obj"
+dest_files=["res://.godot/imported/wagon.obj-2a4e7c281ebdb3447870efa7be362acd.mesh", "res://.godot/imported/wagon.obj-2a4e7c281ebdb3447870efa7be362acd.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false
