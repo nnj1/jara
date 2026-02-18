@@ -73,8 +73,8 @@ func apply_attack_impulse():
 		# Push direction is based on where the camera is looking
 		var push_dir = -camera.global_transform.basis.z
 		
-		if target is RigidBody3D:
-			target.apply_central_impulse(push_dir * attack_impulse)
+		if target is EntityRigidBody:
+			target.apply_impulse_synced(push_dir * attack_impulse)
 			print('Pushed entity')
 			is_attacking = false # Prevent multiple hits in one frame
 		elif target is CharacterBody3D and target.has_method("apply_knockback"):
@@ -228,11 +228,11 @@ func handle_rigidbody_push() -> void:
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
 		var collider = collision.get_collider()
-		if collider is RigidBody3D:
+		if collider is EntityRigidBody:
 			var push_dir = -collision.get_normal()
 			push_dir.y = 0 
 			var impact_strength = velocity.length() * push_force
-			collider.apply_central_impulse(push_dir * impact_strength)
+			collider.apply_impulse_synced(push_dir * impact_strength)
 
 @rpc("any_peer", "call_local", "reliable")
 func server_lob_fireball():

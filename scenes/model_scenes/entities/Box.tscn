@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://ilesyvvern2n"]
 
+[ext_resource type="Script" uid="uid://dv7lhyh4wgyt7" path="res://src/entity_rigid_body.gd" id="1_88acd"]
 [ext_resource type="Material" uid="uid://bhjgl025d0k5n" path="res://assets/models/PSX_Dungeon/mats/CratesAndBarrels.tres" id="2_7ufkm"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_rvga3"]
@@ -44,8 +45,15 @@ properties/0/replication_mode = 2
 properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
 properties/1/replication_mode = 2
+properties/2/path = NodePath(".:linear_velocity")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath(".:angular_velocity")
+properties/3/spawn = true
+properties/3/replication_mode = 2
 
 [node name="Box" type="RigidBody3D" unique_id=1446971119]
+script = ExtResource("1_88acd")
 
 [node name="Cube_044" type="MeshInstance3D" parent="." unique_id=618606296]
 mesh = SubResource("ArrayMesh_3f4ot")

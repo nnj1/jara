@@ -179,6 +179,7 @@ func _gen_z_walls(x_unit, z_unit):
 func spawn_skeleton(x_unit, z_unit, y_unit = 0.0):
 	# Note: Only spawn on server if these are synced enemies!
 	var skeleton_instance = preload('res://scenes/model_scenes/enemies/skeleton.tscn').instantiate()
+	skeleton_instance.name = "Skeleton_" + str(x_unit) + "_" + str(z_unit) # Unique Name
 	skeleton_instance.position = Vector3(x_unit * unit_size + unit_size/2.0, y_unit * unit_size + 3.0, z_unit * unit_size + unit_size/2.0)
 	skeleton_instance.rotation.y = rng.randf_range(0, 2*PI)
 	if multiplayer.is_server():
@@ -237,14 +238,16 @@ func place_debris(x_unit, z_unit, y_unit = 0.0):
 
 func place_barrel(x_unit, z_unit, y_unit = 0.0):
 	var barrel_instance = barrel_scene.instantiate()
+	barrel_instance.name = "Barrel_" + str(x_unit) + "_" + str(z_unit) # Unique Name
 	var aabb_size = get_first_mesh_size(barrel_instance)
 	barrel_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + rng.randf_range(0, 20), y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0 + rng.randf_range(0, 20))
 	barrel_instance.rotation.y = rng.randf_range(0, 2*PI)
 	if multiplayer.is_server():
-		self.add_child(barrel_instance)
+		main_game_node.get_node('entities').add_child(barrel_instance, true)
 
 func place_chest(x_unit, z_unit, y_unit = 0.0):
 	var chest_instance = chest_scene.instantiate()
+	chest_instance.name = "Chest_" + str(x_unit) + "_" + str(z_unit) # Unique Name
 	var aabb_size = get_first_mesh_size(chest_instance)
 	chest_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + rng.randf_range(0, 20), y_unit * unit_size + aabb_size.y, z_unit * unit_size + aabb_size.z/2.0 + rng.randf_range(0, 20))
 	chest_instance.rotation.y = rng.randf_range(0, 2*PI)
@@ -253,6 +256,7 @@ func place_chest(x_unit, z_unit, y_unit = 0.0):
 	
 func place_box(x_unit, z_unit, y_unit = 0.0):
 	var box_instance = box_scene.instantiate()
+	box_instance.name = "Box_" + str(x_unit) + "_" + str(z_unit) # Unique Name
 	var aabb_size = get_first_mesh_size(box_instance)
 	box_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + rng.randf_range(0, 20), y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0 + rng.randf_range(0, 20))
 	box_instance.rotation.y = rng.randf_range(0, 2*PI)
@@ -261,6 +265,7 @@ func place_box(x_unit, z_unit, y_unit = 0.0):
 	
 func place_skull(x_unit, z_unit, y_unit = 0.0):
 	var skull_instance = skull_scene.instantiate()
+	skull_instance.name = "Skull_" + str(x_unit) + "_" + str(z_unit) # Unique Name
 	var aabb_size = get_first_mesh_size(skull_instance)
 	skull_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + rng.randf_range(0, 20), y_unit * unit_size + 5, z_unit * unit_size + aabb_size.z/2.0 + rng.randf_range(0, 20))
 	skull_instance.rotation.y = rng.randf_range(0, 2*PI)

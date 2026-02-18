@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://bdxxc581qwkiy"]
 
+[ext_resource type="Script" uid="uid://dv7lhyh4wgyt7" path="res://src/entity_rigid_body.gd" id="1_7c2tb"]
 [ext_resource type="Material" uid="uid://bhjgl025d0k5n" path="res://assets/models/PSX_Dungeon/mats/CratesAndBarrels.tres" id="2_7456y"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_krl4r"]
@@ -46,6 +47,7 @@ properties/1/spawn = true
 properties/1/replication_mode = 2
 
 [node name="Barrel" type="RigidBody3D" unique_id=2085427135]
+script = ExtResource("1_7c2tb")
 
 [node name="Cylinder_021" type="MeshInstance3D" parent="." unique_id=585688125]
 mesh = SubResource("ArrayMesh_vlnq5")
