@@ -48,10 +48,16 @@ var is_attacking: bool = false # Tracked for AnimationPlayer
 @onready var attack_ray: RayCast3D = $Camera3D/RayCast3D2
 
 func _ready() -> void:
-	if is_active:
+	
+	if is_multiplayer_authority():
+		camera.make_current()
 		capture_mouse(true)
-	_camera_rotation.y = rotation.y
-	_camera_rotation.x = camera.rotation.x
+		_camera_rotation.y = rotation.y
+		_camera_rotation.x = camera.rotation.x
+	else:
+		is_active = false
+		camera.current = false
+		
 	change_weapon(0)
 
 # --- NEW ATTACK METHODS FOR ANIMATION PLAYER ---
@@ -79,8 +85,9 @@ func apply_attack_impulse():
 
 func change_weapon(index):
 	_current_weapon_index = index
+	var weapon_container = $right_arm/weapons
 	var i = 0
-	for weapon in $right_arm/weapons.get_children():
+	for weapon in weapon_container.get_children():
 		weapon.hide()
 		if i == index:
 			weapon.show()
@@ -99,8 +106,10 @@ func prev_weapon():
 		_current_weapon_index -= 1
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not is_active: 
+	# Only handle mouse look and UI for the local player
+	if not is_multiplayer_authority() or not is_active: 
 		return
+		
 	if event.is_action_pressed("scroll_up"):
 		next_weapon()
 	if event.is_action_pressed("scroll_down"):
@@ -122,12 +131,13 @@ func capture_mouse(capture: bool) -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if capture else Input.MOUSE_MODE_VISIBLE
 
 func _physics_process(delta: float) -> void:
-	if not is_active: 
+	# Only the owner handles input and calculates movement
+	if not is_multiplayer_authority() or not is_active: 
 		return
 		
-	# Handle spellcasting
-	if Input.is_action_pressed("spell_q"):
-		lob_fireball()
+	# Handle spellcasting (Server-side spawn via RPC)
+	if Input.is_action_just_pressed("spell_q"):
+		rpc_id(1, "server_lob_fireball")
 		
 	# Handle Attack Logic
 	if is_attacking:
@@ -224,15 +234,19 @@ func handle_rigidbody_push() -> void:
 			var impact_strength = velocity.length() * push_force
 			collider.apply_central_impulse(push_dir * impact_strength)
 
-func lob_fireball():
+@rpc("any_peer", "call_local", "reliable")
+func server_lob_fireball():
+	# Only the server should instantiate the fireball to keep it synced
+	if not multiplayer.is_server():
+		return
+		
 	var fireball = fireball_scene.instantiate()
 	# Add fireball to the root scene so it doesn't move with the player
 	main_game_node.get_node('entities').add_child(fireball, true)
 	# Position it at the wizard's hand/staff
 	fireball.global_position = muzzle.global_position
-	# 1. Get the direction from the RayCast
-	# If raycast isn't hitting anything, we use the target_position (forward)
-	var target_dir = -attack_ray.global_transform.basis.z 
+	# 1. Get the direction from the RayCast (Server uses camera rotation synced from client)
+	var target_dir = -camera.global_transform.basis.z 
 	# 2. Add the "Lob" (Angle it up slightly)
 	var launch_velocity = (target_dir + Vector3.UP * upward_bias).normalized() * lob_strength
 	# 3. Apply the force

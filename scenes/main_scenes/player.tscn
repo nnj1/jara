@@ -163,7 +163,6 @@ mesh = SubResource("CapsuleMesh_40gj3")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=763268410]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
-current = true
 
 [node name="SpotLight3D" type="SpotLight3D" parent="Camera3D" unique_id=1466011008]
 light_energy = 5.0

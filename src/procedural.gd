@@ -67,11 +67,21 @@ var is_generated: bool = false
 enum ORIENT {POS_X, NEG_X, POS_Z, NEG_Z}
 
 func _ready() -> void:	
-	# Only generate if settings are already here (host), otherwise wait for signal (client)
-	if multiplayer.is_server() or (MultiplayerManager.server_settings.has("map_seed") and MultiplayerManager.server_settings["map_seed"] != 0):
+	if multiplayer.is_server():
+		# HOST: We already have the seed.
+		print("Host: Building with seed: ", MultiplayerManager.server_settings["map_seed"])
 		generate_dungeon()
 	else:
-		MultiplayerManager.settings_received.connect(generate_dungeon)
+		# CLIENT: Force a reset of the local seed to 0 so we KNOW if it hasn't arrived
+		MultiplayerManager.server_settings["map_seed"] = 0
+		
+		# If the settings haven't arrived yet, wait.
+		# Note: We use a lambda to ensure it only runs once.
+		var on_settings = func():
+			print("Client: Building with RECEIVED seed: ", MultiplayerManager.server_settings["map_seed"])
+			generate_dungeon()
+			
+		MultiplayerManager.settings_received.connect(on_settings, CONNECT_ONE_SHOT)
 
 func generate_dungeon() -> void:
 	if is_generated: return
@@ -239,7 +249,7 @@ func place_chest(x_unit, z_unit, y_unit = 0.0):
 	chest_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + rng.randf_range(0, 20), y_unit * unit_size + aabb_size.y, z_unit * unit_size + aabb_size.z/2.0 + rng.randf_range(0, 20))
 	chest_instance.rotation.y = rng.randf_range(0, 2*PI)
 	if multiplayer.is_server():
-		self.add_child(chest_instance)
+		main_game_node.get_node('entities').add_child(chest_instance, true)
 	
 func place_box(x_unit, z_unit, y_unit = 0.0):
 	var box_instance = box_scene.instantiate()
@@ -247,7 +257,7 @@ func place_box(x_unit, z_unit, y_unit = 0.0):
 	box_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + rng.randf_range(0, 20), y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0 + rng.randf_range(0, 20))
 	box_instance.rotation.y = rng.randf_range(0, 2*PI)
 	if multiplayer.is_server():
-		self.add_child(box_instance)
+		main_game_node.get_node('entities').add_child(box_instance, true)
 	
 func place_skull(x_unit, z_unit, y_unit = 0.0):
 	var skull_instance = skull_scene.instantiate()
@@ -256,7 +266,8 @@ func place_skull(x_unit, z_unit, y_unit = 0.0):
 	skull_instance.rotation.y = rng.randf_range(0, 2*PI)
 	skull_instance.rotation.x = rng.randf_range(0, 2*PI)
 	skull_instance.rotation.z = rng.randf_range(0, 2*PI)
-	main_game_node.get_node('entities').add_child(skull_instance, true)
+	if multiplayer.is_server():
+		main_game_node.get_node('entities').add_child(skull_instance, true)
 	
 func place_x_arch(x_unit, z_unit, y_unit = 1.0):
 	var arch_instance = arch_scene.instantiate()
