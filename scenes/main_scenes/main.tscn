@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://db6h1hkjrodsq" path="res://src/main.gd" id="1_e6bjw"]
 [ext_resource type="Texture2D" uid="uid://b6hvrv17f6e78" path="res://assets/backgrounds/2.png" id="2_gru0p"]
+[ext_resource type="PackedScene" uid="uid://nycer1r7tatx" path="res://scenes/components/VersionLabel.tscn" id="2_lv7y6"]
 
 [sub_resource type="Theme" id="Theme_e6bjw"]
 Button/font_sizes/font_size = 24
@@ -128,6 +129,19 @@ text = "Start Client"
 layout_mode = 2
 text = "Start Server"
 
+[node name="Button" type="Button" parent="CanvasLayer" unique_id=1257082322]
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Credits"
+
+[node name="VersionLabel" parent="CanvasLayer" unique_id=46342722 instance=ExtResource("2_lv7y6")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -1.0
+offset_bottom = 21.0
+grow_horizontal = 0
+
 [node name="Timer" type="Timer" parent="." unique_id=731085026]
 autostart = true
 
@@ -144,4 +158,5 @@ expand_mode = 2
 
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/ClientButton" to="." method="_on_join_manual_pressed"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/ServerButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Button" to="." method="_on_button_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_refresh_list_timeout"]

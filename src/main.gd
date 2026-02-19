@@ -59,3 +59,10 @@ func _update_local_identity():
 	var final_name = player_name_input.text
 	if final_name.is_empty(): final_name = "Pilgrim_" + str(randi() % 1000)
 	MultiplayerManager.player_name = final_name
+
+
+func _on_button_pressed() -> void:
+	var credits_scene = preload('res://scenes/main_scenes/popup_window.tscn').instantiate()
+	credits_scene.contents_bb_code = 'Some shit would go here'
+	credits_scene.window_title = 'Credits'
+	$CanvasLayer.add_child(credits_scene)
