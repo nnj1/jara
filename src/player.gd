@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+class_name Player
+
 @onready var main_game_node = get_tree().get_root().get_node('Game')
 
 ## Movement parameters (Quake-style)
@@ -82,9 +84,20 @@ func apply_attack_impulse():
 			target.apply_impulse_synced(push_dir * attack_impulse)
 			print('Pushed entity')
 			is_attacking = false # Prevent multiple hits in one frame
-		elif target is CharacterBody3D and target.has_method("apply_knockback"):
-			target.apply_knockback(push_dir * attack_impulse)
-			print('Pushed enemy')
+		elif target is CharacterBody3D:
+			if target is Player:
+				# TODO: only do if PVP friendly fire is turned on
+				pass
+			if target is DumbEnemy:
+				var health_component = target.get_node_or_null('HealthComponent')
+				if health_component:
+					# TODO: Make weapons apply different damage types
+					var damage_amount = randi_range(1,25)
+					health_component.take_damage(damage_amount, true if damage_amount > 20 else false)
+					print('Damaged enemy')
+			if target.has_method("apply_knockback"):
+				target.apply_knockback(push_dir * attack_impulse)
+				print('Pushed enemy')
 			is_attacking = false
 # -----------------------------------------------
 
@@ -155,6 +168,7 @@ func _physics_process(delta: float) -> void:
 	if is_attacking:
 		apply_attack_impulse()
 		
+	# attack and parry animations
 	if Input.is_action_pressed('left_click'):
 		if not $right_arm/AnimationPlayer.is_playing():
 			$right_arm/AnimationPlayer.play("stab")
@@ -162,6 +176,7 @@ func _physics_process(delta: float) -> void:
 		if not $right_arm/AnimationPlayer.is_playing():
 			$right_arm/AnimationPlayer.play("parry")
 		
+	# Interaction logic
 	if interaction_ray.is_colliding():
 		var collider = interaction_ray.get_collider()
 		if collider:
@@ -174,6 +189,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		main_game_node.get_node('UI/raycast_center_message').text = ''
 
+	# Movement logic
 	var input_dir := Vector2.ZERO
 	if is_mouse_captured:
 		input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
@@ -200,10 +216,11 @@ func _physics_process(delta: float) -> void:
 	elif $footstepsSound.playing:
 		$footstepsSound.stop()
 		
-	# play animation 
+	# play walking and idle animations 
 	var progress = Vector3(velocity.x, 0, velocity.z).length() / walk_speed
 	body_animation_tree.set('parameters/blend_position', progress)
 	
+	# handle any rigidbodies the player bumps into
 	handle_rigidbody_push()
 
 func _handle_view_effects(delta: float, input_dir: Vector2) -> void:

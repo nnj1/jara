@@ -44,7 +44,7 @@ func play_creature_sound(pool: Array[AudioStream], force: bool = true) -> void:
 
 # --- Public API Methods ---
 
-func play_hurt() -> void:
+func play_hurt(_damage_amount = 0.0) -> void:
 	play_creature_sound(hurt_sounds, true)
 
 func play_aggro() -> void:
