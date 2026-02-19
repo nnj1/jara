@@ -185,7 +185,7 @@ func _physics_process(delta: float) -> void:
 				main_game_node.get_node('UI/raycast_center_message').text = collider.get_meta('interaction_message')
 			if Input.is_action_just_pressed("interact"):
 				if collider.has_meta('interaction_function'):
-					collider.call(collider.get_meta('interaction_function'))
+					collider.call(collider.get_meta('interaction_function'), self)
 	else:
 		main_game_node.get_node('UI/raycast_center_message').text = ''
 

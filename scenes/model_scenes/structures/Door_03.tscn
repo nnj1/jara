@@ -1,6 +1,9 @@
 [gd_scene format=4 uid="uid://b3dfvf8865ej5"]
 
+[ext_resource type="Script" uid="uid://co8ius8o04p7f" path="res://src/door.gd" id="1_da4b2"]
 [ext_resource type="Material" uid="uid://csj0kp6mhs3of" path="res://assets/models/PSX_Dungeon/mats/N64.tres" id="2_scdr2"]
+[ext_resource type="AudioStream" uid="uid://balr51ajfue5c" path="res://assets/sfx/Free Fantasy SFX Pack By TomMusic/OGG Files/SFX/Doors Gates and Chests/Gate Open.ogg" id="3_6viwp"]
+[ext_resource type="AudioStream" uid="uid://d11sbhmm5707l" path="res://assets/sfx/Free Fantasy SFX Pack By TomMusic/OGG Files/SFX/Doors Gates and Chests/Gate Close.ogg" id="4_d23qn"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_7ya0i"]
 _surfaces = [{
@@ -34,8 +37,31 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_7ya0i")
 
-[node name="Door_03" type="Node3D" unique_id=1531683584]
+[sub_resource type="BoxShape3D" id="BoxShape3D_m04un"]
+size = Vector3(10, 15, 1.25)
+
+[node name="Door_03" type="AnimatableBody3D" unique_id=1354159363]
+collision_mask = 0
+script = ExtResource("1_da4b2")
 
 [node name="Cube_041" type="MeshInstance3D" parent="." unique_id=1772297424]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -7.5, 0)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5, -7.5, 0)
 mesh = SubResource("ArrayMesh_5gmb5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=565929267]
+shape = SubResource("BoxShape3D_m04un")
+
+[node name="openSound" type="AudioStreamPlayer3D" parent="." unique_id=1327278249]
+stream = ExtResource("3_6viwp")
+volume_db = 10.0
+max_db = 6.0
+bus = &"Sfx"
+
+[node name="closeSound" type="AudioStreamPlayer3D" parent="." unique_id=1000976525]
+stream = ExtResource("4_d23qn")
+volume_db = 10.0
+max_db = 6.0
+bus = &"Sfx"
+
+[node name="hinge" type="Marker3D" parent="." unique_id=362105380]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)

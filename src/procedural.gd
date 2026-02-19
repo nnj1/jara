@@ -34,10 +34,14 @@ var is_generated: bool = false
 # WALL DECORATORS
 @onready var wall_table_scene: PackedScene = preload('res://scenes/model_scenes/structures/Wall_Table.tscn')
 
-# DOORS
+# DOORS AND DOOR FRAMES
 @onready var door_frame_01_scene: PackedScene = preload('res://scenes/model_scenes/structures/Door_Frame_01.tscn')
 @onready var door_frame_02_scene: PackedScene = preload('res://scenes/model_scenes/structures/Door_Frame_02.tscn')
+@onready var door_01_scene: PackedScene = preload('res://scenes/model_scenes/structures/Door_01.tscn')
+@onready var door_02_scene: PackedScene = preload('res://scenes/model_scenes/structures/Door_02.tscn')
+@onready var door_03_scene: PackedScene = preload('res://scenes/model_scenes/structures/Door_03.tscn')
 @onready var all_door_frames = [door_frame_01_scene, door_frame_02_scene]
+@onready var all_doors = [door_01_scene, door_02_scene, door_03_scene]
 
 # FLOOR DECORATORS
 @onready var hexagon_scene: PackedScene = preload('res://scenes/model_scenes/structures/Hexagon.tscn')
@@ -154,6 +158,8 @@ func _gen_x_walls(x_unit, z_unit):
 			place_x_arch_fence(x_unit + 1, z_unit, 1.5)
 	else:
 		place_x_door_frame(x_unit, z_unit)
+		if rng.randf() < 0.5:
+			place_x_door(x_unit, z_unit)
 		place_x_wall(x_unit, z_unit, 1)
 
 func _gen_z_walls(x_unit, z_unit):
@@ -175,6 +181,8 @@ func _gen_z_walls(x_unit, z_unit):
 			place_z_arch_fence(x_unit, z_unit + 1, 1.5)
 	else:
 		place_z_door_frame(x_unit, z_unit)
+		if rng.randf() < 0.5:
+			place_z_door(x_unit, z_unit)
 		place_z_wall(x_unit, z_unit, 1)
 
 # ENEMY PLACEMENT FUNCTIONS
@@ -371,6 +379,21 @@ func place_z_door_frame(x_unit, z_unit, y_unit = 0.0):
 	wall_instance.rotation.y = PI/2
 	wall_instance.position = Vector3(x_unit * unit_size + aabb_size.z/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.x/2.0)
 	self.add_child(wall_instance)
+	
+func place_x_door(x_unit, z_unit, y_unit = 0.0):
+	var selected_door = all_doors[rng.randi() % all_doors.size()]
+	var door_instance = selected_door.instantiate()
+	var aabb_size = get_first_mesh_size(door_instance)
+	door_instance.position = Vector3(x_unit * unit_size + aabb_size.x, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z)
+	self.add_child(door_instance)
+
+func place_z_door(x_unit, z_unit, y_unit = 0.0):
+	var selected_door = all_doors[rng.randi() % all_doors.size()]
+	var door_instance = selected_door.instantiate()
+	var aabb_size = get_first_mesh_size(door_instance)
+	door_instance.rotation.y = PI/2
+	door_instance.position = Vector3(x_unit * unit_size + aabb_size.z, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.x)
+	self.add_child(door_instance)
 
 func place_block(x_unit, z_unit, y_unit = 2.0):
 	var block_instance = block_scene.instantiate()
@@ -386,16 +409,45 @@ func place_chandelier(x_unit, z_unit, y_unit = 2.0):
 	
 ## HELPER FUNCTIONS
 
+#func get_first_mesh_size(root_node: Node) -> Vector3:
+	#var mesh_instance = _find_first_mesh_instance(root_node)
+	#if mesh_instance and mesh_instance.mesh:
+		#var aabb: AABB = mesh_instance.get_mesh().get_aabb()
+		#return aabb.size * root_node.scale
+	#return Vector3.ZERO
+#
+#func _find_first_mesh_instance(node: Node) -> MeshInstance3D:
+	#if node is MeshInstance3D: return node
+	#for child in node.get_children():
+		#var found = _find_first_mesh_instance(child)
+		#if found: return found
+	#return null
+	
 func get_first_mesh_size(root_node: Node) -> Vector3:
 	var mesh_instance = _find_first_mesh_instance(root_node)
+	
 	if mesh_instance and mesh_instance.mesh:
-		var aabb: AABB = mesh_instance.get_mesh().get_aabb()
-		return aabb.size * root_node.scale
+		var aabb: AABB = mesh_instance.mesh.get_aabb()
+		
+		# Check if the node is actually in the tree
+		if mesh_instance.is_inside_tree():
+			return aabb.size * mesh_instance.global_transform.basis.get_scale()
+		else:
+			# Fallback: If not in tree, use local scale. 
+			# Note: This won't account for parent scales yet!
+			return aabb.size * mesh_instance.scale
+			
 	return Vector3.ZERO
 
 func _find_first_mesh_instance(node: Node) -> MeshInstance3D:
-	if node is MeshInstance3D: return node
+	# Base case: if this node is what we're looking for, return it
+	if node is MeshInstance3D: 
+		return node
+	
+	# Recursive step: check all children
 	for child in node.get_children():
 		var found = _find_first_mesh_instance(child)
-		if found: return found
+		if found: 
+			return found
+			
 	return null

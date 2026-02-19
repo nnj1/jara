@@ -10,13 +10,13 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	pass
 	
-func open_chest():
+func open_chest(_player = null):
 	tween_hinge($hinge, true)
 	set_meta('interaction_message', 'Press E to close')
 	set_meta('interaction_function', 'close_chest')
 	$openSound.play()
 	
-func close_chest():
+func close_chest(_player = null):
 	tween_hinge($hinge, false)
 	set_meta('interaction_message', 'Press E to open')
 	set_meta('interaction_function', 'open_chest')
