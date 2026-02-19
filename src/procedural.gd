@@ -109,7 +109,10 @@ func generate_dungeon() -> void:
 				for i in rng.randi_range(0, 4):
 					place_skull(x_unit, z_unit)
 			elif rng.randf() < 0.01:
-				spawn_skeleton(x_unit, z_unit)
+				if rng.randf() < 0.5:
+					spawn_skeleton(x_unit, z_unit)
+				else:
+					spawn_monster(x_unit, z_unit)
 				
 			if x_unit % 2 == 0 and z_unit % 2 == 0:
 				if rng.randf() < 0.1:
@@ -184,6 +187,15 @@ func spawn_skeleton(x_unit, z_unit, y_unit = 0.0):
 	skeleton_instance.rotation.y = rng.randf_range(0, 2*PI)
 	if multiplayer.is_server():
 		main_game_node.get_node('enemies').add_child(skeleton_instance, true)
+
+func spawn_monster(x_unit, z_unit, y_unit = 0.0):
+	# Note: Only spawn on server if these are synced enemies!
+	var monster_instance = preload('res://scenes/model_scenes/enemies/monster.tscn').instantiate()
+	monster_instance.name = "Monster_" + str(x_unit) + "_" + str(z_unit) # Unique Name
+	monster_instance.position = Vector3(x_unit * unit_size + unit_size/2.0, y_unit * unit_size + 3.0, z_unit * unit_size + unit_size/2.0)
+	monster_instance.rotation.y = rng.randf_range(0, 2*PI)
+	if multiplayer.is_server():
+		main_game_node.get_node('enemies').add_child(monster_instance, true)
 
 ## ENVIRONMENT PLACEMENT FUNCTIONS
 
