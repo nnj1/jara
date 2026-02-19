@@ -183,7 +183,6 @@ func _on_died():
 	# Disable collision so the player doesn't trip over a corpse
 	collision_layer = 0
 	collision_mask = 1 # Keep mask for ground floor only
-	anim_player.speed_scale = 2 # death animation is a little slow so speed up the player
 	safe_play("die")
 	
 	# Optional: Remove the enemy after some time
@@ -192,6 +191,8 @@ func _on_died():
 
 func safe_play(anim_name: String):
 	var n = "skeleton_stuff/rig_rig_" + anim_name
+	if anim_name == 'die':
+		anim_player.speed_scale = 2 # death animation is a little slow so speed up the player
 	if anim_player.has_animation(n):
 		if anim_player.current_animation != n:
 			anim_player.play(n)

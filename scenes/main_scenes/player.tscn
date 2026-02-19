@@ -579,7 +579,7 @@ collision_mask = 7
 collide_with_areas = true
 
 [node name="RayCast3D3" type="RayCast3D" parent="Camera3D" unique_id=881697108]
-target_position = Vector3(0, 0, -20)
+target_position = Vector3(0, 0, -40)
 collision_mask = 7
 collide_with_areas = true
 
