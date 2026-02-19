@@ -8,6 +8,7 @@ enum State { IDLE, RANDOM_WALK, AGGRO, DEAD }
 @export var walk_speed: float = 10.0
 @export var run_speed: float = 30.0
 @export var jump_velocity: float = 12.0
+@export var base_knockback: float = 1.0
 
 @export_group("Smart Targeting")
 @export var chase_persistence: float = 3.0
@@ -197,7 +198,7 @@ func safe_play(anim_name: String):
 
 func apply_knockback(force: Vector3):
 	if current_state == State.DEAD: return
-	knockback_velocity = force
+	knockback_velocity = force * base_knockback
 	# Optional: If you want being hit to make them "mad"
 	if current_state != State.AGGRO:
 		change_state(State.AGGRO)

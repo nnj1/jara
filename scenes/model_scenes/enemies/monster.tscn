@@ -2068,6 +2068,7 @@ script = ExtResource("1_aw0w7")
 walk_speed = 5.0
 run_speed = 15.0
 jump_velocity = 0.0
+base_knockback = 0.5
 
 [node name="Armature_009" type="Node3D" parent="." unique_id=469507055]
 transform = Transform3D(-16, 0, -2.4159328e-06, 0, 16, 0, 2.4159328e-06, 0, -16, 0, -12.360809, 0.5429878)
