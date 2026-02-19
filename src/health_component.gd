@@ -104,7 +104,7 @@ func spawn_damage_marker(amount: float, is_critical: bool, override_color: Color
 	get_tree().root.add_child(label)
 	
 	# Start at this component's world position
-	label.global_position = global_position + Vector3(0, 1.5, 0)
+	label.global_position = global_position + Vector3(randf_range(-1.5, 1.5), randf_range(-1.5, 1.5), randf_range(-1.5, 1.5))
 	
 	# Animation Logic
 	var tween = get_tree().create_tween().set_parallel(true)
