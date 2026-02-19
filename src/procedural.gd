@@ -96,10 +96,10 @@ func generate_dungeon() -> void:
 	
 	for x_unit in [-1] + range(width_units + 1):
 		for z_unit in [-1] + range(height_units + 1):
-			if x_unit < 0 or x_unit > width_units:
+			if x_unit < 0 or x_unit == width_units:
 				place_block(x_unit, z_unit, 0)
 				continue
-			if z_unit < 0 or z_unit > height_units:
+			if z_unit < 0 or z_unit == height_units:
 				place_block(x_unit, z_unit, 0)	
 				continue
 
@@ -409,45 +409,16 @@ func place_chandelier(x_unit, z_unit, y_unit = 2.0):
 	
 ## HELPER FUNCTIONS
 
-#func get_first_mesh_size(root_node: Node) -> Vector3:
-	#var mesh_instance = _find_first_mesh_instance(root_node)
-	#if mesh_instance and mesh_instance.mesh:
-		#var aabb: AABB = mesh_instance.get_mesh().get_aabb()
-		#return aabb.size * root_node.scale
-	#return Vector3.ZERO
-#
-#func _find_first_mesh_instance(node: Node) -> MeshInstance3D:
-	#if node is MeshInstance3D: return node
-	#for child in node.get_children():
-		#var found = _find_first_mesh_instance(child)
-		#if found: return found
-	#return null
-	
 func get_first_mesh_size(root_node: Node) -> Vector3:
 	var mesh_instance = _find_first_mesh_instance(root_node)
-	
 	if mesh_instance and mesh_instance.mesh:
-		var aabb: AABB = mesh_instance.mesh.get_aabb()
-		
-		# Check if the node is actually in the tree
-		if mesh_instance.is_inside_tree():
-			return aabb.size * mesh_instance.global_transform.basis.get_scale()
-		else:
-			# Fallback: If not in tree, use local scale. 
-			# Note: This won't account for parent scales yet!
-			return aabb.size * mesh_instance.scale
-			
+		var aabb: AABB = mesh_instance.get_mesh().get_aabb()
+		return aabb.size * root_node.scale
 	return Vector3.ZERO
 
 func _find_first_mesh_instance(node: Node) -> MeshInstance3D:
-	# Base case: if this node is what we're looking for, return it
-	if node is MeshInstance3D: 
-		return node
-	
-	# Recursive step: check all children
+	if node is MeshInstance3D: return node
 	for child in node.get_children():
 		var found = _find_first_mesh_instance(child)
-		if found: 
-			return found
-			
+		if found: return found
 	return null
