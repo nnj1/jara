@@ -1,7 +1,7 @@
 extends Node
 
 # Configuration
-var music_folder: String = "res://assets/music/Mind's Eye Pack/Pack/"
+var music_folder: String = "res://assets/music/hiding_place_mp3/"
 var music_player: AudioStreamPlayer
 
 var playlist: Array[String] = []

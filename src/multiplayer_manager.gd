@@ -119,11 +119,31 @@ func _on_server_disconnected():
 func _on_connection_failed():
 	_cleanup_and_exit()
 
+# --- DISCONNECTION HANDLING ---
+
+## Public function to leave the game or stop the server
+func leave_game():
+	if multiplayer.multiplayer_peer is ENetMultiplayerPeer:
+		multiplayer.multiplayer_peer.close()
+	
+	# Manually trigger cleanup since close() doesn't always 
+	# trigger signals for the local player immediately
+	_cleanup_and_exit()
+
+# Modify your existing cleanup to be slightly more robust
 func _cleanup_and_exit():
+	# Stop UDP broadcasting if we were hosting
+	broadcast_timer.stop()
+	udp_socket.close()
+	
+	# Reset networking and data
 	multiplayer.multiplayer_peer = null
 	players.clear()
-	broadcast_timer.stop()
-	get_tree().change_scene_to_file("res://scenes/main_scenes/menu.tscn")
+	
+	# Navigate back to the main menu
+	# Note: Use deferred call if you run into "Locked Header" errors during scene changes
+	get_tree().change_scene_to_file.call_deferred("res://scenes/main_scenes/main.tscn")
+	print("Disconnected and returned to menu.")
 
 # --- LAN DISCOVERY ---
 

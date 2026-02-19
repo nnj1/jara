@@ -9,6 +9,8 @@ extends Panel
 @onready var main_menu_btn = $VBoxContainer/Button
 @onready var exit_desktop_btn = $VBoxContainer/Button2
 
+@onready var master_bus_index: int = AudioServer.get_bus_index("Master")
+
 # Resolution table
 var resolutions: Dictionary = {
 	"1280x720 (HD)": Vector2i(1280, 720),
@@ -39,6 +41,13 @@ func _ready():
 	main_menu_btn.pressed.connect(_on_main_menu_pressed)
 	exit_desktop_btn.pressed.connect(_on_exit_desktop_pressed)
 
+
+	var is_currently_on = AudioServer.is_bus_effect_enabled(master_bus_index, 0)
+	if is_currently_on:
+		$VBoxContainer/HBoxContainer5/CheckBox.button_pressed = true
+	else:
+		$VBoxContainer/HBoxContainer5/CheckBox.button_pressed = false
+	
 # --- Audio Logic ---
 
 func setup_audio_slider(slider: HSlider, bus_name: String):
@@ -109,7 +118,30 @@ func _on_fullscreen_toggled(is_pressed: bool):
 # --- Navigation Logic ---
 
 func _on_main_menu_pressed():
+	MultiplayerManager.leave_game()
 	get_tree().change_scene_to_file("res://scenes/main_scenes/main.tscn")
 
 func _on_exit_desktop_pressed():
+	MultiplayerManager.leave_game()
 	get_tree().quit()
+
+
+## Disables all effects on the Master bus
+func disable_psx_effects():
+	var effect_count = AudioServer.get_bus_effect_count(master_bus_index)
+	for i in range(effect_count):
+		AudioServer.set_bus_effect_enabled(master_bus_index, i, false)
+	print("PSX Effects Disabled: Audio is now modern/clean.")
+
+## Enables all effects on the Master bus
+func enable_psx_effects():
+	var effect_count = AudioServer.get_bus_effect_count(master_bus_index)
+	for i in range(effect_count):
+		AudioServer.set_bus_effect_enabled(master_bus_index, i, true)
+	print("PSX Effects Enabled: Time to party like it's 1996.")
+
+func _on_check_box_toggled(toggled_on: bool) -> void:
+	if not toggled_on:
+		disable_psx_effects()
+	else:
+		enable_psx_effects()

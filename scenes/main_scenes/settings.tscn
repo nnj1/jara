@@ -74,6 +74,17 @@ text = "Master Volume"
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer" unique_id=1179572264]
+layout_mode = 2
+
+[node name="CheckBox" type="CheckBox" parent="VBoxContainer/HBoxContainer5" unique_id=1605149224]
+layout_mode = 2
+text = "PSX Audio"
+
+[node name="CheckBox2" type="CheckBox" parent="VBoxContainer/HBoxContainer5" unique_id=2027224497]
+layout_mode = 2
+text = "PSX Video"
+
 [node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer" unique_id=767245737]
 layout_mode = 2
 
@@ -98,3 +109,5 @@ text = "Exit to Menu"
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Exit to Desktop"
+
+[connection signal="toggled" from="VBoxContainer/HBoxContainer5/CheckBox" to="." method="_on_check_box_toggled"]
