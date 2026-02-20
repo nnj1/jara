@@ -40,6 +40,8 @@ shadow_mesh = SubResource("ArrayMesh_j8sd8")
 [sub_resource type="BoxShape3D" id="BoxShape3D_mm5xa"]
 size = Vector3(10, 15, 2)
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_7hy6f"]
+
 [node name="Door_01" type="AnimatableBody3D" unique_id=1401509377]
 collision_mask = 0
 script = ExtResource("1_sm5pb")
@@ -66,3 +68,6 @@ shape = SubResource("BoxShape3D_mm5xa")
 
 [node name="hinge" type="Marker3D" parent="." unique_id=1886650034]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.0138535, 0, 0)
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=393045908]
+replication_config = SubResource("SceneReplicationConfig_7hy6f")

@@ -1,37 +1,49 @@
 extends StaticBody3D
 
+@onready var hinge = $hinge		
 
-# Called when the node enters the scene tree for the first time.
+# The 'setter' runs this code every time the value changes (locally or via network)
+@export var is_open: bool = false:
+	set(value):
+		is_open = value
+		_update_visuals(value)
+
 func _ready() -> void:
-	set_meta('interaction_message', 'Press E to open')
-	set_meta('interaction_function', 'open_chest')
+	_update_visuals(is_open)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
-	
-func open_chest(_player = null):
-	tween_hinge($hinge, true)
-	set_meta('interaction_message', 'Press E to close')
-	set_meta('interaction_function', 'close_chest')
-	$openSound.play()
-	
-func close_chest(_player = null):
-	tween_hinge($hinge, false)
-	set_meta('interaction_message', 'Press E to open')
-	set_meta('interaction_function', 'open_chest')
-	$closeSound.play()
+## --- Interaction (Local) ---
 
-@warning_ignore("shadowed_variable")
-func tween_hinge(node: Node3D, open: bool):
-	# Create a new tween instance
+func open_chest(_p = null): _request_toggle.rpc_id(1, true)
+func close_chest(_p = null): _request_toggle.rpc_id(1, false)
+
+## --- Network Logic (Server Only) ---
+
+@rpc("any_peer", "call_local", "reliable")
+func _request_toggle(should_open: bool):
+	if not multiplayer.is_server(): return
+	
+	# Spam filter: Ignore if already in that state or currently tweening
+	if is_open == should_open or get_tree().get_processed_tweens().size() > 0:
+		return
+	
+	# Changing this on the server automatically updates all clients via Synchronizer
+	is_open = should_open
+
+## --- Visuals (Runs on everyone) ---
+
+func _update_visuals(open: bool):
+	# 1. Update UI prompts
+	set_meta('interaction_message', 'Press E to ' + ('close' if open else 'open'))
+	set_meta('interaction_function', 'close_chest' if open else 'open_chest')
+	
+	# 2. Animate the lid
 	var tween = create_tween()
-	
-	# Determine the target angle based on the 'open' boolean
-	var target_angle = -120.0 if open else 0.0
-	
-	# Transition the X-axis rotation
-	# Parameters: (Property, Final Value, Duration in seconds)
-	tween.tween_property(node, "rotation_degrees:x", target_angle, 1.0)\
-		.set_trans(Tween.TRANS_QUAD)\
-		.set_ease(Tween.EASE_OUT)
+	var target = -120.0 if open else 0.0
+	tween.tween_property(hinge, "rotation_degrees:x", target, 0.8).set_trans(Tween.TRANS_QUAD)
+
+	# 3. Play sounds (only if the node is inside the tree and active)
+	if is_inside_tree():
+		if open: 
+			$openSound.play() 
+		else: 
+			$closeSound.play()

@@ -39,7 +39,12 @@ func initialize_anchor() -> void:
 	else:
 		push_warning("Hinge Marker3D not found on: ", name)
 
-func toggle_door(player: Node3D) -> void:
+func toggle_door(player_path: NodePath) -> void:
+	rpc('toggle_door_sync', player_path)
+
+@rpc("any_peer", "call_local","reliable")
+func toggle_door_sync(player_path: NodePath) -> void:
+	var player = get_node(player_path)
 	if is_tweening:
 		return
 		

@@ -86,6 +86,12 @@ properties/0/replication_mode = 2
 properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
 properties/1/replication_mode = 2
+properties/2/path = NodePath(".:is_open")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath(".:rarity_tier")
+properties/3/spawn = true
+properties/3/replication_mode = 2
 
 [node name="Chest" type="StaticBody3D" unique_id=311350760]
 collision_mask = 0
@@ -96,7 +102,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.0166674, -0.25)
 mesh = SubResource("ArrayMesh_6c5mm")
 
 [node name="hinge" type="Marker3D" parent="." unique_id=1218112701]
-transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, -4.259727)
+transform = Transform3D(1, 0, 0, 0, -0.99999994, 8.742277e-08, 0, -8.742277e-08, -0.99999994, 0, 0, -4.259727)
 
 [node name="Cube_085" type="MeshInstance3D" parent="hinge" unique_id=1322234803]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.016667366, 0.009727001)
