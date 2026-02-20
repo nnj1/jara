@@ -28,6 +28,10 @@ func _physics_process(delta: float) -> void:
 			if target is Player:
 				# TODO: only do if PVP friendly fire is turned on
 				pass
+			if target is SpellProjectile:
+				# TODO: only do if PVP friendly fire is turned on
+				if target.has_method('grow'):
+					target.grow(delta)
 			if target is DumbEnemy:
 				var health_component = target.get_node_or_null('HealthComponent')
 				if health_component:

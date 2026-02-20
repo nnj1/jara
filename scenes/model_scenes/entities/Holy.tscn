@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://dydjr2dffpu1k"]
+
+[ext_resource type="Script" uid="uid://dqxf2002fasfa" path="res://src/holy.gd" id="1_h6x27"]
+[ext_resource type="Shader" uid="uid://lx7hihai6cxe" path="res://shaders/Holy.gdshader" id="2_avc8j"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_tur3b"]
+noise_type = 3
+frequency = 0.0296
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_hlhir"]
+noise = SubResource("FastNoiseLite_tur3b")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5sdtd"]
+render_priority = 0
+shader = ExtResource("2_avc8j")
+shader_parameter/gold_color = Color(1.6197081, 1.3831543, 0.66726744, 1)
+shader_parameter/emission_strength = 10.0
+shader_parameter/ray_count = 1.0
+shader_parameter/speed = 0.050000002375
+shader_parameter/ray_softness = 0.10000000149012
+shader_parameter/noise_tex = SubResource("NoiseTexture2D_hlhir")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_h6x27"]
+resource_local_to_scene = true
+material = SubResource("ShaderMaterial_5sdtd")
+top_radius = 20.0
+bottom_radius = 25.0
+height = 30.0
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_avc8j"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+
+[node name="Holy" type="Node3D" unique_id=1896246784]
+script = ExtResource("1_h6x27")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=775706877]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 0)
+mesh = SubResource("CylinderMesh_h6x27")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=2064356715]
+replication_config = SubResource("SceneReplicationConfig_avc8j")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="." unique_id=1646685584]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 27.27988, 0)
+light_energy = 5.0
+spot_range = 42.549

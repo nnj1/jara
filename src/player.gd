@@ -157,6 +157,10 @@ func _physics_process(delta: float) -> void:
 	# Handle spellcasting (Server-side spawn via RPC)
 	if Input.is_action_just_pressed("spell_q"):
 		rpc_id(1, "server_lob_fireball")
+	if Input.is_action_pressed("spell_1"):
+		$aoe_spells/Holy.is_active = true
+	if Input.is_action_just_released("spell_1"):
+		$aoe_spells/Holy.is_active = false
 	if Input.is_action_pressed("spell_r"):
 		$left_arm/spells/Lightning.is_active = true
 		$left_arm/spells/Lightning.show()

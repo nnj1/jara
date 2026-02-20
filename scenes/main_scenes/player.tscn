@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://ce20v5msw6es3" path="res://assets/models/PSX_Weapons_GLTF/zweinhander.glb" id="11_1h5rl"]
 [ext_resource type="AudioStream" uid="uid://bgtdqt2dttnir" path="res://assets/sfx/Minifantasy_Dungeon_SFX/07_human_atk_sword_2.wav" id="13_imse2"]
 [ext_resource type="PackedScene" uid="uid://dgccc8jew0xkd" path="res://scenes/model_scenes/entities/Lightning.tscn" id="17_j7tqj"]
+[ext_resource type="PackedScene" uid="uid://dydjr2dffpu1k" path="res://scenes/model_scenes/entities/Holy.tscn" id="18_jsgyb"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_40gj3"]
 radius = 2.0
@@ -658,6 +659,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9752139, 3.9760818, -1.846
 [node name="Lightning" parent="left_arm/spells" unique_id=771008225 node_paths=PackedStringArray("ray") instance=ExtResource("17_j7tqj")]
 visible = false
 ray = NodePath("../../../Camera3D/RayCast3D3")
+
+[node name="aoe_spells" type="Node3D" parent="." unique_id=537040030]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.716469, 0)
+
+[node name="Holy" parent="aoe_spells" unique_id=1896246784 instance=ExtResource("18_jsgyb")]
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=904833346]
 replication_config = SubResource("SceneReplicationConfig_imse2")

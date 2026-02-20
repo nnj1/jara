@@ -1,20 +1,32 @@
 [gd_scene format=3 uid="uid://boagnrysleo5p"]
 
 [ext_resource type="Script" uid="uid://cwqglfresnqpv" path="res://src/fireball.gd" id="1_en363"]
-[ext_resource type="Texture2D" uid="uid://dh5noh68sfcl" path="res://resources/fireball_noise_texture.tres" id="2_nqms4"]
 [ext_resource type="AudioStream" uid="uid://clkitaq8jxywp" path="res://assets/sfx/Free Fantasy SFX Pack By TomMusic/OGG Files/SFX/Spells/Fireball 1.ogg" id="3_emyhp"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_en363"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_en363"]
+[sub_resource type="Gradient" id="Gradient_nqms4"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_emyhp"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_m53f1"]
+noise = SubResource("FastNoiseLite_emyhp")
+color_ramp = SubResource("Gradient_nqms4")
+seamless = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wfnvf"]
+resource_local_to_scene = true
 transparency = 1
-albedo_texture = ExtResource("2_nqms4")
+albedo_texture = SubResource("NoiseTexture2D_m53f1")
 emission_enabled = true
 emission = Color(2.454227, 0, 0, 1)
 emission_energy_multiplier = 10.0
 
-[sub_resource type="SphereMesh" id="SphereMesh_nqms4"]
-material = SubResource("StandardMaterial3D_en363")
+[sub_resource type="SphereMesh" id="SphereMesh_fxnhy"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_wfnvf")
 radius = 2.0
 height = 4.0
 
@@ -45,7 +57,7 @@ physics_material_override = SubResource("PhysicsMaterial_en363")
 script = ExtResource("1_en363")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1227347789]
-mesh = SubResource("SphereMesh_nqms4")
+mesh = SubResource("SphereMesh_fxnhy")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1966939374]
 shape = SubResource("SphereShape3D_en363")
