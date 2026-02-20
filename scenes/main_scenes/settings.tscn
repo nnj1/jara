@@ -81,9 +81,13 @@ layout_mode = 2
 layout_mode = 2
 text = "PSX Audio"
 
-[node name="CheckBox2" type="CheckBox" parent="VBoxContainer/HBoxContainer5" unique_id=2027224497]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer5" unique_id=1850281940]
 layout_mode = 2
-text = "PSX Video"
+theme_override_font_sizes/font_size = 16
+text = "Postprocessor:"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/HBoxContainer5" unique_id=1415919696]
+layout_mode = 2
 
 [node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer" unique_id=767245737]
 layout_mode = 2
@@ -111,3 +115,4 @@ theme_override_font_sizes/font_size = 20
 text = "Exit to Desktop"
 
 [connection signal="toggled" from="VBoxContainer/HBoxContainer5/CheckBox" to="." method="_on_check_box_toggled"]
+[connection signal="item_selected" from="VBoxContainer/HBoxContainer5/OptionButton" to="." method="_on_option_button_item_selected"]

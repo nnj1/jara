@@ -9,10 +9,10 @@ uniform float max_lum : hint_range(0.0, 1.0) = 1.0;
 uniform float time_scale : hint_range(0.0, 1.0) = 0.5;
 
 uniform float scanline_intensity : hint_range(0.0, 1.0) = 0.2;
-uniform float chromatic_aberration : hint_range(0.0, 0.01) = 0.005;
+uniform float chromatic_aberration : hint_range(0.0, 0.01) = 0.001;
 
-uniform int pixel_resolution_x : hint_range(32, 1152) = 320;
-uniform int pixel_resolution_y : hint_range(24, 864) = 240;
+uniform int pixel_resolution_x : hint_range(32, 1152) = 1152;
+uniform int pixel_resolution_y : hint_range(24, 864) = 648;
 uniform bool enable_color_quantization = true;
 uniform float color_quant_steps : hint_range(2.0, 64.0) = 32.0;
 

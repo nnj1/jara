@@ -8,6 +8,7 @@ extends Panel
 @onready var fullscreen_toggle = $VBoxContainer/HBoxContainer4/CheckBox # Add this to your scene!
 @onready var main_menu_btn = $VBoxContainer/Button
 @onready var exit_desktop_btn = $VBoxContainer/Button2
+@onready var post_processor_options = $VBoxContainer/HBoxContainer5/OptionButton
 
 @onready var master_bus_index: int = AudioServer.get_bus_index("Master")
 
@@ -41,12 +42,20 @@ func _ready():
 	main_menu_btn.pressed.connect(_on_main_menu_pressed)
 	exit_desktop_btn.pressed.connect(_on_exit_desktop_pressed)
 
-
+	
+	# 5. Initialize PSX audio options
 	var is_currently_on = AudioServer.is_bus_effect_enabled(master_bus_index, 0)
 	if is_currently_on:
 		$VBoxContainer/HBoxContainer5/CheckBox.button_pressed = true
 	else:
 		$VBoxContainer/HBoxContainer5/CheckBox.button_pressed = false
+	
+	# 5. Initialize post-processor options
+	var current_shader_file_name = GlobalVars.get_shader_file_name(PostProcessor.get_node('ColorRect').material)
+	for shader_file in GlobalVars.get_files_with_extension('res://shaders/post/','.gdshader'):
+		post_processor_options.add_item(shader_file)
+	GlobalVars.select_option_by_value(post_processor_options, current_shader_file_name)
+			
 	
 # --- Audio Logic ---
 
@@ -145,3 +154,7 @@ func _on_check_box_toggled(toggled_on: bool) -> void:
 		disable_psx_effects()
 	else:
 		enable_psx_effects()
+
+func _on_option_button_item_selected(index: int) -> void:
+	var shader_path = 'res://shaders/post/' + post_processor_options.get_item_text(index)
+	PostProcessor.get_node('ColorRect').material.shader = GlobalVars.load_resource_from_path(shader_path)

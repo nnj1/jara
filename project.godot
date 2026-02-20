@@ -24,6 +24,7 @@ buses/default_bus_layout="uid://c7ge6x43d7c1e"
 
 [autoload]
 
+GlobalVars="*uid://cxu03ydgwapxd"
 PostProcessor="*uid://cidp6guyk3ufi"
 MultiplayerManager="*uid://dbxhiovb823ww"
 MusicManager="*uid://ijuhsnldgtsi"

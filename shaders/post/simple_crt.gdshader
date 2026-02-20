@@ -1,7 +1,7 @@
 shader_type canvas_item;
 uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_nearest;
 uniform float brightnessMult:hint_range(0.0, 10.0, 0.1)=4.0;
-uniform float wiggleMult:hint_range(0.0, 0.01, 0.0001)=0.005;
+uniform float wiggleMult:hint_range(0.0, 0.01, 0.0001)=0.001;
 uniform float chromaticAberrationOffset:hint_range(0.0, 0.01, 0.00001)=0.001;
 
 void fragment( ){
