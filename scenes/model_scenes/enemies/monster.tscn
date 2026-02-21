@@ -2040,7 +2040,7 @@ _data = {
 }
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nx78w"]
-radius = 3.5
+radius = 4.5
 height = 23.98716
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_hklau"]

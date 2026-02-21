@@ -6,7 +6,9 @@ extends StaticBody3D
 @export var is_open: bool = false:
 	set(value):
 		is_open = value
-		_update_visuals(value)
+		# ONLY run visuals if the node is actually ready in the scene
+		if is_node_ready():
+			_update_visuals(value)
 
 func _ready() -> void:
 	_update_visuals(is_open)

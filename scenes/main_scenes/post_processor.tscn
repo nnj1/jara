@@ -1,19 +1,12 @@
 [gd_scene format=3 uid="uid://cidp6guyk3ufi"]
 
-[ext_resource type="Shader" uid="uid://dq35jjhfmysv2" path="res://shaders/post/psx.gdshader" id="1_387q4"]
+[ext_resource type="Shader" uid="uid://bm4em5i1uengm" path="res://shaders/post/simple_crt.gdshader" id="1_387q4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_p6kf1"]
 shader = ExtResource("1_387q4")
-shader_parameter/grain_intensity = 0.10000000475
-shader_parameter/min_lum = 0.0
-shader_parameter/max_lum = 1.0
-shader_parameter/time_scale = 0.5
-shader_parameter/scanline_intensity = 0.2
-shader_parameter/chromatic_aberration = 0.0010000000475
-shader_parameter/pixel_resolution_x = 1152
-shader_parameter/pixel_resolution_y = 648
-shader_parameter/enable_color_quantization = true
-shader_parameter/color_quant_steps = 32.0
+shader_parameter/brightnessMult = 4.0
+shader_parameter/wiggleMult = 0.001
+shader_parameter/chromaticAberrationOffset = 0.001
 
 [node name="PostProcessor" type="CanvasLayer" unique_id=1878421992]
 layer = 5

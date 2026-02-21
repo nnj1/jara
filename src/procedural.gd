@@ -383,17 +383,21 @@ func place_z_door_frame(x_unit, z_unit, y_unit = 0.0):
 func place_x_door(x_unit, z_unit, y_unit = 0.0):
 	var selected_door = all_doors[rng.randi() % all_doors.size()]
 	var door_instance = selected_door.instantiate()
+	door_instance.name = "Door_" + str(x_unit) + "_" + str(z_unit) # Unique Name
 	var aabb_size = get_first_mesh_size(door_instance)
 	door_instance.position = Vector3(x_unit * unit_size + aabb_size.x, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z)
-	self.add_child(door_instance)
+	if multiplayer.is_server():
+		main_game_node.get_node('entities').add_child(door_instance, true)
 
 func place_z_door(x_unit, z_unit, y_unit = 0.0):
 	var selected_door = all_doors[rng.randi() % all_doors.size()]
 	var door_instance = selected_door.instantiate()
+	door_instance.name = "Door_" + str(x_unit) + "_" + str(z_unit) # Unique Name
 	var aabb_size = get_first_mesh_size(door_instance)
 	door_instance.rotation.y = PI/2
 	door_instance.position = Vector3(x_unit * unit_size + aabb_size.z, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.x)
-	self.add_child(door_instance)
+	if multiplayer.is_server():	
+		main_game_node.get_node('entities').add_child(door_instance, true)
 
 func place_block(x_unit, z_unit, y_unit = 2.0):
 	var block_instance = block_scene.instantiate()

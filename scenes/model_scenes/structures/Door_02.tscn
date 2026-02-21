@@ -40,8 +40,17 @@ shadow_mesh = SubResource("ArrayMesh_ctue8")
 [sub_resource type="BoxShape3D" id="BoxShape3D_87q1t"]
 size = Vector3(10, 15, 2)
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_4xhkb"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 0
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 0
+
 [node name="Door_02" type="AnimatableBody3D" unique_id=1217267146]
 collision_mask = 0
+sync_to_physics = false
 script = ExtResource("1_sg2h6")
 
 [node name="Cube_061" type="MeshInstance3D" parent="." unique_id=175616828]
@@ -65,3 +74,6 @@ bus = &"Sfx"
 
 [node name="hinge" type="Marker3D" parent="." unique_id=134464533]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.0138535, 0, 0)
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=2045174417]
+replication_config = SubResource("SceneReplicationConfig_4xhkb")

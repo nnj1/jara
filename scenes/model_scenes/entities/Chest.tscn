@@ -89,9 +89,6 @@ properties/1/replication_mode = 2
 properties/2/path = NodePath(".:is_open")
 properties/2/spawn = true
 properties/2/replication_mode = 2
-properties/3/path = NodePath(".:rarity_tier")
-properties/3/spawn = true
-properties/3/replication_mode = 2
 
 [node name="Chest" type="StaticBody3D" unique_id=311350760]
 collision_mask = 0
