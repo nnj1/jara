@@ -38,7 +38,7 @@ func _physics_process(delta: float) -> void:
 					attack_timer -= delta
 					if attack_timer < 0:
 						var damage_amount = randi_range(1,5)
-						health_component.take_damage(damage_amount, true if damage_amount > 3 else false)
+						health_component.take_damage_synced(damage_amount, true if damage_amount > 3 else false)
 						attack_timer = attack_timeout
 		else:
 			strike_at(ray.target_position)

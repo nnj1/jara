@@ -30,6 +30,10 @@ func _ready() -> void:
 ### Public Methods (Server-Only Logic)
 
 ## TODO: Called by the server when a hit is detected
+
+func take_damage_synced(amount: float, is_critical: bool = false) -> void:
+	rpc_id(1, 'take_damage', amount, is_critical)
+	
 @rpc("any_peer","call_local","reliable")
 func take_damage(amount: float, is_critical: bool = false) -> void:
 	if not multiplayer.is_server() or is_dead or amount <= 0:
@@ -44,6 +48,10 @@ func take_damage(amount: float, is_critical: bool = false) -> void:
 		_broadcast_death.rpc()
 
 ## Called by the server when a heal occurs (potions, lifesteal)
+func heal_synced(amount: float) -> void:
+	rpc_id(1, 'heal', amount)
+	
+@rpc("any_peer","call_local","reliable")
 func heal(amount: float) -> void:
 	if not multiplayer.is_server() or is_dead or amount <= 0:
 		return

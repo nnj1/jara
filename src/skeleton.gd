@@ -41,6 +41,7 @@ func _ready() -> void:
 	# Connect HealthComponent to our local death function
 	$HealthComponent.died.connect(_on_died)
 	
+# TODO: MAKE MOST MONSTER PHYSICS ONLY RUN ON SERVER
 func _physics_process(delta: float) -> void:
 	# Stop all logic if dead
 	if current_state == State.DEAD:
@@ -196,8 +197,13 @@ func safe_play(anim_name: String):
 	if anim_player.has_animation(n):
 		if anim_player.current_animation != n:
 			anim_player.play(n)
+			
+func apply_knockback_synced(force: Vector3):
+	rpc_id(1, 'apply_knockback', force)
 
+@rpc("any_peer","call_local","reliable")
 func apply_knockback(force: Vector3):
+	if not multiplayer.is_server(): return
 	if current_state == State.DEAD: return
 	knockback_velocity = force * base_knockback
 	# Optional: If you want being hit to make them "mad"
