@@ -12,7 +12,7 @@ var _rot_x: float = 0.0
 var _rot_y: float = 0.0
 
 func _ready():
-	active = false
+	#active = false
 	_rot_x = rotation.x
 	_rot_y = rotation.y
 	if active:

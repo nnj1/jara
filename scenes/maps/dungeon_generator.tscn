@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://b0f7qglb0fvgu"]
+
+[ext_resource type="Script" uid="uid://c1m80ma1ru3c2" path="res://src/dunegeon_generator.gd" id="1_kvsb3"]
+[ext_resource type="Script" uid="uid://bdk3doktgdrxf" path="res://src/flying_camera.gd" id="2_hfbpa"]
+
+[node name="dungeon_generator" type="Node3D" unique_id=1887088690]
+script = ExtResource("1_kvsb3")
+VIEW_ROOM_BOUNDING_BOXES = false
+
+[node name="flying_camera" type="Camera3D" parent="." unique_id=1068986239]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 33.865936, 0)
+current = true
+script = ExtResource("2_hfbpa")
+active = true
+move_speed = 300.0
+acceleration = 50.0
