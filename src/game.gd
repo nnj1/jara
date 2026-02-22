@@ -18,7 +18,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			settings_menu = false
 			# make player recapture mouse
 			players_container.get_node(str(multiplayer.get_unique_id())).capture_mouse(true)
-
+	if event.is_action_pressed("flyingcam"):
+		toggle_mode()
+	
 func _ready() -> void:
 	fly_cam.active = false
 
