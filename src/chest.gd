@@ -48,4 +48,5 @@ func _update_visuals(open: bool):
 		if open: 
 			$openSound.play() 
 		else: 
+			await get_tree().create_timer(0.7).timeout
 			$closeSound.play()
