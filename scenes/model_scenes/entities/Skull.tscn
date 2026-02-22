@@ -55,12 +55,16 @@ properties/2/replication_mode = 2
 properties/3/path = NodePath(".:angular_velocity")
 properties/3/spawn = true
 properties/3/replication_mode = 2
+properties/4/path = NodePath(".:is_held")
+properties/4/spawn = true
+properties/4/replication_mode = 2
 
 [node name="Skull" type="RigidBody3D" unique_id=745084882]
 collision_layer = 4
 collision_mask = 7
 physics_material_override = SubResource("PhysicsMaterial_r2rjo")
 script = ExtResource("1_mplfx")
+is_pickable = true
 
 [node name="Skull" type="MeshInstance3D" parent="." unique_id=1197349901]
 transform = Transform3D(200, 0, 0, 0, -8.742278e-06, 200, 0, -200, -8.742278e-06, 0, 0.004645765, 0)

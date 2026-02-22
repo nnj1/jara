@@ -38,7 +38,7 @@ shadow_mesh = SubResource("ArrayMesh_rvga3")
 [sub_resource type="BoxShape3D" id="BoxShape3D_mh4bm"]
 size = Vector3(8, 8, 8)
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kslmq"]
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_88acd"]
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 2
@@ -51,6 +51,9 @@ properties/2/replication_mode = 2
 properties/3/path = NodePath(".:angular_velocity")
 properties/3/spawn = true
 properties/3/replication_mode = 2
+properties/4/path = NodePath(".:is_held")
+properties/4/spawn = true
+properties/4/replication_mode = 2
 
 [node name="Box" type="RigidBody3D" unique_id=1446971119]
 script = ExtResource("1_88acd")
@@ -61,5 +64,5 @@ mesh = SubResource("ArrayMesh_3f4ot")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=723830973]
 shape = SubResource("BoxShape3D_mh4bm")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=969692900]
-replication_config = SubResource("SceneReplicationConfig_kslmq")
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=987995266]
+replication_config = SubResource("SceneReplicationConfig_88acd")

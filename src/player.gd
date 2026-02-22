@@ -46,6 +46,8 @@ var _bob_time: float = 0.0
 var _camera_rotation := Vector2.ZERO 
 var _current_weapon_index: int = 0 : set = change_weapon
 var is_attacking: bool = false # Tracked for AnimationPlayer
+var held_object: EntityRigidBody = null
+var held_object_rotation_speed: float = 5.0
 
 @onready var camera: Camera3D = $Camera3D
 @onready var _default_cam_height: float = camera.position.y
@@ -155,18 +157,22 @@ func _physics_process(delta: float) -> void:
 		return
 		
 	# Handle spellcasting (Server-side spawn via RPC)
-	if Input.is_action_just_pressed("spell_q"):
+	if Input.is_action_just_pressed("spell_1"):
 		rpc_id(1, "server_lob_fireball")
-	if Input.is_action_pressed("spell_1"):
+	if Input.is_action_pressed("spell_2"):
 		$aoe_spells/Holy.is_active = true
-	if Input.is_action_just_released("spell_1"):
+	if Input.is_action_just_released("spell_2"):
 		$aoe_spells/Holy.is_active = false
-	if Input.is_action_pressed("spell_r"):
+	if Input.is_action_pressed("spell_q"):
 		$left_arm/spells/Lightning.is_active = true
 		$left_arm/spells/Lightning.show()
 	else:
 		$left_arm/spells/Lightning.is_active = false
 		$left_arm/spells/Lightning.hide()
+		
+	# Handle rotation of any held object
+	if Input.is_action_pressed('spell_r'):
+		$left_arm/hold_point.rotate_y(held_object_rotation_speed * delta)
 		
 	# Handle Attack Logic
 	if is_attacking:
@@ -191,6 +197,11 @@ func _physics_process(delta: float) -> void:
 				if collider.has_meta('interaction_function'):
 					collider.call(collider.get_meta('interaction_function'), self.get_path())
 	else:
+		# Drop any held object
+		if held_object and Input.is_action_just_pressed('interact'):
+			held_object.drop_synced()
+			held_object = null
+			
 		main_game_node.get_node('UI/raycast_center_message').text = ''
 
 	# Movement logic
