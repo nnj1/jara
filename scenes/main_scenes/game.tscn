@@ -72,6 +72,15 @@ horizontal_alignment = 1
 
 [node name="ChatBox" parent="UI" unique_id=685031447 instance=ExtResource("6_leqql")]
 
+[node name="ColorRect" type="ColorRect" parent="UI" unique_id=751682632]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+
 [node name="players" type="Node3D" parent="." unique_id=508872652]
 
 [node name="entities" type="Node3D" parent="." unique_id=173960560]

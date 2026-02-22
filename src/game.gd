@@ -51,3 +51,17 @@ func toggle_mode():
 		local_player.get_node("Camera3D").make_current()
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+func flash_damage_animation():
+	# 1. Create the tween
+	var tween = create_tween()
+	
+	# Define your colors
+	var transparent = Color(1, 0, 0, 0)      # Red, but invisible
+	var light_red = Color(1, 0.3, 0.3, 0.6)  # Semi-transparent light red
+	
+	# 2. Flash TO light red (takes 0.1 seconds)
+	tween.tween_property($UI/ColorRect, "color", light_red, 0.1).set_trans(Tween.TRANS_SINE)
+	
+	# 3. Fade BACK to transparent (takes 0.2 seconds)
+	tween.tween_property($UI/ColorRect, "color", transparent, 0.2).set_trans(Tween.TRANS_SINE)

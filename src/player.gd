@@ -58,6 +58,7 @@ var held_object_rotation_speed: float = 5.0
 
 func _ready() -> void:
 	
+	# Turn off all flying camera
 	if is_multiplayer_authority():
 		camera.make_current()
 		capture_mouse(true)
@@ -68,11 +69,32 @@ func _ready() -> void:
 		camera.current = false
 		# make it's player model visible to the other players
 		$rig/Skeleton3D/Knight.set_layer_mask_value(1, true)
-		
+	
+	# set the default weapon
 	change_weapon(0)
-
+	
+	# Configure the health component
+	$HealthComponent.max_health = 100.0
+	$HealthComponent.damaged.connect(on_taking_damage)
+	
+# --- ANIMATION FOR TAKING DAMAGE ---
+func on_taking_damage(amount):
+	$CreatureSoundPlayer.play_hurt()
+	main_game_node.flash_damage_animation()
+	tilt_camera_3d(0.05 * amount)
+	
+func tilt_camera_3d(intensity: float = 0.05, duration: float = 0.1):
+	var tween = create_tween()
+	# Rotate on the Z axis (Roll)
+	# Vector3(0, 0, intensity) tilts left/right
+	var direction = 1 if randf() > 0.5 else -1
+	tween.tween_property(camera, "rotation:z", intensity * direction, duration).set_trans(Tween.TRANS_SINE)	
+	# Return to zero
+	tween.tween_property(camera, "rotation:z", 0, duration).set_trans(Tween.TRANS_SINE)
+	
 # --- NEW ATTACK METHODS FOR ANIMATION PLAYER ---
 func start_attack():
+	$CreatureSoundPlayer.play_attack()
 	is_attacking = true
 
 func stop_attack():

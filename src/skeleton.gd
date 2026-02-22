@@ -14,6 +14,10 @@ enum State { IDLE, RANDOM_WALK, AGGRO, DEAD }
 @export var chase_persistence: float = 3.0
 @export var max_chase_distance: float = 100.0
 
+@export_group("Slide Attack Variables")
+@export var slide_attack_cooldown: float = 0.5
+@onready var slide_attack_cooldown_timer: float = 0.0
+
 # --- Internal Variables ---
 var current_state: State = State.IDLE
 var target_player: CharacterBody3D = null
@@ -81,6 +85,23 @@ func _physics_process(delta: float) -> void:
 		knockback_velocity = knockback_velocity.move_toward(Vector3.ZERO, delta * 50.0)
 		
 	move_and_slide()
+	
+	if target_player:
+		for i in get_slide_collision_count():
+			var collision = get_slide_collision(i)
+			var collider = collision.get_collider()
+			
+			# Check if the object hit is a Player
+			if collider == target_player:
+				if slide_attack_cooldown_timer > 0:
+					slide_attack_cooldown_timer -= delta
+				else:
+					var damage_amount = randi_range(1,5)
+					collider.get_node('HealthComponent').take_damage_synced(damage_amount, false)
+					print('Damaged player')
+					slide_attack_cooldown_timer = slide_attack_cooldown
+
+
 
 func process_aggro_logic(delta: float):
 	if target_player:
