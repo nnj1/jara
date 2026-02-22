@@ -39,6 +39,8 @@ class_name Player
 
 ## Animation Parameters
 @onready var body_animation_tree: AnimationTree = $rig/AnimationTree
+@onready var right_arm_animation_player: AnimationPlayer = $right_arm/AnimationPlayer
+@onready var block_timer: float = 0.0
 
 # Internal variables
 var is_mouse_captured: bool = true
@@ -179,13 +181,22 @@ func _physics_process(delta: float) -> void:
 		apply_attack_impulse()
 		
 	# attack and parry animations
-	if Input.is_action_pressed('left_click'):
-		if not $right_arm/AnimationPlayer.is_playing():
-			$right_arm/AnimationPlayer.play("stab")
-	elif Input.is_action_pressed('right_click'):
-		if not $right_arm/AnimationPlayer.is_playing():
-			$right_arm/AnimationPlayer.play("parry")
-		
+	if Input.is_action_just_pressed('left_click'):
+		if not right_arm_animation_player.is_playing():
+			right_arm_animation_player.play("stab")
+	elif Input.is_action_just_pressed('right_click'):
+		if not right_arm_animation_player.is_playing():
+			right_arm_animation_player.play("block")
+	
+	if Input.is_action_pressed("right_click"):
+		block_timer += delta
+			
+	if Input.is_action_just_released('right_click'):
+		#print(block_timer)
+		block_timer = 0.0
+		if len(right_arm_animation_player.get_queue()) == 0:
+			right_arm_animation_player.queue('return_from_block')
+			
 	# Interaction logic
 	if interaction_ray.is_colliding():
 		var collider = interaction_ray.get_collider()
