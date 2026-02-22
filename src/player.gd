@@ -76,7 +76,13 @@ func _ready() -> void:
 	# Configure the health component
 	$HealthComponent.max_health = 100.0
 	$HealthComponent.damaged.connect(on_taking_damage)
+	if is_multiplayer_authority():
+		$HealthComponent.health_changed.connect(update_ui)
 	
+# SIGNALS THAT JACK INTO THE UI	
+func update_ui(current_health, max_health):
+	main_game_node.get_node('UI/player_stats/VBoxContainer/HP_label').text = 'HP: ' + str(int(current_health)) + '/' + str(int(max_health))
+
 # --- ANIMATION FOR TAKING DAMAGE ---
 func on_taking_damage(amount):
 	$CreatureSoundPlayer.play_hurt()
