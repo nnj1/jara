@@ -201,7 +201,6 @@ func _physics_process(delta: float) -> void:
 		if held_object and Input.is_action_just_pressed('interact'):
 			held_object.drop_synced()
 			held_object = null
-			
 		main_game_node.get_node('UI/raycast_center_message').text = ''
 
 	# Movement logic
