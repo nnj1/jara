@@ -101,6 +101,26 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "MP: 100/100"
 
+[node name="room_info" type="HBoxContainer" parent="UI" unique_id=138090172]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -269.0
+offset_top = 40.0
+offset_bottom = 273.0
+grow_horizontal = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/room_info" unique_id=216740095]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/room_info/VBoxContainer" unique_id=414688873]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_alignment = 2
+
 [node name="players" type="Node3D" parent="." unique_id=508872652]
 
 [node name="entities" type="Node3D" parent="." unique_id=173960560]

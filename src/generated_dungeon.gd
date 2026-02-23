@@ -1,5 +1,7 @@
 extends Node3D
 
+@onready var main_game_node = get_parent() if get_tree().get_root().get_node_or_null('Game') == null else get_tree().get_root().get_node('Game')
+
 # --- RNG & Synchronization ---
 var rng := RandomNumberGenerator.new()
 var is_generated: bool = false
@@ -38,6 +40,7 @@ var is_generated: bool = false
 
 enum ROOM_TYPES {START, BOSS, TREASURE, END, OTHER}
 var rooms = []
+var room_ground_units = {} # for fast checking what room a coordinate string key belongs too
 var hallway_segments = []
 
 func _ready() -> void:
@@ -267,6 +270,7 @@ func actually_populate_rooms():
 		for unit_x in range(room_data.x_unit_bounds[0], room_data.x_unit_bounds[1]):
 			for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1]):
 				placer.place_floor_tile(unit_x, unit_z, room_data.y_unit_bounds[0])
+				##room_ground_units[str(int(unit_x)) + '_' + str(int(room_data.y_unit_bounds[0])) + '_' + str(int(unit_z))] = str(room_data)
 		
 		# Add roof 
 		for unit_x in range(room_data.x_unit_bounds[0], room_data.x_unit_bounds[1]):
@@ -355,31 +359,64 @@ func create_room(room_data: Dictionary) -> Node3D:
 	# Mapping coordinates to Godot Vector3(X, Y, Z)
 	room_anchor.position = Vector3(
 		room_data.x_unit_bounds.x * unit_size,
-		room_data.y_unit_bounds.x * unit_size, # Vertical
+		room_data.y_unit_bounds.x * unit_size, 
 		room_data.z_unit_bounds.x * unit_size
 	)
 	
-	var mesh_instance = MeshInstance3D.new()
-	var box_mesh = BoxMesh.new()
-	
 	var visual_x = room_data.width * unit_size
-	var visual_y = room_data.depth * unit_size   # Vertical thickness
+	var visual_y = room_data.depth * unit_size
 	var visual_z = room_data.height * unit_size
 	
+	# --- 1. Create the Area3D ---
+	var area = Area3D.new()
+	# Set collision mask to look for players
+	area.set_collision_mask_value(2, true)
+	area.collision_layer = 0 # The area itself doesn't need to be on a layer
+	
+	# --- 2. Create the CollisionShape3D ---
+	var collision_shape = CollisionShape3D.new()
+	var box_shape = BoxShape3D.new()
+	box_shape.size = Vector3(visual_x, visual_y, visual_z)
+	collision_shape.shape = box_shape
+	
+	# Match the mesh offset so the area aligns with the visual box
+	area.position = Vector3(visual_x / 2.0, visual_y / 2.0, visual_z / 2.0)
+	
+	# --- 3. Connect the Signal ---
+	area.body_entered.connect(_on_player_entered_room.bind(room_data))
+	
+	# Assemble the Area
+	area.add_child(collision_shape)
+	room_anchor.add_child(area)
+
+	# --- Visual Mesh Logic ---
+	var mesh_instance = MeshInstance3D.new()
+	var box_mesh = BoxMesh.new()
 	box_mesh.size = Vector3(visual_x, visual_y, visual_z)
 	mesh_instance.mesh = box_mesh
-	
-	# Offset mesh so anchor is at the corner (min_x, min_y, min_z)
-	mesh_instance.position = Vector3(visual_x / 2.0, visual_y / 2.0, visual_z / 2.0)
+	mesh_instance.position = area.position # Keep them synced
 	
 	apply_room_material(mesh_instance, room_data.type)
 	
-	# Room bounding box material
 	if VIEW_ROOM_BOUNDING_BOXES:
 		room_anchor.add_child(mesh_instance)
 	
 	add_child(room_anchor, true)
 	return room_anchor
+
+# --- 4. The Callback Function for when a player enters the room---
+@warning_ignore("unused_parameter")
+func _on_player_entered_room(body: Node3D, given_room_data: Dictionary):
+	#print("Player entered room: ", given_room_data.type)
+	if main_game_node:
+		main_game_node.get_node('UI/room_info/VBoxContainer/RichTextLabel').text = dictionary_to_string_with_newlines(given_room_data)
+
+func dictionary_to_string_with_newlines(dictionary):
+	var result_string = ""
+	for key in dictionary: # Iterating over the dictionary naturally iterates over its keys
+		# Format the key and value as a string, adding a newline character at the end
+		result_string += "%s: %s\n" % [key, dictionary[key]]
+	return result_string		
 
 func apply_room_material(instance: MeshInstance3D, type: int):
 	var room_color: Color
