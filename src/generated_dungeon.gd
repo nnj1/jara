@@ -179,9 +179,9 @@ func actually_populate_rooms():
 					placer.place_chandelier(unit_x, unit_z, room_data.y_unit_bounds[1] - 1)
 		
 		# Add wall borders and walls
-		for unit_x in range(room_data.x_unit_bounds[0], room_data.x_unit_bounds[1] + 1):
-			for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1] + 1):
-				if unit_x == room_data.x_unit_bounds[0] or unit_x == room_data.x_unit_bounds[1]:
+		for unit_x in range(room_data.x_unit_bounds[0], room_data.x_unit_bounds[0] + room_data.width + 1):
+			for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[0] + room_data.height + 1):
+				if (unit_x == room_data.x_unit_bounds[0] or unit_x == room_data.x_unit_bounds[1]) and unit_z < room_data.z_unit_bounds[0] + room_data.height:
 					
 					# place border and first wall
 					if not is_connection(room_data, Vector3i(unit_x, room_data.y_unit_bounds[0], unit_z)):
@@ -200,7 +200,7 @@ func actually_populate_rooms():
 		
 					pass
 					
-				if unit_z == room_data.z_unit_bounds[0] or unit_z == room_data.z_unit_bounds[1]:
+				if (unit_z == room_data.z_unit_bounds[0] or unit_z == room_data.z_unit_bounds[1]) and unit_x < room_data.x_unit_bounds[0] + room_data.width:
 					# place border and first wall
 					if not is_connection(room_data, Vector3i(unit_x, room_data.y_unit_bounds[0], unit_z)):
 						placer.place_x_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0])
@@ -491,7 +491,7 @@ func spawn_hallway_segment(grid_pos: Vector3i, container: Node3D, h_size: Vector
 
 
 func is_hallway_overlapping_room(pos: Vector3i, h_size: Vector3i) -> bool:
-	var buffer = 1 # The "1 unit away" rule
+	var buffer = 0 # The "1 unit away" rule
 	
 	var h_x_min = pos.x
 	var h_x_max = pos.x + h_size.x

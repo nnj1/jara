@@ -13,7 +13,7 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 3
 current = true
 script = ExtResource("2_e6mp5")
 active = true
-move_speed = 300.0
-acceleration = 50.0
+move_speed = 200.0
+acceleration = 25.0
 
 [node name="PsxDungeonPlacer" parent="." unique_id=647242144 instance=ExtResource("3_e6mp5")]
