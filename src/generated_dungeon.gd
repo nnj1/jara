@@ -63,7 +63,6 @@ func _ready() -> void:
 
 func generate_dungeon():
 	if is_generated: return
-	is_generated = true
 	
 	# Set the  RNG seed from the multiplayer manager
 	if MultiplayerManager:
@@ -79,6 +78,9 @@ func generate_dungeon():
 	actually_populate_hallways()
 	center_camera()
 	move_player_to_start()
+	
+	is_generated = true
+	
 	
 func move_player_to_start():
 	# 1. Find the start room
@@ -109,7 +111,7 @@ func move_player_to_start():
 	# 4. Move the node
 	if has_node("player_spawn_point"):
 		$player_spawn_point.global_position = spawn_pos
-		print("Player moved to start room at: ", spawn_pos)
+		print("Player spawn moved to start room at: ", spawn_pos)
 	else:
 		push_error("Node 'player_spawn_point' not found in scene.")
 
