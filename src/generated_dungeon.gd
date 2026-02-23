@@ -525,27 +525,28 @@ func generate_hallways(matrix: Dictionary):
 				processed_connections.append([i, j])
 
 func create_corridor_at_points(room_a: Dictionary, room_b: Dictionary, start_pos: Vector3i, end_pos: Vector3i, container: Node3D, h_size: Vector3i):
-	# Pathfind with room context for the jut
 	var path_points = get_astar_path(start_pos, end_pos, room_a, room_b)
 	
 	if path_points.is_empty():
+		push_warning("Hallway failed: No path found between rooms.")
 		return
 
 	var prev_segment = null
 	for i in range(path_points.size()):
-		var is_start = (i == 0)
-		var is_end = (i == path_points.size() - 1)
+		var is_terminal = (i == 0 or i == path_points.size() - 1)
 		
-		# We use ignore_rooms=true because A* already ensures we don't phase through rooms
+		# We set ignore_rooms to true because A* is already handling room avoidance
 		var current_segment = spawn_hallway_segment(path_points[i], container, h_size, true)
 		
 		if current_segment:
-			if is_start or is_end: 
+			if is_terminal: 
 				current_segment["is_doorway"] = true
+			
 			if prev_segment != null:
-				# We set is_room_connection to false here because AStar nodes 
-				# are contiguous; the 'door' is index 0.
+				# We don't need the 'is_room_connection' bypass anymore because
+				# A* generates a single continuous chain of segments.
 				link_segments(prev_segment, current_segment, false)
+				
 		prev_segment = current_segment
 		
 func link_segments(seg_a: Dictionary, seg_b: Dictionary, is_room_connection: bool):
@@ -773,56 +774,68 @@ func is_pos_hallway(pos: Vector3i) -> bool:
 func get_astar_path(start: Vector3i, end: Vector3i, room_a: Dictionary, room_b: Dictionary) -> Array[Vector3i]:
 	var astar = AStar3D.new()
 	
-	# Determine jut directions
+	# Determine directions away from the rooms
 	var start_jut_dir = get_exit_direction(start, room_a)
-	var end_jut_dir = get_exit_direction(end, room_b) # This is the direction OUT of B
+	var end_jut_dir = get_exit_direction(end, room_b)
 	
+	# Pre-calculate jut positions for easy checking
+	var jut_points = []
+	for k in range(1, jut_distance + 1):
+		jut_points.append(start + (start_jut_dir * k))
+		jut_points.append(end + (end_jut_dir * k))
+
+	# 1. Register Points and Set Weights
 	for y in range(max_depth_units):
 		for x in range(max_width_units):
 			for z in range(max_height_units):
 				var pos = Vector3i(x, y, z)
 				var id = pos_to_id(pos)
-				astar.add_point(id, Vector3(x, y, z))
+				astar.add_point(id, Vector3(pos))
 				
-				# 1. Disable points inside rooms (except doors)
+				# Disable if inside a room (unless it's the exact start/end door tile)
 				if is_pos_inside_any_room(pos) and pos != start and pos != end:
 					astar.set_point_disabled(id, true)
 					continue
 				
-				# 2. Weighting Logic
-				# Default weight
-				var weight = 1.0 
-				
-				# Make vertical movement expensive to prefer horizontal travel
-				# This ensures it only goes up/down if horizontal is blocked
-				if pos.y != start.y:
-					weight = 5.0 
-
-				# Reward the "Jut Zone" (make it very cheap to move into the jut)
-				for k in range(1, jut_distance + 1):
-					if pos == start + (start_jut_dir * k) or pos == end + (end_jut_dir * k):
-						weight = 0.1
+				var weight = 1.0
+				if pos.y != start.y: weight = 10.0 # Heavy penalty for verticality
+				if pos in jut_points: weight = 0.1 # High incentive for juts
 				
 				astar.set_point_weight_scale(id, weight)
 
-	# 3. Connect points
+	# 2. Connect Points with "Forced Tunnel" Logic
 	for y in range(max_depth_units):
 		for x in range(max_width_units):
 			for z in range(max_height_units):
 				var pos = Vector3i(x, y, z)
 				var id = pos_to_id(pos)
+				
 				for neighbor in [Vector3i(1,0,0), Vector3i(-1,0,0), Vector3i(0,1,0), Vector3i(0,-1,0), Vector3i(0,0,1), Vector3i(0,0,-1)]:
 					var next = pos + neighbor
-					if is_within_bounds(next):
+					if not is_within_bounds(next): continue
+					
+					var can_connect = true
+					
+					# Force start door to ONLY connect to its jut
+					if pos == start and next != (start + start_jut_dir): can_connect = false
+					elif next == start and pos != (start + start_jut_dir): can_connect = false
+					
+					# Force end door to ONLY connect to its jut
+					if pos == end and next != (end + end_jut_dir): can_connect = false
+					elif next == end and pos != (end + end_jut_dir): can_connect = false
+
+					if can_connect:
 						astar.connect_points(id, pos_to_id(next))
 
+	# 3. Generate the path
 	var p = astar.get_id_path(pos_to_id(start), pos_to_id(end))
 	var path: Array[Vector3i] = []
-	for id in p:
-		path.append(id_to_pos(id))
+	for node_id in p:
+		path.append(id_to_pos(node_id))
 	return path
-	
+
 func get_exit_direction(pos: Vector3i, room: Dictionary) -> Vector3i:
+	# If the door is on the Min X boundary, it must jut further Min (-1)
 	if pos.x == room.x_unit_bounds.x: return Vector3i(-1, 0, 0)
 	if pos.x == room.x_unit_bounds.y: return Vector3i(1, 0, 0)
 	if pos.z == room.z_unit_bounds.x: return Vector3i(0, 0, -1)
