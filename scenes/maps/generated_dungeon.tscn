@@ -8,6 +8,7 @@
 script = ExtResource("1_gih56")
 VIEW_ROOM_BOUNDING_BOXES = false
 VIEW_COORIDOR_BOUNDING_BOXES = false
+SPAWN_ENTITIES = true
 
 [node name="flying_camera" parent="." unique_id=1961233597 instance=ExtResource("2_e6mp5")]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 33.865936, 0)

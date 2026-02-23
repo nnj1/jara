@@ -363,30 +363,36 @@ func actually_populate_rooms():
 		
 		# add entities
 		if SPAWN_ENTITIES:
-			for unit_x in range(room_data.x_unit_bounds[0], room_data.x_unit_bounds[1]):
-				for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1]):
-					if rng.randf() < 0.05:
-						for i in rng.randi_range(0, 4):
-							placer.place_skull(unit_x, unit_z, room_data.y_unit_bounds[0])
-					elif rng.randf() < 0.01:
-						if rng.randf() < 0.5:
-							placer.spawn_skeleton(unit_x, unit_z, room_data.y_unit_bounds[0])
-						else:
-							placer.spawn_monster(unit_x, unit_z, room_data.y_unit_bounds[0])
-					
-					if unit_x % 2 == 0 and unit_z % 2 == 0:
-						if rng.randf() < 0.1:
-							placer.place_hexagon(unit_x, unit_z, room_data.y_unit_bounds[0])
-						elif rng.randf() < 0.3:
-							var sub_roll = rng.randf()
-							if sub_roll < 0.33:
-								placer.place_pillar(unit_x, unit_z, room_data.y_unit_bounds[0])
-							elif sub_roll < 0.66:
-								var things = ['barrel', 'debris', 'chest', 'box']
-								var thing = things[rng.randi() % things.size()]
-								placer.call('place_' + thing, unit_x, unit_z, room_data.y_unit_bounds[0])
+			# spawn any special monsters if boss room
+			if room_data.type == ROOM_TYPES.BOSS:
+				var center_room_position_x = int((room_data.x_unit_bounds[0] + room_data.x_unit_bounds[1]) /2)
+				var center_room_position_z = int((room_data.z_unit_bounds[0] + room_data.z_unit_bounds[1]) /2)
+				placer.spawn_dragon(center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
+			else:
+				for unit_x in range(room_data.x_unit_bounds[0], room_data.x_unit_bounds[1]):
+					for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1]):
+						if rng.randf() < 0.05:
+							for i in rng.randi_range(0, 4):
+								placer.place_skull(unit_x, unit_z, room_data.y_unit_bounds[0])
+						elif rng.randf() < 0.01:
+							if rng.randf() < 0.5:
+								placer.spawn_skeleton(unit_x, unit_z, room_data.y_unit_bounds[0])
 							else:
-								placer.place_spike(unit_x, unit_z, room_data.y_unit_bounds[0])
+								placer.spawn_monster(unit_x, unit_z, room_data.y_unit_bounds[0])
+						
+						if unit_x % 2 == 0 and unit_z % 2 == 0:
+							if rng.randf() < 0.1:
+								placer.place_hexagon(unit_x, unit_z, room_data.y_unit_bounds[0])
+							elif rng.randf() < 0.3:
+								var sub_roll = rng.randf()
+								if sub_roll < 0.33:
+									placer.place_pillar(unit_x, unit_z, room_data.y_unit_bounds[0])
+								elif sub_roll < 0.66:
+									var things = ['barrel', 'debris', 'chest', 'box']
+									var thing = things[rng.randi() % things.size()]
+									placer.call('place_' + thing, unit_x, unit_z, room_data.y_unit_bounds[0])
+								else:
+									placer.place_spike(unit_x, unit_z, room_data.y_unit_bounds[0])
 		
 func create_room(room_data: Dictionary) -> Node3D:
 	var room_anchor = Node3D.new()
