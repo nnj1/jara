@@ -491,69 +491,27 @@ func generate_hallways(matrix: Dictionary):
 				create_corridor_at_points(rooms[i], rooms[j], start_pt, end_pt, hallway_container, default_hallway_size)
 				processed_connections.append([i, j])
 
-@warning_ignore("unused_parameter")
-func create_corridor_at_points(room_a: Dictionary, room_b: Dictionary, start_pos: Vector3i, end_pos: Vector3i, container: Node3D, h_size: Vector3i):	
-	var path_points = []
+func create_corridor_at_points(_room_a, _room_b, start_pos: Vector3i, end_pos: Vector3i, container: Node3D, h_size: Vector3i):
+	# Use A* to find the route around rooms
+	var path_points = get_astar_path(start_pos, end_pos)
 	
-	# --- 1. EXIT BUFFER (FROM ROOM A) ---
-	var exit_dir = Vector3i.ZERO
-	if start_pos.x == room_a.x_unit_bounds.x: exit_dir = Vector3i(-1, 0, 0)
-	elif start_pos.x == room_a.x_unit_bounds.y: exit_dir = Vector3i(1, 0, 0)
-	elif start_pos.z == room_a.z_unit_bounds.x: exit_dir = Vector3i(0, 0, -1)
-	elif start_pos.z == room_a.z_unit_bounds.y: exit_dir = Vector3i(0, 0, 1)
-	
-	var current = start_pos
-	path_points.append(Vector3i(current))
-	
-	for k in range(2):
-		var next = current + exit_dir
-		# Safety: don't overshoot the destination on the relevant axis
-		if exit_dir.x != 0 and abs(next.x - start_pos.x) > abs(end_pos.x - start_pos.x): break
-		if exit_dir.z != 0 and abs(next.z - start_pos.z) > abs(end_pos.z - start_pos.z): break
-		current = next
-		path_points.append(Vector3i(current))
+	if path_points.is_empty():
+		push_warning("AStar could not find a path between rooms!")
+		return
 
-	# --- 2. ENTRANCE BUFFER TARGET (INTO ROOM B) ---
-	var enter_dir = Vector3i.ZERO
-	if end_pos.x == room_b.x_unit_bounds.x: enter_dir = Vector3i(1, 0, 0) # Must come from West to hit West wall
-	elif end_pos.x == room_b.x_unit_bounds.y: enter_dir = Vector3i(-1, 0, 0)
-	elif end_pos.z == room_b.z_unit_bounds.x: enter_dir = Vector3i(0, 0, 1)
-	elif end_pos.z == room_b.z_unit_bounds.y: enter_dir = Vector3i(0, 0, -1)
-	
-	# Calculate where the "pre-entrance" point is (2 units back from the door)
-	var entrance_buffer_start = end_pos + (enter_dir * -2)
-
-	# --- 3. CONNECT THE BUFFERS (MANHATTAN) ---
-	# We move from 'current' to 'entrance_buffer_start'
-	while current.x != entrance_buffer_start.x:
-		current.x += clampi(entrance_buffer_start.x - current.x, -1, 1)
-		path_points.append(Vector3i(current))
-	while current.z != entrance_buffer_start.z:
-		current.z += clampi(entrance_buffer_start.z - current.z, -1, 1)
-		path_points.append(Vector3i(current))
-	while current.y != entrance_buffer_start.y:
-		current.y += clampi(entrance_buffer_start.y - current.y, -1, 1)
-		path_points.append(Vector3i(current))
-
-	# --- 4. FINAL ENTRANCE STRETCH ---
-	while current != end_pos:
-		if current.x != end_pos.x: current.x += clampi(end_pos.x - current.x, -1, 1)
-		elif current.z != end_pos.z: current.z += clampi(end_pos.z - current.z, -1, 1)
-		elif current.y != end_pos.y: current.y += clampi(end_pos.y - current.y, -1, 1)
-		path_points.append(Vector3i(current))
-
-	# --- 5. SPAWN AND LINK ---
 	var prev_segment = null
 	for i in range(path_points.size()):
 		var is_start = (i == 0)
 		var is_end = (i == path_points.size() - 1)
-		var current_segment = spawn_hallway_segment(path_points[i], container, h_size, (is_start or is_end))
+		
+		# Spawn segment (pass ignore_rooms=true since AStar already handled avoidance)
+		var current_segment = spawn_hallway_segment(path_points[i], container, h_size, true)
 		
 		if current_segment:
 			if is_start or is_end: current_segment["is_doorway"] = true
 			if prev_segment != null:
-				var is_room_connection = (i == 1 or i == path_points.size() - 1)
-				link_segments(prev_segment, current_segment, is_room_connection)
+				# Use your existing link logic
+				link_segments(prev_segment, current_segment, false)
 		prev_segment = current_segment
 		
 func link_segments(seg_a: Dictionary, seg_b: Dictionary, is_room_connection: bool):
@@ -774,3 +732,52 @@ func is_pos_hallway(pos: Vector3i) -> bool:
 		if segment.grid_pos == pos:
 			return true
 	return false
+
+func get_astar_path(start: Vector3i, end: Vector3i) -> Array[Vector3i]:
+	var astar = AStar3D.new()
+	var path: Array[Vector3i] = []
+	
+	# 1. Register all possible grid points in the dungeon area
+	for y in range(max_depth_units):
+		for x in range(max_width_units):
+			for z in range(max_height_units):
+				var pos = Vector3i(x, y, z)
+				var id = pos_to_id(pos)
+				astar.add_point(id, Vector3(x, y, z))
+				
+				# 2. Disable points that are inside rooms (excluding doorways)
+				if is_pos_inside_any_room(pos) and pos != start and pos != end:
+					astar.set_point_disabled(id, true)
+
+	# 3. Connect neighboring points (orthogonal only, no diagonals)
+	for y in range(max_depth_units):
+		for x in range(max_width_units):
+			for z in range(max_height_units):
+				var pos = Vector3i(x, y, z)
+				var id = pos_to_id(pos)
+				for neighbor in [Vector3i(1,0,0), Vector3i(-1,0,0), Vector3i(0,1,0), Vector3i(0,-1,0), Vector3i(0,0,1), Vector3i(0,0,-1)]:
+					var next = pos + neighbor
+					if is_within_bounds(next):
+						astar.connect_points(id, pos_to_id(next))
+
+	# 4. Generate Path
+	var p = astar.get_id_path(pos_to_id(start), pos_to_id(end))
+	for id in p:
+		path.append(id_to_pos(id))
+	return path
+
+# Helper to turn 3D coords into a unique ID
+func pos_to_id(pos: Vector3i) -> int:
+	return pos.x + (pos.z * max_width_units) + (pos.y * max_width_units * max_height_units)
+
+func id_to_pos(id: int) -> Vector3i:
+	@warning_ignore("integer_division")
+	var y = id / (max_width_units * max_height_units)
+	var rem = id % (max_width_units * max_height_units)
+	@warning_ignore("integer_division")
+	var z = rem / max_width_units
+	var x = rem % max_width_units
+	return Vector3i(x, y, z)
+
+func is_within_bounds(p: Vector3i) -> bool:
+	return p.x >= 0 and p.x < max_width_units and p.y >= 0 and p.y < max_depth_units and p.z >= 0 and p.z < max_height_units
