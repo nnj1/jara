@@ -117,6 +117,7 @@ func _on_server_disconnected():
 	_cleanup_and_exit()
 
 func _on_connection_failed():
+	print('Connection failed.')
 	_cleanup_and_exit()
 
 # --- DISCONNECTION HANDLING ---

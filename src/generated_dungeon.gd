@@ -405,13 +405,13 @@ func create_room(room_data: Dictionary) -> Node3D:
 	return room_anchor
 
 # --- 4. The Callback Function for when a player enters the room---
-@warning_ignore("unused_parameter")
 func _on_player_entered_room(body: Node3D, given_room_data: Dictionary):
 	#print("Player entered room: ", given_room_data.type)
 	if main_game_node:
-		var room_text_label = main_game_node.get_node_or_null('UI/room_info/VBoxContainer/RichTextLabel')
-		if room_text_label:
-			room_text_label.text = dictionary_to_string_with_newlines(given_room_data)
+		if body.is_multiplayer_authority():
+			var room_text_label = main_game_node.get_node_or_null('UI/room_info/VBoxContainer/RichTextLabel')
+			if room_text_label:
+				room_text_label.text = dictionary_to_string_with_newlines(given_room_data)
 
 func dictionary_to_string_with_newlines(dictionary):
 	var result_string = ""
@@ -760,7 +760,7 @@ func get_random_bright_color() -> Color:
 	# Hue: 0.0 to 1.0 (all colors of the rainbow)
 	# Saturation: 0.7 to 1.0 (keeps it from looking washed out/white)
 	# Value: 0.8 to 1.0 (keeps it from looking dark/black)
-	return Color.from_hsv(randf(), randf_range(0.7, 1.0), randf_range(0.8, 1.0), 0.25)
+	return Color.from_hsv(rng.randf(), rng.randf_range(0.7, 1.0), rng.randf_range(0.8, 1.0), 0.25)
 
 func is_connection(room_data: Dictionary, current_pos: Vector3i) -> bool:
 	for conn_pos in room_data.connections:
