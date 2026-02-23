@@ -249,7 +249,15 @@ func _physics_process(delta: float) -> void:
 	
 	var wish_dir := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
-	if is_on_floor():
+	# --- FLYING LOGIC START ---
+	if Input.is_action_pressed("fly"):
+		# Move up at jump_velocity speed (or create a new fly_speed variable)
+		velocity.y = jump_velocity 
+		# While flying, we use air physics for horizontal movement so it feels floaty
+		handle_air_physics(wish_dir, delta)
+	# --- FLYING LOGIC END ---
+	
+	elif is_on_floor():
 		handle_ground_physics(wish_dir, delta)
 	else:
 		handle_air_physics(wish_dir, delta)

@@ -40,14 +40,74 @@ var rooms = []
 var hallway_segments = []
 
 func _ready() -> void:
-	rng.randomize()
+	
+	if multiplayer.is_server():
+		# HOST: We already have the seed.
+		print("Host: Building with seed: ", MultiplayerManager.server_settings["map_seed"])
+		generate_dungeon()
+	else:
+		# CLIENT: Force a reset of the local seed to 0 so we KNOW if it hasn't arrived
+		MultiplayerManager.server_settings["map_seed"] = 0
+		
+		# If the settings haven't arrived yet, wait.
+		# Note: We use a lambda to ensure it only runs once.
+		var on_settings = func():
+			print("Client: Building with RECEIVED seed: ", MultiplayerManager.server_settings["map_seed"])
+			generate_dungeon()
+			
+		MultiplayerManager.settings_received.connect(on_settings, CONNECT_ONE_SHOT)
+
+func generate_dungeon():
+	if is_generated: return
+	is_generated = true
+	
+	# Set the  RNG seed from the multiplayer manager
+	if MultiplayerManager:
+		rng.seed = MultiplayerManager.server_settings["map_seed"]
+
 	placer.rng = rng
+		
 	draw_dungeon_outline()
 	generate_rooms()
 	var connection_matrix = generate_connections()
 	generate_hallways(connection_matrix)
 	actually_populate_rooms()
+	actually_populate_hallways()
 	center_camera()
+	move_player_to_start()
+	
+func move_player_to_start():
+	# 1. Find the start room
+	var start_room = null
+	for room in rooms:
+		if room.type == ROOM_TYPES.START:
+			start_room = room
+			break
+	
+	if start_room == null:
+		push_error("No start room found!")
+		return
+
+	# 2. Pick a random unit coordinate inside the room
+	# We subtract 1 from the max bounds to ensure the player isn't inside a wall
+	var random_x = rng.randi_range(start_room.x_unit_bounds.x + 1, start_room.x_unit_bounds.y - 1)
+	var random_z = rng.randi_range(start_room.z_unit_bounds.x + 1, start_room.z_unit_bounds.y - 1)
+	var y_level = start_room.y_unit_bounds.x # The floor level
+	
+	# 3. Convert unit coordinates to Godot world position
+	# We add 0.5 to center the player in the middle of the tile
+	var spawn_pos = Vector3(
+		(random_x + 0.5) * unit_size,
+		(y_level + 0.1) * unit_size, # Slightly above floor to prevent clipping
+		(random_z + 0.5) * unit_size
+	)
+	
+	# 4. Move the node
+	if has_node("player_spawn_point"):
+		$player_spawn_point.global_position = spawn_pos
+		print("Player moved to start room at: ", spawn_pos)
+	else:
+		push_error("Node 'player_spawn_point' not found in scene.")
 
 func center_camera():
 	# Position the camera to see the whole dungeon from above
@@ -57,7 +117,42 @@ func center_camera():
 			max_depth_units * unit_size + 100,  
 			max_height_units * unit_size / 2
 		)
+		
+func actually_populate_hallways():
+	for segment in hallway_segments:
+		var pos = segment.grid_pos
+		
+		# 1. FLOOR (Place a floor tile)
+		var below_pos = pos + Vector3i(0, -1, 0)
+		if not segment.faces.down and not is_pos_inside_any_room(below_pos) and not is_pos_hallway(below_pos):
+			placer.place_block(below_pos.x, below_pos.z, below_pos.y)
+			
+		# ROOF (Place a block above the path)
+		var top_pos = pos + Vector3i(0, 1, 0)
+		if not segment.faces.up and not is_pos_inside_any_room(top_pos) and not is_pos_hallway(top_pos):
+			placer.place_block(top_pos.x, top_pos.z, top_pos.y)
 
+		# 2. HORIZONTAL WALLS
+		# Check North (-Z)
+		var north_pos = pos + Vector3i(0, 0, -1)
+		if not segment.faces.north and not is_pos_inside_any_room(north_pos) and not is_pos_hallway(north_pos):
+			placer.place_block(north_pos.x, north_pos.z, north_pos.y)
+		
+		# Check South (+Z)
+		var south_pos = pos + Vector3i(0, 0, 1)
+		if not segment.faces.south and not is_pos_inside_any_room(south_pos) and not is_pos_hallway(south_pos):
+			placer.place_block(south_pos.x, south_pos.z, south_pos.y)
+
+		# Check West (-X)
+		var west_pos = pos + Vector3i(-1, 0, 0)
+		if not segment.faces.west and not is_pos_inside_any_room(west_pos) and not is_pos_hallway(west_pos):
+			placer.place_block(west_pos.x, west_pos.z, west_pos.y)
+
+		# Check East (+X)
+		var east_pos = pos + Vector3i(1, 0, 0)
+		if not segment.faces.east and not is_pos_inside_any_room(east_pos) and not is_pos_hallway(east_pos):
+			placer.place_block(east_pos.x, east_pos.z, east_pos.y)
+			
 func generate_connections() -> Dictionary:
 	# initialize the connection matrix to be a pure identity matrix
 	var connection_matrix = {}
@@ -398,26 +493,96 @@ func generate_hallways(matrix: Dictionary):
 
 @warning_ignore("unused_parameter")
 func create_corridor_at_points(room_a: Dictionary, room_b: Dictionary, start_pos: Vector3i, end_pos: Vector3i, container: Node3D, h_size: Vector3i):	
+	var path_points = []
+	
+	# --- 1. EXIT BUFFER (FROM ROOM A) ---
+	var exit_dir = Vector3i.ZERO
+	if start_pos.x == room_a.x_unit_bounds.x: exit_dir = Vector3i(-1, 0, 0)
+	elif start_pos.x == room_a.x_unit_bounds.y: exit_dir = Vector3i(1, 0, 0)
+	elif start_pos.z == room_a.z_unit_bounds.x: exit_dir = Vector3i(0, 0, -1)
+	elif start_pos.z == room_a.z_unit_bounds.y: exit_dir = Vector3i(0, 0, 1)
+	
 	var current = start_pos
-	var segments_to_spawn = []
+	path_points.append(Vector3i(current))
 	
-	# Collect all points first
-	segments_to_spawn.append(Vector3i(current))
-	while current.x != end_pos.x:
-		current.x += clampi(end_pos.x - current.x, -h_size.x, h_size.x)
-		segments_to_spawn.append(Vector3i(current))
-	while current.z != end_pos.z:
-		current.z += clampi(end_pos.z - current.z, -h_size.z, h_size.z)
-		segments_to_spawn.append(Vector3i(current))
-	while current.y != end_pos.y:
-		current.y += clampi(end_pos.y - current.y, -h_size.y, h_size.y)
-		segments_to_spawn.append(Vector3i(current))
+	for k in range(2):
+		var next = current + exit_dir
+		# Safety: don't overshoot the destination on the relevant axis
+		if exit_dir.x != 0 and abs(next.x - start_pos.x) > abs(end_pos.x - start_pos.x): break
+		if exit_dir.z != 0 and abs(next.z - start_pos.z) > abs(end_pos.z - start_pos.z): break
+		current = next
+		path_points.append(Vector3i(current))
 
-	# Spawn segments with a skip-check for the ends
-	for i in range(segments_to_spawn.size()):
-		var is_end_piece = (i == 0 or i == segments_to_spawn.size() - 1)
-		spawn_hallway_segment(segments_to_spawn[i], container, h_size, is_end_piece)
+	# --- 2. ENTRANCE BUFFER TARGET (INTO ROOM B) ---
+	var enter_dir = Vector3i.ZERO
+	if end_pos.x == room_b.x_unit_bounds.x: enter_dir = Vector3i(1, 0, 0) # Must come from West to hit West wall
+	elif end_pos.x == room_b.x_unit_bounds.y: enter_dir = Vector3i(-1, 0, 0)
+	elif end_pos.z == room_b.z_unit_bounds.x: enter_dir = Vector3i(0, 0, 1)
+	elif end_pos.z == room_b.z_unit_bounds.y: enter_dir = Vector3i(0, 0, -1)
 	
+	# Calculate where the "pre-entrance" point is (2 units back from the door)
+	var entrance_buffer_start = end_pos + (enter_dir * -2)
+
+	# --- 3. CONNECT THE BUFFERS (MANHATTAN) ---
+	# We move from 'current' to 'entrance_buffer_start'
+	while current.x != entrance_buffer_start.x:
+		current.x += clampi(entrance_buffer_start.x - current.x, -1, 1)
+		path_points.append(Vector3i(current))
+	while current.z != entrance_buffer_start.z:
+		current.z += clampi(entrance_buffer_start.z - current.z, -1, 1)
+		path_points.append(Vector3i(current))
+	while current.y != entrance_buffer_start.y:
+		current.y += clampi(entrance_buffer_start.y - current.y, -1, 1)
+		path_points.append(Vector3i(current))
+
+	# --- 4. FINAL ENTRANCE STRETCH ---
+	while current != end_pos:
+		if current.x != end_pos.x: current.x += clampi(end_pos.x - current.x, -1, 1)
+		elif current.z != end_pos.z: current.z += clampi(end_pos.z - current.z, -1, 1)
+		elif current.y != end_pos.y: current.y += clampi(end_pos.y - current.y, -1, 1)
+		path_points.append(Vector3i(current))
+
+	# --- 5. SPAWN AND LINK ---
+	var prev_segment = null
+	for i in range(path_points.size()):
+		var is_start = (i == 0)
+		var is_end = (i == path_points.size() - 1)
+		var current_segment = spawn_hallway_segment(path_points[i], container, h_size, (is_start or is_end))
+		
+		if current_segment:
+			if is_start or is_end: current_segment["is_doorway"] = true
+			if prev_segment != null:
+				var is_room_connection = (i == 1 or i == path_points.size() - 1)
+				link_segments(prev_segment, current_segment, is_room_connection)
+		prev_segment = current_segment
+		
+func link_segments(seg_a: Dictionary, seg_b: Dictionary, is_room_connection: bool):
+	# If this link is between a terminal segment and its neighbor,
+	# we might want to keep the wall closed or handle it differently.
+	if is_room_connection:
+		return # Do not link faces; keeps the hallway 'box' sealed at the room entrance
+		
+	var diff = seg_b.grid_pos - seg_a.grid_pos
+	
+	if diff.x > 0: # Moving East (+X)
+		seg_a.faces.east = true
+		seg_b.faces.west = true
+	elif diff.x < 0: # Moving West (-X)
+		seg_a.faces.west = true
+		seg_b.faces.east = true
+	elif diff.z > 0: # Moving South (+Z)
+		seg_a.faces.south = true
+		seg_b.faces.north = true
+	elif diff.z < 0: # Moving North (-Z)
+		seg_a.faces.north = true
+		seg_b.faces.south = true
+	elif diff.y > 0: # Moving Up (+Y)
+		seg_a.faces.up = true
+		seg_b.faces.down = true
+	elif diff.y < 0: # Moving Down (-Y)
+		seg_a.faces.down = true
+		seg_b.faces.up = true
+			
 # Helper function to find the point on the wall closest to the target room
 func get_wall_connection_point(from_room: Dictionary, to_room: Dictionary, h_size: Vector3i) -> Vector3i:
 	var center_from = get_room_center(from_room) / unit_size
@@ -425,34 +590,61 @@ func get_wall_connection_point(from_room: Dictionary, to_room: Dictionary, h_siz
 	var diff = center_to - center_from
 	var out_point = Vector3i()
 	
-	# Logic: Exit the wall that faces the target room most directly
+	# Logic: Determine which wall (X or Z) faces the target room
 	if abs(diff.x) > abs(diff.z):
-		# Exit Left/Right wall
-		var x_pos = from_room.x_unit_bounds.y if diff.x > 0 else from_room.x_unit_bounds.x - h_size.x
+		# Target is further away on X-axis: Use Left/Right walls
+		# We pick the X coordinate exactly on the boundary
+		var x_pos = from_room.x_unit_bounds.y if diff.x > 0 else from_room.x_unit_bounds.x
+		
 		out_point = Vector3i(
 			int(x_pos),
 			int(from_room.y_unit_bounds.x), # Floor level
-			int((from_room.z_unit_bounds.x + from_room.z_unit_bounds.y) / 2.0 - (h_size.z / 2.0))
+			# Center the hallway on the Z wall
+			int(floor((from_room.z_unit_bounds.x + from_room.z_unit_bounds.y) / 2.0 - (h_size.z / 2.0)))
 		)
 	else:
-		# Exit Front/Back wall
-		var z_pos = from_room.z_unit_bounds.y if diff.z > 0 else from_room.z_unit_bounds.x - h_size.z
+		# Target is further away on Z-axis: Use Front/Back walls
+		# We pick the Z coordinate exactly on the boundary
+		var z_pos = from_room.z_unit_bounds.y if diff.z > 0 else from_room.z_unit_bounds.x
+		
 		out_point = Vector3i(
-			int((from_room.x_unit_bounds.x + from_room.x_unit_bounds.y) / 2.0 - (h_size.x / 2.0)),
+			# Center the hallway on the X wall
+			int(floor((from_room.x_unit_bounds.x + from_room.x_unit_bounds.y) / 2.0 - (h_size.x / 2.0))),
 			int(from_room.y_unit_bounds.x), # Floor level
 			int(z_pos)
 		)
+		
 	return out_point
 	
-func spawn_hallway_segment(grid_pos: Vector3i, container: Node3D, h_size: Vector3i, ignore_rooms: bool = false):
+func spawn_hallway_segment(grid_pos: Vector3i, container: Node3D, h_size: Vector3i, ignore_rooms: bool = false) -> Variant:
 	var segment_name = "Hall_%d_%d_%d" % [grid_pos.x, grid_pos.y, grid_pos.z]
-	if container.has_node(segment_name): return 
+	
+	# 1. Check if this segment already exists (don't duplicate work)
+	# We search the array instead of has_node for data consistency
+	for existing in hallway_segments:
+		if existing.grid_pos == grid_pos:
+			return existing
 
-	# 1. STRICT ROOM CHECK
-	# We check if this segment's BOUNDS overlap a room's BOUNDS.
+	# 2. Room Collision Check
 	if not ignore_rooms and is_hallway_overlapping_room(grid_pos, h_size):
-		return
+		return null
 
+	# 3. Initialize Segment Data
+	# These bools determine which sides of the "box" are open
+	var segment_data = {
+		"grid_pos": grid_pos,
+		"faces": {
+			"up": false,    # +Y
+			"down": false,  # -Y
+			"north": false, # -Z
+			"south": false, # +Z
+			"east": false,  # +X
+			"west": false   # -X
+		},
+		"mesh_instance": null # Reference to the visual node if needed
+	}
+
+	# 4. Visual Representation (Bounding Box)
 	var mesh_instance = MeshInstance3D.new()
 	mesh_instance.name = segment_name
 	
@@ -461,8 +653,7 @@ func spawn_hallway_segment(grid_pos: Vector3i, container: Node3D, h_size: Vector
 	box.size = visual_size
 	mesh_instance.mesh = box
 	
-	# 2. ANCHOR POSITIONING (Matching create_room logic)
-	# This sets the "corner" of the hallway at the grid_pos
+	# Positioning (Center the box on the grid coordinate)
 	mesh_instance.position = Vector3(
 		grid_pos.x * unit_size + (visual_size.x / 2.0),
 		grid_pos.y * unit_size + (visual_size.y / 2.0),
@@ -483,12 +674,15 @@ func spawn_hallway_segment(grid_pos: Vector3i, container: Node3D, h_size: Vector
 	
 	main_mat.next_pass = outline_mat
 	mesh_instance.material_override = main_mat
-	container.add_child(mesh_instance)
 	
-	hallway_segments.append({
-		'grid_pos': grid_pos
-	})
-
+	# 5. Finalize
+	if VIEW_COORIDOR_BOUNDING_BOXES:
+		container.add_child(mesh_instance)
+	
+	segment_data.mesh_instance = mesh_instance
+	hallway_segments.append(segment_data)
+	
+	return segment_data
 
 func is_hallway_overlapping_room(pos: Vector3i, h_size: Vector3i) -> bool:
 	var buffer = 0 # The "1 unit away" rule
@@ -534,13 +728,49 @@ func get_random_bright_color() -> Color:
 	# Hue: 0.0 to 1.0 (all colors of the rainbow)
 	# Saturation: 0.7 to 1.0 (keeps it from looking washed out/white)
 	# Value: 0.8 to 1.0 (keeps it from looking dark/black)
-	return Color.from_hsv(randf(), randf_range(0.7, 1.0), randf_range(0.8, 1.0))
+	return Color.from_hsv(randf(), randf_range(0.7, 1.0), randf_range(0.8, 1.0), 0.25)
 
 func is_connection(room_data: Dictionary, current_pos: Vector3i) -> bool:
 	for conn_pos in room_data.connections:
-		# We check if the wall segment's X and Z match the connection
-		# We usually ignore Y if you want a full-height hole, 
-		# or include it if you only want the 'floor' level open.
-		if current_pos.x == conn_pos.x and current_pos.z == conn_pos.z and current_pos.y == conn_pos.y:
+		# 1. Height Check (Doorway height)
+		var within_y = (current_pos.y >= conn_pos.y and current_pos.y < conn_pos.y + 2)
+		if not within_y: continue
+
+		# 2. Precise Wall Alignment
+		# Check if the wall we are currently building is the same X or Z as the connection
+		var on_x_wall = (current_pos.x == conn_pos.x)
+		var on_z_wall = (current_pos.z == conn_pos.z)
+
+		# 3. Footprint Check
+		# Only punch the hole if we are on the correct wall AND aligned with hallway width
+		
+		# If we are on the X-boundary wall (Left/Right), check Z alignment
+		if on_x_wall and (conn_pos.x == room_data.x_unit_bounds.x or conn_pos.x == room_data.x_unit_bounds.y):
+			var dz = abs(current_pos.z - conn_pos.z)
+			if dz < default_hallway_size.z:
+				return true
+				
+		# If we are on the Z-boundary wall (Front/Back), check X alignment
+		if on_z_wall and (conn_pos.z == room_data.z_unit_bounds.x or conn_pos.z == room_data.z_unit_bounds.y):
+			var dx = abs(current_pos.x - conn_pos.x)
+			if dx < default_hallway_size.x:
+				return true
+			
+	return false
+
+func is_pos_inside_any_room(pos: Vector3i) -> bool:
+	for room in rooms:
+		# Check if the coordinate is strictly within the room's interior volume
+		var in_x = pos.x >= room.x_unit_bounds.x and pos.x < room.x_unit_bounds.y
+		var in_y = pos.y >= room.y_unit_bounds.x and pos.y < room.y_unit_bounds.y
+		var in_z = pos.z >= room.z_unit_bounds.x and pos.z < room.z_unit_bounds.y
+		
+		if in_x and in_y and in_z:
+			return true
+	return false
+
+func is_pos_hallway(pos: Vector3i) -> bool:
+	for segment in hallway_segments:
+		if segment.grid_pos == pos:
 			return true
 	return false
