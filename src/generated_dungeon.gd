@@ -122,11 +122,12 @@ func center_camera():
 func actually_populate_hallways():
 	for segment in hallway_segments:
 		var pos = segment.grid_pos
-		
-		# 1. FLOOR (Place a floor tile)
+			
+		# 1. FLOOR (Place a floor block or tile)
 		var below_pos = pos + Vector3i(0, -1, 0)
 		if not segment.faces.down and not is_pos_inside_any_room(below_pos) and not is_pos_hallway(below_pos):
 			placer.place_block(below_pos.x, below_pos.z, below_pos.y)
+			#placer.place_roof_tile(below_pos.x, below_pos.z, below_pos.y)
 			
 		# ROOF (Place a block above the path)
 		var top_pos = pos + Vector3i(0, 1, 0)
@@ -285,6 +286,8 @@ func actually_populate_rooms():
 						placer.place_z_wall(unit_x, unit_z, room_data.y_unit_bounds[0] + 0.5)
 					else:
 						placer.place_z_door_frame(unit_x, unit_z, room_data.y_unit_bounds[0])
+						#placer.remove_structure('Wall_z', unit_x, unit_z + 1, room_data.y_unit_bounds[0])
+						#placer.remove_structure('Wall_z', unit_x, unit_z - 1, room_data.y_unit_bounds[0])
 						placer.place_z_door(unit_x, unit_z, room_data.y_unit_bounds[0])
 						
 					# fill up with the rest of the walls
@@ -304,6 +307,8 @@ func actually_populate_rooms():
 						placer.place_x_wall(unit_x, unit_z, room_data.y_unit_bounds[0] + 0.5)
 					else:
 						placer.place_x_door_frame(unit_x, unit_z, room_data.y_unit_bounds[0])
+						#placer.remove_structure('Wall_x', unit_x - 1, unit_z, room_data.y_unit_bounds[0])
+						#placer.remove_structure('Wall_x', unit_x + 1, unit_z, room_data.y_unit_bounds[0])
 						placer.place_x_door(unit_x, unit_z, room_data.y_unit_bounds[0])
 					
 					# fill up with the rest of the walls
@@ -519,12 +524,11 @@ func generate_hallways(matrix: Dictionary):
 				create_corridor_at_points(rooms[i], rooms[j], start_pt, end_pt, hallway_container, default_hallway_size)
 				processed_connections.append([i, j])
 
-func create_corridor_at_points(_room_a, _room_b, start_pos: Vector3i, end_pos: Vector3i, container: Node3D, h_size: Vector3i):
-	# Use A* to find the route around rooms
-	var path_points = get_astar_path(start_pos, end_pos)
+func create_corridor_at_points(room_a: Dictionary, room_b: Dictionary, start_pos: Vector3i, end_pos: Vector3i, container: Node3D, h_size: Vector3i):
+	# Pathfind with room context for the jut
+	var path_points = get_astar_path(start_pos, end_pos, room_a, room_b)
 	
 	if path_points.is_empty():
-		push_warning("AStar could not find a path between rooms!")
 		return
 
 	var prev_segment = null
@@ -532,13 +536,15 @@ func create_corridor_at_points(_room_a, _room_b, start_pos: Vector3i, end_pos: V
 		var is_start = (i == 0)
 		var is_end = (i == path_points.size() - 1)
 		
-		# Spawn segment (pass ignore_rooms=true since AStar already handled avoidance)
+		# We use ignore_rooms=true because A* already ensures we don't phase through rooms
 		var current_segment = spawn_hallway_segment(path_points[i], container, h_size, true)
 		
 		if current_segment:
-			if is_start or is_end: current_segment["is_doorway"] = true
+			if is_start or is_end: 
+				current_segment["is_doorway"] = true
 			if prev_segment != null:
-				# Use your existing link logic
+				# We set is_room_connection to false here because AStar nodes 
+				# are contiguous; the 'door' is index 0.
 				link_segments(prev_segment, current_segment, false)
 		prev_segment = current_segment
 		
@@ -727,6 +733,7 @@ func is_connection(room_data: Dictionary, current_pos: Vector3i) -> bool:
 		var on_x_wall = (current_pos.x == conn_pos.x)
 		var on_z_wall = (current_pos.z == conn_pos.z)
 
+		
 		# 3. Footprint Check
 		# Only punch the hole if we are on the correct wall AND aligned with hallway width
 		
@@ -761,11 +768,15 @@ func is_pos_hallway(pos: Vector3i) -> bool:
 			return true
 	return false
 
-func get_astar_path(start: Vector3i, end: Vector3i) -> Array[Vector3i]:
+@export var jut_distance: int = 2
+
+func get_astar_path(start: Vector3i, end: Vector3i, room_a: Dictionary, room_b: Dictionary) -> Array[Vector3i]:
 	var astar = AStar3D.new()
-	var path: Array[Vector3i] = []
 	
-	# 1. Register all possible grid points in the dungeon area
+	# Determine jut directions
+	var start_jut_dir = get_exit_direction(start, room_a)
+	var end_jut_dir = get_exit_direction(end, room_b) # This is the direction OUT of B
+	
 	for y in range(max_depth_units):
 		for x in range(max_width_units):
 			for z in range(max_height_units):
@@ -773,11 +784,28 @@ func get_astar_path(start: Vector3i, end: Vector3i) -> Array[Vector3i]:
 				var id = pos_to_id(pos)
 				astar.add_point(id, Vector3(x, y, z))
 				
-				# 2. Disable points that are inside rooms (excluding doorways)
+				# 1. Disable points inside rooms (except doors)
 				if is_pos_inside_any_room(pos) and pos != start and pos != end:
 					astar.set_point_disabled(id, true)
+					continue
+				
+				# 2. Weighting Logic
+				# Default weight
+				var weight = 1.0 
+				
+				# Make vertical movement expensive to prefer horizontal travel
+				# This ensures it only goes up/down if horizontal is blocked
+				if pos.y != start.y:
+					weight = 5.0 
 
-	# 3. Connect neighboring points (orthogonal only, no diagonals)
+				# Reward the "Jut Zone" (make it very cheap to move into the jut)
+				for k in range(1, jut_distance + 1):
+					if pos == start + (start_jut_dir * k) or pos == end + (end_jut_dir * k):
+						weight = 0.1
+				
+				astar.set_point_weight_scale(id, weight)
+
+	# 3. Connect points
 	for y in range(max_depth_units):
 		for x in range(max_width_units):
 			for z in range(max_height_units):
@@ -788,11 +816,18 @@ func get_astar_path(start: Vector3i, end: Vector3i) -> Array[Vector3i]:
 					if is_within_bounds(next):
 						astar.connect_points(id, pos_to_id(next))
 
-	# 4. Generate Path
 	var p = astar.get_id_path(pos_to_id(start), pos_to_id(end))
+	var path: Array[Vector3i] = []
 	for id in p:
 		path.append(id_to_pos(id))
 	return path
+	
+func get_exit_direction(pos: Vector3i, room: Dictionary) -> Vector3i:
+	if pos.x == room.x_unit_bounds.x: return Vector3i(-1, 0, 0)
+	if pos.x == room.x_unit_bounds.y: return Vector3i(1, 0, 0)
+	if pos.z == room.z_unit_bounds.x: return Vector3i(0, 0, -1)
+	if pos.z == room.z_unit_bounds.y: return Vector3i(0, 0, 1)
+	return Vector3i.ZERO
 
 # Helper to turn 3D coords into a unique ID
 func pos_to_id(pos: Vector3i) -> int:

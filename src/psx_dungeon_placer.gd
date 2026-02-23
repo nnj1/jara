@@ -66,6 +66,9 @@ enum ORIENT {POS_X, NEG_X, POS_Z, NEG_Z}
 # Random Number generation
 @onready var rng: RandomNumberGenerator
 
+## DATABASE OF PLACED STRUCTURES
+@onready var placed_structures = {}
+
 ## ENTITY PLACEMENT FUNCTIONS
 
 func place_barrel(x_unit, z_unit, y_unit = 0.0):
@@ -174,6 +177,7 @@ func place_x_wall(x_unit, z_unit, y_unit = 0.0):
 	var wall_instance = selected_wall.instantiate()
 	var aabb_size = get_first_mesh_size(wall_instance)
 	wall_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0)
+	wall_instance.name = 'Wall_x_' + str(int(x_unit)) + '_' + str(int(y_unit)) + '_' + str(int(z_unit))
 	self.add_child(wall_instance)
 
 func place_x_window_wall(x_unit, z_unit, y_unit = 0.0):
@@ -203,6 +207,7 @@ func place_z_wall(x_unit, z_unit, y_unit = 0.0):
 	var aabb_size = get_first_mesh_size(wall_instance)
 	wall_instance.rotation.y = PI/2
 	wall_instance.position = Vector3(x_unit * unit_size + aabb_size.z/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.x/2.0)
+	wall_instance.name = 'Wall_z_' + str(int(x_unit)) + '_' + str(int(y_unit)) + '_' + str(int(z_unit))
 	self.add_child(wall_instance)
 
 func place_z_window_wall(x_unit, z_unit, y_unit = 0.0):
@@ -311,3 +316,10 @@ func _find_first_mesh_instance(node: Node) -> MeshInstance3D:
 		var found = _find_first_mesh_instance(child)
 		if found: return found
 	return null
+
+func remove_structure(structure_prefix: String, x_unit, z_unit, y_unit):
+	var node_name = structure_prefix + '_' + str(int(x_unit)) + '_' + str(int(y_unit)) + '_' + str(int(z_unit))
+	var node = get_node_or_null(node_name)
+	if node:
+		print('remove node ' + node.name)
+		node.queue_free()
