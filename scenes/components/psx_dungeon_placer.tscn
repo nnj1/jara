@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://de3ulb24lab7s"]
+
+[ext_resource type="Script" uid="uid://k25jmrkjgexw" path="res://src/psx_dungeon_placer.gd" id="1_mmvvv"]
+
+[node name="PsxDungeonPlacer" type="Node3D" unique_id=647242144]
+script = ExtResource("1_mmvvv")
