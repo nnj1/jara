@@ -21,3 +21,7 @@ acceleration = 25.0
 
 [node name="player_spawn_point" type="Marker3D" parent="." unique_id=631291578]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 10, 10)
+
+[node name="entities" type="Node3D" parent="." unique_id=639868233]
+
+[node name="enemies" type="Node3D" parent="." unique_id=1269205697]

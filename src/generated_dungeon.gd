@@ -11,6 +11,7 @@ var is_generated: bool = false
 @export var VIEW_ROOM_BOUNDING_BOXES: bool = true
 @export var VIEW_ROOM_CONNECTORS: bool = true
 @export var VIEW_COORIDOR_BOUNDING_BOXES: bool = true
+@export var SPAWN_ENTITIES: bool = false
 
 @export_category('Dungeon Settings')
 @export var unit_size: float = 20.0
@@ -284,7 +285,8 @@ func actually_populate_rooms():
 						placer.place_z_wall(unit_x, unit_z, room_data.y_unit_bounds[0] + 0.5)
 					else:
 						placer.place_z_door_frame(unit_x, unit_z, room_data.y_unit_bounds[0])
-					
+						placer.place_z_door(unit_x, unit_z, room_data.y_unit_bounds[0])
+						
 					# fill up with the rest of the walls
 					for y_offset in range(room_data.depth - 2):
 						placer.place_z_wall(unit_x, unit_z, room_data.y_unit_bounds[0] + 1.5 + y_offset)
@@ -302,6 +304,7 @@ func actually_populate_rooms():
 						placer.place_x_wall(unit_x, unit_z, room_data.y_unit_bounds[0] + 0.5)
 					else:
 						placer.place_x_door_frame(unit_x, unit_z, room_data.y_unit_bounds[0])
+						placer.place_x_door(unit_x, unit_z, room_data.y_unit_bounds[0])
 					
 					# fill up with the rest of the walls
 					for y_offset in range(room_data.depth - 2):
@@ -313,7 +316,32 @@ func actually_populate_rooms():
 					placer.place_x_arch_fence(unit_x, unit_z, room_data.y_unit_bounds[0] + room_data.depth - 0.5)
 					pass 
 		
-		
+		# add entities
+		if SPAWN_ENTITIES:
+			for unit_x in range(room_data.x_unit_bounds[0], room_data.x_unit_bounds[1]):
+				for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1]):
+					if rng.randf() < 0.05:
+						for i in rng.randi_range(0, 4):
+							placer.place_skull(unit_x, unit_z, room_data.y_unit_bounds[0])
+					elif rng.randf() < 0.01:
+						if rng.randf() < 0.5:
+							placer.spawn_skeleton(unit_x, unit_z, room_data.y_unit_bounds[0])
+						else:
+							placer.spawn_monster(unit_x, unit_z, room_data.y_unit_bounds[0])
+					
+					if unit_x % 2 == 0 and unit_z % 2 == 0:
+						if rng.randf() < 0.1:
+							placer.place_hexagon(unit_x, unit_z, room_data.y_unit_bounds[0])
+						elif rng.randf() < 0.3:
+							var sub_roll = rng.randf()
+							if sub_roll < 0.33:
+								placer.place_pillar(unit_x, unit_z, room_data.y_unit_bounds[0])
+							elif sub_roll < 0.66:
+								var things = ['barrel', 'debris', 'chest', 'box']
+								var thing = things[rng.randi() % things.size()]
+								placer.call('place_' + thing, unit_x, unit_z, room_data.y_unit_bounds[0])
+							else:
+								placer.place_spike(unit_x, unit_z, room_data.y_unit_bounds[0])
 		
 func create_room(room_data: Dictionary) -> Node3D:
 	var room_anchor = Node3D.new()

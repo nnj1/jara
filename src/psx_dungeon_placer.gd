@@ -1,5 +1,7 @@
 extends Node3D
 
+@onready var main_game_node = get_parent() if get_tree().get_root().get_node_or_null('Game') == null else get_tree().get_root().get_node('Game')
+
 @export var unit_size: float = 20.0
 
 @export_category('Dungeon Models')
@@ -63,6 +65,46 @@ enum ORIENT {POS_X, NEG_X, POS_Z, NEG_Z}
 
 # Random Number generation
 @onready var rng: RandomNumberGenerator
+
+## ENTITY PLACEMENT FUNCTIONS
+
+func place_barrel(x_unit, z_unit, y_unit = 0.0):
+	var barrel_instance = barrel_scene.instantiate()
+	barrel_instance.name = "Barrel_" + str(x_unit) + "_" + str(z_unit) # Unique Name
+	var aabb_size = get_first_mesh_size(barrel_instance)
+	barrel_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + rng.randf_range(0, 20), y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0 + rng.randf_range(0, 20))
+	barrel_instance.rotation.y = rng.randf_range(0, 2*PI)
+	if multiplayer.is_server():
+		main_game_node.get_node('entities').add_child(barrel_instance, true)
+
+func place_chest(x_unit, z_unit, y_unit = 0.0):
+	var chest_instance = chest_scene.instantiate()
+	chest_instance.name = "Chest_" + str(x_unit) + "_" + str(z_unit) # Unique Name
+	var aabb_size = get_first_mesh_size(chest_instance)
+	chest_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + rng.randf_range(0, 20), y_unit * unit_size + aabb_size.y, z_unit * unit_size + aabb_size.z/2.0 + rng.randf_range(0, 20))
+	chest_instance.rotation.y = rng.randf_range(0, 2*PI)
+	if multiplayer.is_server():
+		main_game_node.get_node('entities').add_child(chest_instance, true)
+	
+func place_box(x_unit, z_unit, y_unit = 0.0):
+	var box_instance = box_scene.instantiate()
+	box_instance.name = "Box_" + str(x_unit) + "_" + str(z_unit) # Unique Name
+	var aabb_size = get_first_mesh_size(box_instance)
+	box_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + rng.randf_range(0, 20), y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0 + rng.randf_range(0, 20))
+	box_instance.rotation.y = rng.randf_range(0, 2*PI)
+	if multiplayer.is_server():
+		main_game_node.get_node('entities').add_child(box_instance, true)
+	
+func place_skull(x_unit, z_unit, y_unit = 0.0):
+	var skull_instance = skull_scene.instantiate()
+	skull_instance.name = "Skull_" + str(x_unit) + "_" + str(z_unit) # Unique Name
+	var aabb_size = get_first_mesh_size(skull_instance)
+	skull_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + rng.randf_range(0, 20), y_unit * unit_size + 5, z_unit * unit_size + aabb_size.z/2.0 + rng.randf_range(0, 20))
+	skull_instance.rotation.y = rng.randf_range(0, 2*PI)
+	skull_instance.rotation.x = rng.randf_range(0, 2*PI)
+	skull_instance.rotation.z = rng.randf_range(0, 2*PI)
+	if multiplayer.is_server():
+		main_game_node.get_node('entities').add_child(skull_instance, true)
 
 ## ENVIRONMENT PLACEMENT FUNCTIONS
 
@@ -212,7 +254,48 @@ func place_chandelier(x_unit, z_unit, y_unit = 2.0):
 	var aabb_size = get_first_mesh_size(chandelier_instance)
 	chandelier_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + (unit_size - aabb_size.x)/2, y_unit * unit_size + aabb_size.y/2.0 + (unit_size - aabb_size.y), z_unit * unit_size + aabb_size.z/2.0 + (unit_size - aabb_size.z)/2)
 	self.add_child(chandelier_instance)
-	
+
+
+# ENEMY PLACEMENT FUNCTIONS
+
+func spawn_skeleton(x_unit, z_unit, y_unit = 0.0):
+	# Note: Only spawn on server if these are synced enemies!
+	var skeleton_instance = preload('res://scenes/model_scenes/enemies/skeleton.tscn').instantiate()
+	skeleton_instance.name = "Skeleton_" + str(x_unit) + "_" + str(z_unit) # Unique Name
+	skeleton_instance.position = Vector3(x_unit * unit_size + unit_size/2.0, y_unit * unit_size + 3.0, z_unit * unit_size + unit_size/2.0)
+	skeleton_instance.rotation.y = rng.randf_range(0, 2*PI)
+	if multiplayer.is_server():
+		main_game_node.get_node('enemies').add_child(skeleton_instance, true)
+
+func spawn_monster(x_unit, z_unit, y_unit = 0.0):
+	# Note: Only spawn on server if these are synced enemies!
+	var monster_instance = preload('res://scenes/model_scenes/enemies/monster.tscn').instantiate()
+	monster_instance.name = "Monster_" + str(x_unit) + "_" + str(z_unit) # Unique Name
+	monster_instance.position = Vector3(x_unit * unit_size + unit_size/2.0, y_unit * unit_size + 3.0, z_unit * unit_size + unit_size/2.0)
+	monster_instance.rotation.y = rng.randf_range(0, 2*PI)
+	if multiplayer.is_server():
+		main_game_node.get_node('enemies').add_child(monster_instance, true)
+
+# DOOR FUNCS
+func place_x_door(x_unit, z_unit, y_unit = 0.0):
+	var selected_door = all_doors[rng.randi() % all_doors.size()]
+	var door_instance = selected_door.instantiate()
+	door_instance.name = "Door_" + str(x_unit) + "_" + str(z_unit) # Unique Name
+	var aabb_size = get_first_mesh_size(door_instance)
+	door_instance.position = Vector3(x_unit * unit_size + aabb_size.x, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z)
+	if multiplayer.is_server():
+		main_game_node.get_node('entities').add_child(door_instance, true)
+
+func place_z_door(x_unit, z_unit, y_unit = 0.0):
+	var selected_door = all_doors[rng.randi() % all_doors.size()]
+	var door_instance = selected_door.instantiate()
+	door_instance.name = "Door_" + str(x_unit) + "_" + str(z_unit) # Unique Name
+	var aabb_size = get_first_mesh_size(door_instance)
+	door_instance.rotation.y = PI/2
+	door_instance.position = Vector3(x_unit * unit_size + aabb_size.z, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.x)
+	if multiplayer.is_server():	
+		main_game_node.get_node('entities').add_child(door_instance, true)
+
 ## HELPER FUNCTIONS
 
 func get_first_mesh_size(root_node: Node) -> Vector3:
