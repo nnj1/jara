@@ -140,7 +140,6 @@ spawn_path = NodePath("..")
 [node name="GeneratedDungeon" parent="map" unique_id=1887088690 instance=ExtResource("7_leqql")]
 VIEW_ROOM_CONNECTORS = false
 SPAWN_ENTITIES = true
-room_count = 3
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1948907850]
 environment = SubResource("Environment_yqjtg")

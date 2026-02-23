@@ -42,6 +42,7 @@ enum ROOM_TYPES {START, BOSS, TREASURE, END, OTHER}
 var rooms = []
 var room_ground_units = {} # for fast checking what room a coordinate string key belongs too
 var hallway_segments = []
+var astar := AStar3D.new()
 
 func _ready() -> void:
 	
@@ -63,15 +64,19 @@ func _ready() -> void:
 
 func generate_dungeon():
 	if is_generated: return
+	is_generated = true
 	
 	# Set the  RNG seed from the multiplayer manager
 	if MultiplayerManager:
 		rng.seed = MultiplayerManager.server_settings["map_seed"]
-
 	placer.rng = rng
 		
 	draw_dungeon_outline()
 	generate_rooms()
+	
+	# --- NEW: Build the pathfinding grid once ---
+	initialize_astar_grid()
+	
 	var connection_matrix = generate_connections()
 	generate_hallways(connection_matrix)
 	actually_populate_rooms()
@@ -79,8 +84,30 @@ func generate_dungeon():
 	center_camera()
 	move_player_to_start()
 	
-	is_generated = true
+func initialize_astar_grid():
+	astar.clear()
+	# Step 1: Register all possible points in the dungeon volume
+	for y in range(max_depth_units):
+		for x in range(max_width_units):
+			for z in range(max_height_units):
+				var pos = Vector3i(x, y, z)
+				var id = pos_to_id(pos)
+				astar.add_point(id, Vector3(pos))
+				
+				# Disable points inside rooms to force hallways to go around
+				if is_pos_inside_any_room(pos):
+					astar.set_point_disabled(id, true)
 	
+	# Step 2: Create connections between adjacent points
+	for y in range(max_depth_units):
+		for x in range(max_width_units):
+			for z in range(max_height_units):
+				var pos = Vector3i(x, y, z)
+				var id = pos_to_id(pos)
+				for neighbor in [Vector3i(1,0,0), Vector3i(0,1,0), Vector3i(0,0,1)]:
+					var next = pos + neighbor
+					if is_within_bounds(next):
+						astar.connect_points(id, pos_to_id(next))
 	
 func move_player_to_start():
 	# 1. Find the start room
@@ -555,6 +582,7 @@ func generate_hallways(matrix: Dictionary):
 	for i in matrix.keys():
 		for j in matrix[i].keys():
 			if matrix[i][j] and i != j and not [j, i] in processed_connections:
+				#await get_tree().process_frame
 				# 1. Get the points
 				var start_pt = get_wall_connection_point(rooms[i], rooms[j], default_hallway_size)
 				var end_pt = get_wall_connection_point(rooms[j], rooms[i], default_hallway_size)
@@ -813,63 +841,29 @@ func is_pos_hallway(pos: Vector3i) -> bool:
 @export var jut_distance: int = 2
 
 func get_astar_path(start: Vector3i, end: Vector3i, room_a: Dictionary, room_b: Dictionary) -> Array[Vector3i]:
-	var astar = AStar3D.new()
+	var start_id = pos_to_id(start)
+	var end_id = pos_to_id(end)
 	
-	# Determine directions away from the rooms
-	var start_jut_dir = get_exit_direction(start, room_a)
-	var end_jut_dir = get_exit_direction(end, room_b)
+	# Enable start/end points (they are usually disabled because they are on room walls)
+	astar.set_point_disabled(start_id, false)
+	astar.set_point_disabled(end_id, false)
 	
-	# Pre-calculate jut positions for easy checking
-	var jut_points = []
-	for k in range(1, jut_distance + 1):
-		jut_points.append(start + (start_jut_dir * k))
-		jut_points.append(end + (end_jut_dir * k))
+	# Add weight preference to the exit directions to prevent immediate turns
+	var jut_start = start + get_exit_direction(start, room_a)
+	var jut_end = end + get_exit_direction(end, room_b)
+	
+	if is_within_bounds(jut_start): astar.set_point_weight_scale(pos_to_id(jut_start), 0.1)
+	if is_within_bounds(jut_end): astar.set_point_weight_scale(pos_to_id(jut_end), 0.1)
 
-	# 1. Register Points and Set Weights
-	for y in range(max_depth_units):
-		for x in range(max_width_units):
-			for z in range(max_height_units):
-				var pos = Vector3i(x, y, z)
-				var id = pos_to_id(pos)
-				astar.add_point(id, Vector3(pos))
-				
-				# Disable if inside a room (unless it's the exact start/end door tile)
-				if is_pos_inside_any_room(pos) and pos != start and pos != end:
-					astar.set_point_disabled(id, true)
-					continue
-				
-				var weight = 1.0
-				if pos.y != start.y: weight = 10.0 # Heavy penalty for verticality
-				if pos in jut_points: weight = 0.1 # High incentive for juts
-				
-				astar.set_point_weight_scale(id, weight)
+	# The actual pathfinding (now near-instant)
+	var p = astar.get_id_path(start_id, end_id)
+	
+	# Reset weights and re-disable start/end for the next hallway
+	if is_within_bounds(jut_start): astar.set_point_weight_scale(pos_to_id(jut_start), 1.0)
+	if is_within_bounds(jut_end): astar.set_point_weight_scale(pos_to_id(jut_end), 1.0)
+	astar.set_point_disabled(start_id, true)
+	astar.set_point_disabled(end_id, true)
 
-	# 2. Connect Points with "Forced Tunnel" Logic
-	for y in range(max_depth_units):
-		for x in range(max_width_units):
-			for z in range(max_height_units):
-				var pos = Vector3i(x, y, z)
-				var id = pos_to_id(pos)
-				
-				for neighbor in [Vector3i(1,0,0), Vector3i(-1,0,0), Vector3i(0,1,0), Vector3i(0,-1,0), Vector3i(0,0,1), Vector3i(0,0,-1)]:
-					var next = pos + neighbor
-					if not is_within_bounds(next): continue
-					
-					var can_connect = true
-					
-					# Force start door to ONLY connect to its jut
-					if pos == start and next != (start + start_jut_dir): can_connect = false
-					elif next == start and pos != (start + start_jut_dir): can_connect = false
-					
-					# Force end door to ONLY connect to its jut
-					if pos == end and next != (end + end_jut_dir): can_connect = false
-					elif next == end and pos != (end + end_jut_dir): can_connect = false
-
-					if can_connect:
-						astar.connect_points(id, pos_to_id(next))
-
-	# 3. Generate the path
-	var p = astar.get_id_path(pos_to_id(start), pos_to_id(end))
 	var path: Array[Vector3i] = []
 	for node_id in p:
 		path.append(id_to_pos(node_id))
