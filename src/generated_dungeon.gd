@@ -17,9 +17,9 @@ var is_generated: bool = false
 
 @export_category('Dungeon Settings')
 @export var unit_size: float = 20.0
-@export var max_width_units: int = 50   # X (Horizontal)
-@export var max_height_units: int = 50  # Z (Horizontal)
-@export var max_depth_units: int = 20   # Y (Vertical)
+@export var max_width_units: int = 75   # X (Horizontal)
+@export var max_height_units: int = 75  # Z (Horizontal)
+@export var max_depth_units: int = 10   # Y (Vertical)
 
 @export_category('Room Settings')
 @export var room_count: int = 10
@@ -158,34 +158,41 @@ func actually_populate_hallways():
 		# 1. FLOOR (Place a floor block or tile)
 		var below_pos = pos + Vector3i(0, -1, 0)
 		if not segment.faces.down and not is_pos_inside_any_room(below_pos) and not is_pos_hallway(below_pos):
-			placer.place_block(below_pos.x, below_pos.z, below_pos.y)
-			#placer.place_roof_tile(below_pos.x, below_pos.z, below_pos.y)
+			if not is_any_room_connection(below_pos):
+				placer.place_block(below_pos.x, below_pos.z, below_pos.y)
+				#placer.place_roof_tile(below_pos.x, below_pos.z, below_pos.y)
 			
 		# ROOF (Place a block above the path)
 		var top_pos = pos + Vector3i(0, 1, 0)
 		if not segment.faces.up and not is_pos_inside_any_room(top_pos) and not is_pos_hallway(top_pos):
-			placer.place_block(top_pos.x, top_pos.z, top_pos.y)
+			if not is_any_room_connection(top_pos):
+				placer.place_block(top_pos.x, top_pos.z, top_pos.y)
 
 		# 2. HORIZONTAL WALLS
 		# Check North (-Z)
 		var north_pos = pos + Vector3i(0, 0, -1)
 		if not segment.faces.north and not is_pos_inside_any_room(north_pos) and not is_pos_hallway(north_pos):
-			placer.place_block(north_pos.x, north_pos.z, north_pos.y)
+			# Only place block if it's NOT a door
+			if not is_any_room_connection(north_pos):
+				placer.place_block(north_pos.x, north_pos.z, north_pos.y)
 		
 		# Check South (+Z)
 		var south_pos = pos + Vector3i(0, 0, 1)
 		if not segment.faces.south and not is_pos_inside_any_room(south_pos) and not is_pos_hallway(south_pos):
-			placer.place_block(south_pos.x, south_pos.z, south_pos.y)
+			if not is_any_room_connection(south_pos):
+				placer.place_block(south_pos.x, south_pos.z, south_pos.y)
 
 		# Check West (-X)
 		var west_pos = pos + Vector3i(-1, 0, 0)
 		if not segment.faces.west and not is_pos_inside_any_room(west_pos) and not is_pos_hallway(west_pos):
-			placer.place_block(west_pos.x, west_pos.z, west_pos.y)
+			if not is_any_room_connection(west_pos):
+				placer.place_block(west_pos.x, west_pos.z, west_pos.y)
 
 		# Check East (+X)
 		var east_pos = pos + Vector3i(1, 0, 0)
 		if not segment.faces.east and not is_pos_inside_any_room(east_pos) and not is_pos_hallway(east_pos):
-			placer.place_block(east_pos.x, east_pos.z, east_pos.y)
+			if not is_any_room_connection(east_pos):
+				placer.place_block(east_pos.x, east_pos.z, east_pos.y)
 			
 func generate_connections() -> Dictionary:
 	# initialize the connection matrix to be a pure identity matrix
@@ -819,6 +826,12 @@ func is_connection(room_data: Dictionary, current_pos: Vector3i) -> bool:
 			if dx < default_hallway_size.x:
 				return true
 			
+	return false
+	
+func is_any_room_connection(pos: Vector3i) -> bool:
+	for room in rooms:
+		if is_connection(room, pos):
+			return true
 	return false
 
 func is_pos_inside_any_room(pos: Vector3i) -> bool:
