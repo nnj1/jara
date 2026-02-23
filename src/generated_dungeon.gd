@@ -409,7 +409,9 @@ func create_room(room_data: Dictionary) -> Node3D:
 func _on_player_entered_room(body: Node3D, given_room_data: Dictionary):
 	#print("Player entered room: ", given_room_data.type)
 	if main_game_node:
-		main_game_node.get_node('UI/room_info/VBoxContainer/RichTextLabel').text = dictionary_to_string_with_newlines(given_room_data)
+		var room_text_label = main_game_node.get_node_or_null('UI/room_info/VBoxContainer/RichTextLabel')
+		if room_text_label:
+			room_text_label.text = dictionary_to_string_with_newlines(given_room_data)
 
 func dictionary_to_string_with_newlines(dictionary):
 	var result_string = ""
