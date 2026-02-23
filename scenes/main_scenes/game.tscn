@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cwcro66du3h12" path="res://src/crosshair.gd" id="1_ifh15"]
 [ext_resource type="Script" uid="uid://brf6n6wrmar8f" path="res://src/game.gd" id="1_ks7w8"]
-[ext_resource type="Script" uid="uid://bdk3doktgdrxf" path="res://src/flying_camera.gd" id="3_3wwfn"]
+[ext_resource type="PackedScene" uid="uid://bsrbcfbh7wxe1" path="res://scenes/components/flying_camera.tscn" id="3_leqql"]
 [ext_resource type="Script" uid="uid://bt88vj1vvfen" path="res://src/fps.gd" id="4_t5sjj"]
 [ext_resource type="Script" uid="uid://fkldrqw0lm67" path="res://src/multiplayer_spawner.gd" id="5_t5sjj"]
 [ext_resource type="PackedScene" uid="uid://d173umj203wf0" path="res://scenes/main_scenes/chat_box.tscn" id="6_leqql"]
@@ -28,11 +28,8 @@ _spawnable_scenes = PackedStringArray("uid://br8v26jp51jkj")
 spawn_path = NodePath("../players")
 script = ExtResource("5_t5sjj")
 
-[node name="flying_camera" type="Camera3D" parent="." unique_id=245619590]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 33.865936, 0)
-script = ExtResource("3_3wwfn")
-move_speed = 200.0
-acceleration = 25.0
+[node name="flying_camera" parent="." unique_id=1961233597 instance=ExtResource("3_leqql")]
+active = false
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=2009129899]
 layer = 2
@@ -56,6 +53,23 @@ offset_bottom = 23.0
 grow_horizontal = 0
 theme_override_font_sizes/font_size = 20
 horizontal_alignment = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/raycast_target" unique_id=1785255092]
+layout_mode = 0
+offset_left = -1112.0
+offset_top = 27.0
+offset_right = -951.0
+offset_bottom = 113.0
+
+[node name="HP_label" type="Label" parent="UI/raycast_target/VBoxContainer" unique_id=289454858]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "HP: 100/100"
+
+[node name="MP_label" type="Label" parent="UI/raycast_target/VBoxContainer" unique_id=52260818]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "MP: 100/100"
 
 [node name="raycast_center_message" type="Label" parent="UI" unique_id=616178951]
 anchors_preset = 8
@@ -87,19 +101,6 @@ color = Color(1, 1, 1, 0)
 offset_top = 27.0
 offset_right = 40.0
 offset_bottom = 67.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/player_stats" unique_id=1785255092]
-layout_mode = 2
-
-[node name="HP_label" type="Label" parent="UI/player_stats/VBoxContainer" unique_id=289454858]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "HP: 100/100"
-
-[node name="MP_label" type="Label" parent="UI/player_stats/VBoxContainer" unique_id=52260818]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "MP: 100/100"
 
 [node name="room_info" type="HBoxContainer" parent="UI" unique_id=138090172]
 anchors_preset = 1

@@ -1,10 +1,12 @@
 extends Camera3D
 
+@onready var main_game_node = get_parent() if get_tree().get_root().get_node_or_null('Game') == null else get_tree().get_root().get_node('Game')
+
 @export_group("Settings")
 @export var active: bool = false
 @export var mouse_sensitivity: float = 0.15
-@export var move_speed: float = 30.0
-@export var acceleration: float = 10.0
+@export var move_speed: float = 200.0
+@export var acceleration: float = 15.0
 
 var velocity: Vector3 = Vector3.ZERO
 var is_locked: bool = false 
@@ -41,6 +43,15 @@ func _set_mouse_lock(lock: bool):
 func _process(delta):
 	if active and is_locked:
 		_handle_movement(delta)
+		$SpotLight3D.show()
+	
+	if not active:
+		$SpotLight3D.hide()
+		if main_game_node:
+			var player = main_game_node.get_node_or_null('players/' + str(multiplayer.get_unique_id()))
+			if player:
+				self.position = player.position
+	
 
 func _handle_movement(delta):
 	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")

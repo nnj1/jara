@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bsrbcfbh7wxe1"]
+
+[ext_resource type="Script" uid="uid://bdk3doktgdrxf" path="res://src/flying_camera.gd" id="1_powim"]
+
+[node name="flying_camera" type="Camera3D" unique_id=1961233597]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+current = true
+script = ExtResource("1_powim")
+active = true
+
+[node name="SpotLight3D" type="SpotLight3D" parent="." unique_id=2119873162]
+visible = false
+light_energy = 10.0
+spot_range = 100.0

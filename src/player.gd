@@ -81,7 +81,9 @@ func _ready() -> void:
 	
 # SIGNALS THAT JACK INTO THE UI	
 func update_ui(current_health, max_health):
-	main_game_node.get_node('UI/player_stats/VBoxContainer/HP_label').text = 'HP: ' + str(int(current_health)) + '/' + str(int(max_health))
+	var hp_label = main_game_node.get_node_or_null('UI/player_stats/VBoxContainer/HP_label')
+	if hp_label:
+		hp_label.text = 'HP: ' + str(int(current_health)) + '/' + str(int(max_health))
 
 # --- ANIMATION FOR TAKING DAMAGE ---
 func on_taking_damage(amount):
