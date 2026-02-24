@@ -40,7 +40,7 @@ class_name Player
 ## Animation Parameters
 @onready var body_animation_tree: AnimationTree = $rig/AnimationTree
 @onready var right_arm_animation_player: AnimationPlayer = $right_arm/AnimationPlayer
-@onready var block_timer: float = 0.0
+@onready var block_timer: float = 0.0 # how long block key was held
 
 # Internal variables
 var is_mouse_captured: bool = true
@@ -50,6 +50,8 @@ var _current_weapon_index: int = 0 : set = change_weapon
 var is_attacking: bool = false # Tracked for AnimationPlayer
 var is_blocking: bool = false
 var is_parrying: bool = false
+var parry_timer: float = 0.0
+@export var parry_window_default: float = 0.1
 var held_object: EntityRigidBody = null
 var held_object_rotation_speed: float = 5.0
 
@@ -78,6 +80,7 @@ func _ready() -> void:
 	# Configure the health component
 	$HealthComponent.max_health = 100.0
 	$HealthComponent.damaged.connect(on_taking_damage)
+	$HealthComponent.parried.connect(on_successful_parry)
 	if is_multiplayer_authority():
 		$HealthComponent.health_changed.connect(update_ui)
 	
@@ -87,6 +90,10 @@ func update_ui(current_health, max_health):
 	if hp_label:
 		hp_label.text = 'HP: ' + str(int(current_health)) + '/' + str(int(max_health))
 
+# --- ANIMATION FOR SUCCESSFUL PARRY ---
+func on_successful_parry():
+	pass
+	
 # --- ANIMATION FOR TAKING DAMAGE ---
 func on_taking_damage(amount):
 	if not is_blocking:
@@ -229,15 +236,23 @@ func _physics_process(delta: float) -> void:
 		if not right_arm_animation_player.is_playing():
 			right_arm_animation_player.play("block")
 	
-	if Input.is_action_pressed("right_click"):
-		block_timer += delta
-			
 	if Input.is_action_just_released('right_click'):
-		#print(block_timer)
-		block_timer = 0.0
 		if len(right_arm_animation_player.get_queue()) == 0:
 			right_arm_animation_player.queue('return_from_block')
-			
+	
+	if is_blocking:
+		parry_timer = 0.0
+		block_timer += delta
+	else:
+		parry_timer = block_timer
+		block_timer = 0.0
+	
+	# check to see if parrying
+	if parry_timer <= parry_window_default and parry_timer != 0.0:
+		is_parrying = true
+	else:
+		is_parrying = false
+	
 	# Interaction logic
 	if interaction_ray.is_colliding():
 		var collider = interaction_ray.get_collider()

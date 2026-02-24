@@ -5,6 +5,7 @@ class_name HealthComponent
 signal health_changed(current_health: float, max_health: float)
 signal damaged(amount: float)
 signal healed(amount: float)
+signal parried
 signal died
 
 @export_group("Settings")
@@ -35,7 +36,7 @@ func take_damage_synced(amount: float, is_critical: bool = false) -> void:
 	# modify health amount based on if the player is blocking
 	if get_parent() is Player:
 		if get_parent().is_parrying:
-			return
+			parried.emit()
 	if get_parent() is Player:
 		if get_parent().is_blocking:
 			amount = amount / 2.0
