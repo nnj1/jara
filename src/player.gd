@@ -49,9 +49,9 @@ var _camera_rotation := Vector2.ZERO
 var _current_weapon_index: int = 0 : set = change_weapon
 var is_attacking: bool = false # Tracked for AnimationPlayer
 var is_blocking: bool = false
-var is_parrying: bool = false
-var parry_timer: float = 0.0
-@export var parry_window_default: float = 0.1
+var is_moving_weapon: bool = false
+var parry_timer:float = 0.0
+@export var parry_window_default: float = 0.5
 var held_object: EntityRigidBody = null
 var held_object_rotation_speed: float = 5.0
 
@@ -92,7 +92,13 @@ func update_ui(current_health, max_health):
 
 # --- ANIMATION FOR SUCCESSFUL PARRY ---
 func on_successful_parry():
-	pass
+	print('PARRIED')
+	# if currently equipped weapon has a parry GPU particle child, activate it
+	for weapon in $right_arm/weapons.get_children():
+		if weapon.visible:
+			var particles = weapon.get_node_or_null('GPUParticles3D')
+			if particles:
+				particles.restart()
 	
 # --- ANIMATION FOR TAKING DAMAGE ---
 func on_taking_damage(amount):
@@ -125,7 +131,13 @@ func start_blocking():
 
 func stop_blocking():
 	is_blocking = false
-
+	
+func start_parry_timer():
+	is_moving_weapon = true
+	
+func reset_parry_timer():
+	is_moving_weapon = false
+	
 func apply_attack_impulse():
 	if attack_ray.is_colliding():
 		var target = attack_ray.get_collider()
@@ -241,17 +253,15 @@ func _physics_process(delta: float) -> void:
 			right_arm_animation_player.queue('return_from_block')
 	
 	if is_blocking:
-		parry_timer = 0.0
 		block_timer += delta
 	else:
-		parry_timer = block_timer
 		block_timer = 0.0
-	
-	# check to see if parrying
-	if parry_timer <= parry_window_default and parry_timer != 0.0:
-		is_parrying = true
+		
+	if is_moving_weapon:
+		parry_timer += delta
 	else:
-		is_parrying = false
+		parry_timer = 0.0
+	#print(is_parrying)
 	
 	# Interaction logic
 	if interaction_ray.is_colliding():

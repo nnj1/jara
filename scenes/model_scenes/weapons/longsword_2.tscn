@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://dhlmdpjjnhk1k"]
+
+[ext_resource type="PackedScene" uid="uid://cncp72hu1nx1b" path="res://assets/models/PSX_Weapons_GLTF/longsword.glb" id="1_d7ok7"]
+
+[node name="longsword2" unique_id=221575974 instance=ExtResource("1_d7ok7")]

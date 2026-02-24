@@ -33,11 +33,11 @@ func _ready() -> void:
 ## TODO: Called by the server when a hit is detected
 
 func take_damage_synced(amount: float, is_critical: bool = false) -> void:
-	# modify health amount based on if the player is blocking
+	# modify health amount based on if the player is blocking or parrying
 	if get_parent() is Player:
-		if get_parent().is_parrying:
-			parried.emit()
-	if get_parent() is Player:
+		if get_parent().parry_timer <= get_parent().parry_window_default and get_parent().parry_timer > 0.0:
+				parried.emit()
+				return
 		if get_parent().is_blocking:
 			amount = amount / 2.0
 			is_critical = false
