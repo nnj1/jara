@@ -35,7 +35,7 @@ func _ready() -> void:
 func take_damage_synced(amount: float, is_critical: bool = false) -> void:
 	# modify health amount based on if the player is blocking or parrying
 	if get_parent() is Player:
-		if get_parent().parry_timer <= get_parent().parry_window_default and get_parent().parry_timer > 0.0:
+		if get_parent().parry_timer > 0 and get_parent().parry_timer <= get_parent().parry_window_default and get_parent().is_moving_weapon:
 				parried.emit()
 				return
 		if get_parent().is_blocking:

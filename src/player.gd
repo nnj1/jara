@@ -51,7 +51,7 @@ var is_attacking: bool = false # Tracked for AnimationPlayer
 var is_blocking: bool = false
 var is_moving_weapon: bool = false
 var parry_timer:float = 0.0
-@export var parry_window_default: float = 0.5
+@export var parry_window_default: float = 1.0
 var held_object: EntityRigidBody = null
 var held_object_rotation_speed: float = 5.0
 
@@ -93,6 +93,7 @@ func update_ui(current_health, max_health):
 # --- ANIMATION FOR SUCCESSFUL PARRY ---
 func on_successful_parry():
 	print('PARRIED')
+	$parrySound.play()
 	# if currently equipped weapon has a parry GPU particle child, activate it
 	for weapon in $right_arm/weapons.get_children():
 		if weapon.visible:
@@ -107,6 +108,7 @@ func on_taking_damage(amount):
 		main_game_node.flash_damage_animation()
 		tilt_camera_3d(0.05 * amount)
 	elif is_blocking:
+		$blockSound.play()
 		tilt_camera_3d(0.025 * amount)
 		
 func tilt_camera_3d(intensity: float = 0.05, duration: float = 0.1):
@@ -256,11 +258,12 @@ func _physics_process(delta: float) -> void:
 		block_timer += delta
 	else:
 		block_timer = 0.0
-		
+
 	if is_moving_weapon:
 		parry_timer += delta
 	else:
 		parry_timer = 0.0
+		
 	#print(is_parrying)
 	
 	# Interaction logic
