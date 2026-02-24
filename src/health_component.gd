@@ -32,13 +32,22 @@ func _ready() -> void:
 ## TODO: Called by the server when a hit is detected
 
 func take_damage_synced(amount: float, is_critical: bool = false) -> void:
+	# modify health amount based on if the player is blocking
+	if get_parent() is Player:
+		if get_parent().is_parrying:
+			return
+	if get_parent() is Player:
+		if get_parent().is_blocking:
+			amount = amount / 2.0
+			is_critical = false
+	
 	rpc_id(1, 'take_damage', amount, is_critical)
 	
 @rpc("any_peer","call_local","reliable")
 func take_damage(amount: float, is_critical: bool = false) -> void:
 	if not multiplayer.is_server() or is_dead or amount <= 0:
 		return
-
+	
 	current_health = clamp(current_health - amount, 0, max_health)
 	
 	# Broadcast damage visuals to everyone

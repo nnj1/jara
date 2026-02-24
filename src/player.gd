@@ -48,6 +48,8 @@ var _bob_time: float = 0.0
 var _camera_rotation := Vector2.ZERO 
 var _current_weapon_index: int = 0 : set = change_weapon
 var is_attacking: bool = false # Tracked for AnimationPlayer
+var is_blocking: bool = false
+var is_parrying: bool = false
 var held_object: EntityRigidBody = null
 var held_object_rotation_speed: float = 5.0
 
@@ -87,10 +89,13 @@ func update_ui(current_health, max_health):
 
 # --- ANIMATION FOR TAKING DAMAGE ---
 func on_taking_damage(amount):
-	$CreatureSoundPlayer.play_hurt()
-	main_game_node.flash_damage_animation()
-	tilt_camera_3d(0.05 * amount)
-	
+	if not is_blocking:
+		$CreatureSoundPlayer.play_hurt()
+		main_game_node.flash_damage_animation()
+		tilt_camera_3d(0.05 * amount)
+	elif is_blocking:
+		tilt_camera_3d(0.025 * amount)
+		
 func tilt_camera_3d(intensity: float = 0.05, duration: float = 0.1):
 	var tween = create_tween()
 	# Rotate on the Z axis (Roll)
@@ -100,13 +105,19 @@ func tilt_camera_3d(intensity: float = 0.05, duration: float = 0.1):
 	# Return to zero
 	tween.tween_property(camera, "rotation:z", 0, duration).set_trans(Tween.TRANS_SINE)
 	
-# --- NEW ATTACK METHODS FOR ANIMATION PLAYER ---
+# --- NEW ATTACK and BLOCK METHODS FOR ANIMATION PLAYER ---
 func start_attack():
 	$CreatureSoundPlayer.play_attack()
 	is_attacking = true
 
 func stop_attack():
 	is_attacking = false
+
+func start_blocking():
+	is_blocking = true
+
+func stop_blocking():
+	is_blocking = false
 
 func apply_attack_impulse():
 	if attack_ray.is_colliding():
