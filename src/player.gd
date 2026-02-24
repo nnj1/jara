@@ -32,7 +32,7 @@ class_name Player
 @export var tilt_speed: float = 5.0
 
 ## Spell Settings
-@export var fireball_scene: PackedScene = GlobalVars.fireball_scene
+@onready var fireball_scene: PackedScene = preload('res://scenes/model_scenes/entities/Fireball.tscn')
 @export var lob_strength: float = 30.0
 @export var upward_bias: float = 0.3 # Adds the "lob" arch
 @onready var muzzle = $Camera3D/Muzzle

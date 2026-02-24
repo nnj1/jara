@@ -1,7 +1,5 @@
 extends Node
 
-var fireball_scene = preload('res://scenes/model_scenes/entities/Fireball.tscn')
-
 func get_files_with_extension(path: String, extension: String = "") -> Array:
 	var files = []
 	var dir = DirAccess.open(path)
