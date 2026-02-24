@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://gxo06j7hikam"
+path="res://.godot/imported/Monster_Thud.mp3-23e3d12a2e33b6c6eb31f265ed376027.mp3str"
+
+[deps]
+
+source_file="res://assets/sfx/Monsters SFX Vol.1/Monsters/Monster_Thud.mp3"
+dest_files=["res://.godot/imported/Monster_Thud.mp3-23e3d12a2e33b6c6eb31f265ed376027.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

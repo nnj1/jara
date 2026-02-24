@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://t7rnuiqude83"
+path="res://.godot/imported/Dragon_FireBreath2.mp3-a65c8f4d0ea1c1463475ae3f542c4731.mp3str"
+
+[deps]
+
+source_file="res://assets/sfx/Monsters SFX Vol.1/Monsters/Dragon_FireBreath2.mp3"
+dest_files=["res://.godot/imported/Dragon_FireBreath2.mp3-a65c8f4d0ea1c1463475ae3f542c4731.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

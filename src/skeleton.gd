@@ -9,6 +9,8 @@ enum State { IDLE, RANDOM_WALK, AGGRO, DEAD }
 @export var run_speed: float = 30.0
 @export var jump_velocity: float = 12.0
 @export var base_knockback: float = 1.0
+@export var rotation_speed: float = 10.0
+var current_look_direction: Vector3 = Vector3.FORWARD
 
 @export_group("Smart Targeting")
 @export var chase_persistence: float = 3.0
@@ -101,12 +103,11 @@ func _physics_process(delta: float) -> void:
 					print('Damaged player')
 					slide_attack_cooldown_timer = slide_attack_cooldown
 
-
-
 func process_aggro_logic(delta: float):
 	if target_player:
 		var dist = global_position.distance_to(target_player.global_position)
 		
+		# 1. Range & Persistence Checks
 		if dist > max_chase_distance:
 			lose_target()
 			return
@@ -117,16 +118,25 @@ func process_aggro_logic(delta: float):
 				lose_target()
 				return
 
-		var dir = (target_player.global_position - global_position)
-		dir.y = 0
+		# 2. Calculate the "Goal" Direction
+		var target_dir = (target_player.global_position - global_position)
+		target_dir.y = 0 # Keep the rotation horizontal
 		
-		if dir.length() > 1.0:
-			dir = dir.normalized()
-			look_at(global_position + dir, Vector3.UP)
-			velocity.x = dir.x * run_speed
-			velocity.z = dir.z * run_speed
+		if target_dir.length() > 0.1:
+			target_dir = target_dir.normalized()
 			
-			# JUMP LOGIC
+			# 3. SLERP THE DIRECTION (The part you wanted)
+			# We move our current_look_direction toward target_dir by rotation_speed
+			current_look_direction = current_look_direction.slerp(target_dir, rotation_speed * delta).normalized()
+			
+			# 4. Use the smoothed direction for look_at
+			look_at(global_position + current_look_direction, Vector3.UP)
+			
+			# Movement uses the actual target_dir (or current_look_direction if you want them to drift)
+			velocity.x = target_dir.x * run_speed
+			velocity.z = target_dir.z * run_speed
+			
+			# 5. JUMP LOGIC
 			if is_on_floor() and is_on_wall() and can_jump:
 				var is_hitting_player = false
 				for i in get_slide_collision_count():
@@ -137,12 +147,13 @@ func process_aggro_logic(delta: float):
 				
 				if not is_hitting_player:
 					velocity.y = jump_velocity
-					jump_cooldown = 1.5 # Lock jumps for 1.5 seconds
+					jump_cooldown = 1.5 
 					can_jump = false 
 		else:
 			velocity.x = 0
 			velocity.z = 0
 			
+		# 6. Animation Handling
 		if not is_on_floor():
 			safe_play("jump")
 		elif velocity.length() > 0.1:
@@ -156,7 +167,8 @@ func process_wander_logic(delta: float):
 	velocity.x = wander_direction.x * walk_speed
 	velocity.z = wander_direction.z * walk_speed
 	if wander_direction != Vector3.ZERO:
-		look_at(global_position + wander_direction, Vector3.UP)
+		current_look_direction = current_look_direction.slerp(wander_direction.normalized(), rotation_speed * delta).normalized()
+		look_at(global_position + current_look_direction, Vector3.UP)
 	if not is_on_floor(): safe_play("jump")
 	else: safe_play("walk")
 	state_timer -= delta
@@ -217,7 +229,7 @@ func safe_play(anim_name: String):
 		anim_player.speed_scale = 2 # death animation is a little slow so speed up the player
 	if anim_player.has_animation(n):
 		if anim_player.current_animation != n:
-			anim_player.play(n)
+			anim_player.play(n, 0.2)
 			
 func apply_knockback_synced(force: Vector3):
 	rpc_id(1, 'apply_knockback', force)

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dcca3bydplnu5"
+path="res://.godot/imported/Monster_Rumble4.mp3-f029a3fd9787b4005ec74e17bef97c0b.mp3str"
+
+[deps]
+
+source_file="res://assets/sfx/Monsters SFX Vol.1/Monsters/Monster_Rumble4.mp3"
+dest_files=["res://.godot/imported/Monster_Rumble4.mp3-f029a3fd9787b4005ec74e17bef97c0b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://pl5qa02ea865"
+path="res://.godot/imported/Dragon_FireBreath.mp3-33883266173332229c8bfa57778009ca.mp3str"
+
+[deps]
+
+source_file="res://assets/sfx/Monsters SFX Vol.1/Monsters/Dragon_FireBreath.mp3"
+dest_files=["res://.godot/imported/Dragon_FireBreath.mp3-33883266173332229c8bfa57778009ca.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

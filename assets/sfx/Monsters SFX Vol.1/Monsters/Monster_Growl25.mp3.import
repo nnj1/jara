@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dnwt6y8hd4uy5"
+path="res://.godot/imported/Monster_Growl25.mp3-2f95d5e6f7748cff5635f93606ef87a9.mp3str"
+
+[deps]
+
+source_file="res://assets/sfx/Monsters SFX Vol.1/Monsters/Monster_Growl25.mp3"
+dest_files=["res://.godot/imported/Monster_Growl25.mp3-2f95d5e6f7748cff5635f93606ef87a9.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

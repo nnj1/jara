@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://duhe4ajtn4g3m"
+path="res://.godot/imported/Monster_Grunt5.mp3-70bcd31efe650f0a4b8728f75a915dd0.mp3str"
+
+[deps]
+
+source_file="res://assets/sfx/Monsters SFX Vol.1/Monsters/Monster_Grunt5.mp3"
+dest_files=["res://.godot/imported/Monster_Grunt5.mp3-70bcd31efe650f0a4b8728f75a915dd0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
