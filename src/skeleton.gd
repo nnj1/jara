@@ -100,7 +100,7 @@ func _physics_process(delta: float) -> void:
 				else:
 					var damage_amount = randi_range(1,5)
 					collider.get_node('HealthComponent').take_damage_synced(damage_amount, false)
-					print('Damaged player')
+					#print('Damaged player')
 					slide_attack_cooldown_timer = slide_attack_cooldown
 
 func process_aggro_logic(delta: float):

@@ -160,10 +160,10 @@ func apply_attack_impulse():
 					# TODO: Make weapons apply different damage types
 					var damage_amount = randi_range(1,25)
 					health_component.take_damage_synced(damage_amount, true if damage_amount > 20 else false)
-					print('Damaged enemy')
+					#print('Damaged enemy')
 			if target.has_method("apply_knockback"):
 				target.apply_knockback_synced(push_dir * attack_impulse)
-				print('Pushed enemy')
+				#print('Pushed enemy')
 			is_attacking = false
 # -----------------------------------------------
 
