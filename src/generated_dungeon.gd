@@ -336,13 +336,17 @@ func actually_populate_rooms():
 					
 					# place border and first wall
 					if not is_connection(room_data, Vector3i(unit_x, room_data.y_unit_bounds[0], unit_z)):
-						placer.place_z_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0])
-						placer.place_z_wall(unit_x, unit_z, room_data.y_unit_bounds[0] + 0.5)
+						if not hallway_segments_surroundings.has(Vector3i(unit_x,  room_data.y_unit_bounds[0], unit_z)):
+							placer.place_z_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0])
+							placer.place_z_wall(unit_x, unit_z, room_data.y_unit_bounds[0] + 0.5)
+						else:
+							placer.place_z_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0] + 1)
 					else:
 						placer.place_z_door_frame(unit_x, unit_z, room_data.y_unit_bounds[0])
 						#placer.remove_structure('Wall_z', unit_x, unit_z + 1, room_data.y_unit_bounds[0])
 						#placer.remove_structure('Wall_z', unit_x, unit_z - 1, room_data.y_unit_bounds[0])
 						placer.place_z_door(unit_x, unit_z, room_data.y_unit_bounds[0])
+						placer.place_z_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0] + 1)
 						
 					# fill up with the rest of the walls
 					for y_offset in range(room_data.depth - 2):
@@ -357,18 +361,21 @@ func actually_populate_rooms():
 				if (unit_z == room_data.z_unit_bounds[0] or unit_z == room_data.z_unit_bounds[1]) and unit_x < room_data.x_unit_bounds[0] + room_data.width:
 					# place border and first wall
 					if not is_connection(room_data, Vector3i(unit_x, room_data.y_unit_bounds[0], unit_z)):
-						placer.place_x_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0])
-						placer.place_x_wall(unit_x, unit_z, room_data.y_unit_bounds[0] + 0.5)
+						if not hallway_segments_surroundings.has(Vector3i(unit_x,  room_data.y_unit_bounds[0], unit_z)):
+							placer.place_x_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0])
+							placer.place_x_wall(unit_x, unit_z, room_data.y_unit_bounds[0] + 0.5)
+						else:
+							placer.place_x_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0] + 1)
 					else:
 						placer.place_x_door_frame(unit_x, unit_z, room_data.y_unit_bounds[0])
 						#placer.remove_structure('Wall_x', unit_x - 1, unit_z, room_data.y_unit_bounds[0])
 						#placer.remove_structure('Wall_x', unit_x + 1, unit_z, room_data.y_unit_bounds[0])
 						placer.place_x_door(unit_x, unit_z, room_data.y_unit_bounds[0])
+						placer.place_x_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0] + 1)
 					
 					# fill up with the rest of the walls
 					for y_offset in range(room_data.depth - 2):
 						placer.place_x_wall(unit_x, unit_z, room_data.y_unit_bounds[0] + 1.5 + y_offset)
-					
 					
 					# place arches
 					placer.place_x_arch(unit_x, unit_z, room_data.y_unit_bounds[0] + room_data.depth - 0.5)
