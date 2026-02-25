@@ -284,9 +284,11 @@ func _physics_process(delta: float) -> void:
 	if interaction_ray.is_colliding():
 		var collider = interaction_ray.get_collider()
 		if collider:
-			main_game_node.get_node('UI/raycast_target').text = str(collider.name)
-			if collider.has_meta('interaction_message'):
-				main_game_node.get_node('UI/raycast_center_message').text = collider.get_meta('interaction_message')
+			if Engine.get_physics_frames() % 5 == 0:
+				main_game_node.get_node('UI/raycast_target').text = str(collider.name)
+				if collider.has_meta('interaction_message'):
+					main_game_node.get_node('UI/raycast_center_message').text = collider.get_meta('interaction_message')
+				
 			if Input.is_action_just_pressed("interact"):
 				if collider.has_meta('interaction_function'):
 					collider.call(collider.get_meta('interaction_function'), self.get_path())
