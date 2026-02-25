@@ -85,15 +85,16 @@ func _physics_process(delta: float) -> void:
 		velocity.z = knockback_velocity.z
 		# Decay the knockback so it doesn't slide forever
 		knockback_velocity = knockback_velocity.move_toward(Vector3.ZERO, delta * 50.0)
-		
-	move_and_slide()
+	
+	if velocity.length_squared() > 0.001 or not is_on_floor():	
+		move_and_slide()
 	
 	if target_player:
 		for i in get_slide_collision_count():
 			var collision = get_slide_collision(i)
 			var collider = collision.get_collider()
 			
-			# Check if the object hit is a Player
+			# Check if the object hit is the target Player
 			if collider == target_player:
 				if slide_attack_cooldown_timer > 0:
 					slide_attack_cooldown_timer -= delta
