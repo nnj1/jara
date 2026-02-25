@@ -14,7 +14,7 @@ var attack_timer: float = attack_timeout
 func _ready() -> void:
 	pass
 	
-func _physics_process(delta: float) -> void:
+func _process(delta: float) -> void:
 	if is_active:
 		if not lightning_sound.playing:
 			lightning_sound.play()

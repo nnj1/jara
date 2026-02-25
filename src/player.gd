@@ -141,6 +141,8 @@ func reset_parry_timer():
 	is_moving_weapon = false
 	
 func apply_attack_impulse():
+	attack_ray.enabled = true # Briefly enable
+	attack_ray.force_raycast_update() # Manually check collision
 	if attack_ray.is_colliding():
 		var target = attack_ray.get_collider()
 		# Push direction is based on where the camera is looking
@@ -165,6 +167,7 @@ func apply_attack_impulse():
 				target.apply_knockback_synced(push_dir * attack_impulse)
 				#print('Pushed enemy')
 			is_attacking = false
+	attack_ray.enabled = false # Turn it back off
 # -----------------------------------------------
 
 func change_weapon(index):
@@ -215,11 +218,7 @@ func capture_mouse(capture: bool) -> void:
 	is_mouse_captured = capture
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if capture else Input.MOUSE_MODE_VISIBLE
 
-func _physics_process(delta: float) -> void:
-	# Only the owner handles input and calculates movement
-	if not is_multiplayer_authority() or not is_active: 
-		return
-		
+func _handle_spell_inputs():
 	# Handle spellcasting (Server-side spawn via RPC)
 	if Input.is_action_just_pressed("spell_1"):
 		rpc_id(1, "server_lob_fireball")
@@ -233,7 +232,19 @@ func _physics_process(delta: float) -> void:
 	else:
 		$left_arm/spells/Lightning.is_active = false
 		$left_arm/spells/Lightning.hide()
+
+func _process(delta: float) -> void:
+	# Only the owner handles input and calculates movement
+	if not is_multiplayer_authority() or not is_active: 
+		return
 		
+	# 1. Input Polling (Spells & UI states)
+	_handle_spell_inputs()
+		
+	# 3. View Effects (Smooth visual movement)
+	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down") if is_mouse_captured else Vector2.ZERO
+	_handle_view_effects(delta, input_dir)
+			
 	# Handle rotation of any held object
 	if Input.is_action_pressed('spell_r'):
 		$left_arm/hold_point.rotate_y(held_object_rotation_speed * delta)
@@ -253,7 +264,12 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_released('right_click'):
 		if len(right_arm_animation_player.get_queue()) == 0:
 			right_arm_animation_player.queue('return_from_block')
-	
+
+func _physics_process(delta: float) -> void:
+	# Only the owner handles input and calculates movement
+	if not is_multiplayer_authority() or not is_active: 
+		return
+
 	if is_blocking:
 		block_timer += delta
 	else:
@@ -263,8 +279,6 @@ func _physics_process(delta: float) -> void:
 		parry_timer += delta
 	else:
 		parry_timer = 0.0
-		
-	#print(is_parrying)
 	
 	# Interaction logic
 	if interaction_ray.is_colliding():
@@ -308,7 +322,6 @@ func _physics_process(delta: float) -> void:
 			$jumpSound.play()
 			
 	move_and_slide()
-	_handle_view_effects(delta, input_dir)
 	
 	if is_on_floor() and velocity.length() > 0.1 and input_dir != Vector2.ZERO:
 		var horizontal_vel = Vector3(velocity.x, 0, velocity.z).length()
@@ -322,8 +335,10 @@ func _physics_process(delta: float) -> void:
 	var progress = Vector3(velocity.x, 0, velocity.z).length() / walk_speed
 	body_animation_tree.set('parameters/blend_position', progress)
 	
-	# handle any rigidbodies the player bumps into
-	handle_rigidbody_push()
+	# 5. Heavy RigidBody checks (Only if actually moving)
+	if velocity.length() > 0.5:
+		# handle any rigidbodies the player bumps into
+		handle_rigidbody_push()
 
 func _handle_view_effects(delta: float, input_dir: Vector2) -> void:
 	if is_on_floor() and velocity.length() > 0.1:
