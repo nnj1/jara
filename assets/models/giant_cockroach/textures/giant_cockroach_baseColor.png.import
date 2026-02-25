@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dbwywcuxhsjnx"
-path.s3tc="res://.godot/imported/potionTex.png-3a889afab8b7cf6c69f43d4b0a6d6bf7.s3tc.ctex"
+uid="uid://blnn220gt0k20"
+path.s3tc="res://.godot/imported/giant_cockroach_baseColor.png-9ca4311387e34970c4e3930b7a78c1e7.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/models/MagicMan-PSX Assets/Textures/potionTex.png"
-dest_files=["res://.godot/imported/potionTex.png-3a889afab8b7cf6c69f43d4b0a6d6bf7.s3tc.ctex"]
+source_file="res://assets/models/giant_cockroach/textures/giant_cockroach_baseColor.png"
+dest_files=["res://.godot/imported/giant_cockroach_baseColor.png-9ca4311387e34970c4e3930b7a78c1e7.s3tc.ctex"]
 
 [params]
 

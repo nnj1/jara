@@ -157,7 +157,11 @@ func center_camera():
 func actually_populate_hallways():
 	for segment in hallway_segments:
 		var pos = segment.grid_pos
-			
+		
+		# add a potential roach
+		if rng.randf() < 0.05:
+			placer.spawn_roach(pos.x, pos.z, pos.y)
+
 		# 1. FLOOR (Place a floor block or tile)
 		var below_pos = pos + Vector3i(0, -1, 0)
 		if not segment.faces.down and not is_pos_inside_any_room(below_pos) and not is_pos_hallway(below_pos):
@@ -384,12 +388,13 @@ func actually_populate_rooms():
 						if rng.randf() < 0.05:
 							for i in rng.randi_range(0, 4):
 								placer.place_skull(unit_x, unit_z, room_data.y_unit_bounds[0])
-						elif rng.randf() < 0.01:
-							if rng.randf() < 0.5:
+						elif rng.randf() < 0.02:
+							var num = rng.randf()
+							if num < 0.5:
 								placer.spawn_skeleton(unit_x, unit_z, room_data.y_unit_bounds[0])
-							else:
+							elif num < 0.75:
 								placer.spawn_monster(unit_x, unit_z, room_data.y_unit_bounds[0])
-						
+
 						if unit_x % 2 == 0 and unit_z % 2 == 0:
 							if rng.randf() < 0.1:
 								placer.place_hexagon(unit_x, unit_z, room_data.y_unit_bounds[0])

@@ -1,6 +1,6 @@
 extends StaticBody3D
 
-@onready var hinge = $hinge		
+@onready var hinge = $hinge
 
 # The 'setter' runs this code every time the value changes (locally or via network)
 @export var is_open: bool = false:
