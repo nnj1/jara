@@ -71,6 +71,8 @@ func start_talking(player_path: NodePath):
 		look_at(player.position, Vector3.UP)
 		# MAKE player freeze
 		player.is_chatting = true
+		# Free mouse to use
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		change_state(State.CHATTING)
 		Dialogic.start(timeline_name)
 		for connection in Dialogic.timeline_ended.get_connections():
@@ -81,7 +83,7 @@ func stop_talking(player_path: NodePath):
 	if is_friendly and timeline_name != "":
 		var player = get_node(player_path)
 		player.is_chatting = false
-		
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		change_state(State.RANDOM_WALK)
 		self.set_meta('interaction_message', 'Press E to talk')
 		self.set_meta('interaction_function', 'start_talking')

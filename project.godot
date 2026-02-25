@@ -32,11 +32,16 @@ Dialogic="*uid://ds2q0uclmolvu"
 
 [dialogic]
 
-directories/dch_directory={}
+directories/dch_directory={
+"cuck_maiden": "res://timelines/cuck_maiden.dch"
+}
 directories/dtl_directory={
 "vendor_timeline": "res://timelines/vendor_timeline.dtl"
 }
-layout/style_directory={}
+layout/style_directory={
+"": "res://timelines/style.tres",
+"style": "res://timelines/style.tres"
+}
 extensions_folder="res://addons/dialogic_additions"
 text/letter_speed=0.01
 text/initial_text_reveal_skippable=true
@@ -70,10 +75,13 @@ audio/channel_defaults={
 "volume": 0.0
 }
 }
-layout/style_list=[]
-layout/default_style="Default"
+layout/style_list=["res://timelines/style.tres"]
+layout/default_style="res://timelines/style.tres"
 glossary/default_case_sensitive=true
-variables={}
+variables={
+"met_vendor": false,
+"player_gold": 0
+}
 
 [display]
 
