@@ -54,6 +54,7 @@ var parry_timer:float = 0.0
 @export var parry_window_default: float = 1.0
 var held_object: EntityRigidBody = null
 var held_object_rotation_speed: float = 5.0
+var is_chatting: bool = false
 
 @onready var camera: Camera3D = $Camera3D
 @onready var _default_cam_height: float = camera.position.y
@@ -237,33 +238,34 @@ func _process(delta: float) -> void:
 	# Only the owner handles input and calculates movement
 	if not is_multiplayer_authority() or not is_active: 
 		return
-		
-	# 1. Input Polling (Spells & UI states)
-	_handle_spell_inputs()
-		
-	# 3. View Effects (Smooth visual movement)
-	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down") if is_mouse_captured else Vector2.ZERO
-	_handle_view_effects(delta, input_dir)
-			
-	# Handle rotation of any held object
-	if Input.is_action_pressed('spell_r'):
-		$left_arm/hold_point.rotate_y(held_object_rotation_speed * delta)
-		
-	# Handle Attack Logic
-	if is_attacking:
-		apply_attack_impulse()
-		
-	# attack and parry animations
-	if Input.is_action_just_pressed('left_click'):
-		if not right_arm_animation_player.is_playing():
-			right_arm_animation_player.play("stab")
-	elif Input.is_action_just_pressed('right_click'):
-		if not right_arm_animation_player.is_playing():
-			right_arm_animation_player.play("block")
 	
-	if Input.is_action_just_released('right_click'):
-		if len(right_arm_animation_player.get_queue()) == 0:
-			right_arm_animation_player.queue('return_from_block')
+	if not is_chatting:
+		# 1. Input Polling (Spells & UI states)
+		_handle_spell_inputs()
+			
+		# 3. View Effects (Smooth visual movement)
+		var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down") if is_mouse_captured else Vector2.ZERO
+		_handle_view_effects(delta, input_dir)
+				
+		# Handle rotation of any held object
+		if Input.is_action_pressed('spell_r'):
+			$left_arm/hold_point.rotate_y(held_object_rotation_speed * delta)
+			
+		# Handle Attack Logic
+		if is_attacking:
+			apply_attack_impulse()
+			
+		# attack and parry animations
+		if Input.is_action_just_pressed('left_click'):
+			if not right_arm_animation_player.is_playing():
+				right_arm_animation_player.play("stab")
+		elif Input.is_action_just_pressed('right_click'):
+			if not right_arm_animation_player.is_playing():
+				right_arm_animation_player.play("block")
+		
+		if Input.is_action_just_released('right_click'):
+			if len(right_arm_animation_player.get_queue()) == 0:
+				right_arm_animation_player.queue('return_from_block')
 
 func _physics_process(delta: float) -> void:
 	# Only the owner handles input and calculates movement
@@ -301,7 +303,7 @@ func _physics_process(delta: float) -> void:
 
 	# Movement logic
 	var input_dir := Vector2.ZERO
-	if is_mouse_captured:
+	if is_mouse_captured and not is_chatting:
 		input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	
 	var wish_dir := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
@@ -319,7 +321,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		handle_air_physics(wish_dir, delta)
 		
-	if is_on_floor() and Input.is_action_just_pressed("jump"):
+	if is_on_floor() and Input.is_action_just_pressed("jump") and not is_chatting:
 		if not $jumpSound.playing:
 			$jumpSound.play()
 			

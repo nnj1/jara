@@ -62,17 +62,26 @@ func set_is_friendly(value: bool):
 ## Chat interaction functions
 func start_talking(player_path: NodePath):
 	if is_friendly and timeline_name != "":
-		self.set_meta('interaction_message', 'Press E to stop talking')
-		self.set_meta('interaction_function', 'stop_talking')
+		self.set_meta('interaction_message', null)
+		self.set_meta('interaction_function', null)
 		# Ensure we stop moving while talking
 		velocity = Vector3.ZERO
 		# MAKE NPC LOOK AT PLAYER
-		look_at(get_node(player_path).position, Vector3.UP)
+		var player = get_node(player_path)
+		look_at(player.position, Vector3.UP)
+		# MAKE player freeze
+		player.is_chatting = true
 		change_state(State.CHATTING)
-		#Dialogic.start(timeline_name)
+		Dialogic.start(timeline_name)
+		for connection in Dialogic.timeline_ended.get_connections():
+			Dialogic.timeline_ended.disconnect(connection.callable)
+		Dialogic.timeline_ended.connect(stop_talking.bind(player.get_path()))
 		
-func stop_talking(_player_path: NodePath):
+func stop_talking(player_path: NodePath):
 	if is_friendly and timeline_name != "":
+		var player = get_node(player_path)
+		player.is_chatting = false
+		
 		change_state(State.RANDOM_WALK)
 		self.set_meta('interaction_message', 'Press E to talk')
 		self.set_meta('interaction_function', 'start_talking')
