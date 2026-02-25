@@ -1,8 +1,12 @@
 extends CharacterBody3D
-class_name DumbEnemy
+class_name DumbNPC
 
-# Added DEAD to the enum
-enum State { IDLE, RANDOM_WALK, AGGRO, DEAD }
+# --- NPC Settings ---
+@export_group("NPC Settings")
+@export var is_friendly: bool = false : set = set_is_friendly
+@export var timeline_name: String = "" # The Dialogic timeline to play
+
+enum State { IDLE, RANDOM_WALK, AGGRO, DEAD, CHATTING }
 
 @export_group("Movement")
 @export var walk_speed: float = 10.0
@@ -34,24 +38,47 @@ var knockback_velocity = Vector3.ZERO
 @onready var detection_area: Area3D = $DetectionArea
 
 func _ready() -> void:
-	if detection_area.body_entered.is_connected(_on_player_detected):
-		detection_area.body_entered.disconnect(_on_player_detected)
+	# Only connect detection if we aren't friendly
 	detection_area.body_entered.connect(_on_player_detected)
 	detection_area.body_exited.connect(_on_player_lost_sight)
+	
 	change_state(State.IDLE)
 	
-	# Set up death sound
+	# Set up sounds/health
 	$HealthComponent.died.connect($CreatureSoundPlayer.play_death)
 	$HealthComponent.damaged.connect($CreatureSoundPlayer.play_hurt)
-	
-	# Connect HealthComponent to our local death function
 	$HealthComponent.died.connect(_on_died)
-	
-# TODO: MAKE MOST MONSTER PHYSICS ONLY RUN ON SERVER
+
+func set_is_friendly(value: bool):
+	is_friendly = value
+	if value:
+		self.set_meta('interaction_message', 'Press E to talk')
+		self.set_meta('interaction_function', 'start_talking')
+	else:
+		# disable chat compoenent here
+		self.set_meta('interaction_message', null)
+		self.set_meta('interaction_function', null)
+		
+## Chat interaction functions
+func start_talking(player_path: NodePath):
+	if is_friendly and timeline_name != "":
+		self.set_meta('interaction_message', 'Press E to stop talking')
+		self.set_meta('interaction_function', 'stop_talking')
+		# Ensure we stop moving while talking
+		velocity = Vector3.ZERO
+		# MAKE NPC LOOK AT PLAYER
+		look_at(get_node(player_path).position, Vector3.UP)
+		change_state(State.CHATTING)
+		#Dialogic.start(timeline_name)
+		
+func stop_talking(_player_path: NodePath):
+	if is_friendly and timeline_name != "":
+		change_state(State.RANDOM_WALK)
+		self.set_meta('interaction_message', 'Press E to talk')
+		self.set_meta('interaction_function', 'start_talking')
+
 func _physics_process(delta: float) -> void:
-	# Stop all logic if dead
 	if current_state == State.DEAD:
-		# Still apply gravity and move_and_slide so they don't float if killed mid-air
 		if not is_on_floor():
 			velocity.y -= 14.8 * delta
 			move_and_slide()
@@ -61,15 +88,13 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y -= 14.8 * delta
 	else:
-		# Reset jump only when on floor AND cooldown has reached zero
 		if not can_jump and velocity.y <= 0 and jump_cooldown <= 0:
 			can_jump = true
 	
-	# 2. Update Jump Cooldown
 	if jump_cooldown > 0:
 		jump_cooldown -= delta
 
-	# 3. State Machine
+	# 2. State Machine
 	match current_state:
 		State.AGGRO:
 			process_aggro_logic(delta)
@@ -77,92 +102,73 @@ func _physics_process(delta: float) -> void:
 			process_wander_logic(delta)
 		State.IDLE:
 			process_idle_logic(delta)
+		State.CHATTING:
+			process_chatting_logic(delta)
 	
-	# 4. APPLY KNOCKBACK OVERRIDE
+	# 3. Apply Knockback
 	if knockback_velocity.length() > 0.1:
-		# We blend the knockback into the velocity
 		velocity.x = knockback_velocity.x
 		velocity.z = knockback_velocity.z
-		# Decay the knockback so it doesn't slide forever
 		knockback_velocity = knockback_velocity.move_toward(Vector3.ZERO, delta * 50.0)
 	
 	if velocity.length_squared() > 0.001 or not is_on_floor():	
 		move_and_slide()
 	
-	if target_player:
-		for i in get_slide_collision_count():
-			var collision = get_slide_collision(i)
-			var collider = collision.get_collider()
-			
-			# Check if the object hit is the target Player
-			if collider == target_player:
-				if slide_attack_cooldown_timer > 0:
-					slide_attack_cooldown_timer -= delta
-				else:
-					var damage_amount = randi_range(1,5)
-					collider.get_node('HealthComponent').take_damage_synced(damage_amount, false)
-					#print('Damaged player')
-					slide_attack_cooldown_timer = slide_attack_cooldown
+	# 4. Attack Logic (Disabled if friendly)
+	if target_player and not is_friendly:
+		check_slide_attack(delta)
+
+func check_slide_attack(delta):
+	for i in get_slide_collision_count():
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
+		
+		if collider == target_player:
+			if slide_attack_cooldown_timer > 0:
+				slide_attack_cooldown_timer -= delta
+			else:
+				var damage_amount = randi_range(1,5)
+				collider.get_node('HealthComponent').take_damage_synced(damage_amount, false)
+				slide_attack_cooldown_timer = slide_attack_cooldown
 
 func process_aggro_logic(delta: float):
-	if target_player:
-		var dist = global_position.distance_to(target_player.global_position)
-		
-		# 1. Range & Persistence Checks
-		if dist > max_chase_distance:
+	# Friendly NPCs should never stay in AGGRO state
+	if is_friendly or not target_player:
+		change_state(State.IDLE)
+		return
+
+	var dist = global_position.distance_to(target_player.global_position)
+	
+	if dist > max_chase_distance:
+		lose_target()
+		return
+
+	if not is_player_in_area():
+		persistence_timer -= delta
+		if persistence_timer <= 0:
 			lose_target()
 			return
 
-		if not is_player_in_area():
-			persistence_timer -= delta
-			if persistence_timer <= 0:
-				lose_target()
-				return
-
-		# 2. Calculate the "Goal" Direction
-		var target_dir = (target_player.global_position - global_position)
-		target_dir.y = 0 # Keep the rotation horizontal
+	var target_dir = (target_player.global_position - global_position)
+	target_dir.y = 0 
+	
+	if target_dir.length() > 0.1:
+		target_dir = target_dir.normalized()
+		current_look_direction = current_look_direction.slerp(target_dir, rotation_speed * delta).normalized()
+		look_at(global_position + current_look_direction, Vector3.UP)
 		
-		if target_dir.length() > 0.1:
-			target_dir = target_dir.normalized()
-			
-			# 3. SLERP THE DIRECTION (The part you wanted)
-			# We move our current_look_direction toward target_dir by rotation_speed
-			current_look_direction = current_look_direction.slerp(target_dir, rotation_speed * delta).normalized()
-			
-			# 4. Use the smoothed direction for look_at
-			look_at(global_position + current_look_direction, Vector3.UP)
-			
-			# Movement uses the actual target_dir (or current_look_direction if you want them to drift)
-			velocity.x = target_dir.x * run_speed
-			velocity.z = target_dir.z * run_speed
-			
-			# 5. JUMP LOGIC
-			if is_on_floor() and is_on_wall() and can_jump:
-				var is_hitting_player = false
-				for i in get_slide_collision_count():
-					var collision = get_slide_collision(i)
-					if collision.get_collider() == target_player:
-						is_hitting_player = true
-						break
-				
-				if not is_hitting_player:
-					velocity.y = jump_velocity
-					jump_cooldown = 1.5 
-					can_jump = false 
-		else:
-			velocity.x = 0
-			velocity.z = 0
-			
-		# 6. Animation Handling
-		if not is_on_floor():
-			safe_play("jump")
-		elif velocity.length() > 0.1:
-			safe_play("run")
-		else:
-			safe_play("idle")
+		velocity.x = target_dir.x * run_speed
+		velocity.z = target_dir.z * run_speed
+		
+		if is_on_floor() and is_on_wall() and can_jump:
+			velocity.y = jump_velocity
+			jump_cooldown = 1.5 
+			can_jump = false 
 	else:
-		change_state(State.IDLE)
+		velocity.x = 0
+		velocity.z = 0
+		
+	handle_animations()
 
 func process_wander_logic(delta: float):
 	velocity.x = wander_direction.x * walk_speed
@@ -170,8 +176,8 @@ func process_wander_logic(delta: float):
 	if wander_direction != Vector3.ZERO:
 		current_look_direction = current_look_direction.slerp(wander_direction.normalized(), rotation_speed * delta).normalized()
 		look_at(global_position + current_look_direction, Vector3.UP)
-	if not is_on_floor(): safe_play("jump")
-	else: safe_play("walk")
+	
+	handle_animations()
 	state_timer -= delta
 	if state_timer <= 0: change_state(State.IDLE)
 
@@ -182,17 +188,34 @@ func process_idle_logic(delta: float):
 	state_timer -= delta
 	if state_timer <= 0: change_state(State.RANDOM_WALK)
 
+func process_chatting_logic(_delta: float):
+	velocity.x = 0
+	velocity.z = 0
+	safe_play("idle")
+	# CAN ONLY LEAVE THIS STATE IF CHAT IS COMPLETE
+	#state_timer -= delta
+	#if state_timer <= 0: change_state(State.RANDOM_WALK)
+
+func handle_animations():
+	if not is_on_floor():
+		safe_play("jump")
+	elif velocity.length() > 0.1:
+		var anim = "run" if current_state == State.AGGRO else "walk"
+		safe_play(anim)
+	else:
+		safe_play("idle")
+
 func lose_target():
 	target_player = null
 	change_state(State.IDLE)
 
 func _on_player_detected(body: Node3D):
-	if current_state == State.DEAD: return
+	if current_state == State.DEAD or is_friendly: return
 	if body is CharacterBody3D and body != self and body.is_in_group('players'):
 		target_player = body
 		persistence_timer = chase_persistence
 		if current_state != State.AGGRO:
-			current_state = State.AGGRO
+			change_state(State.AGGRO)
 
 func _on_player_lost_sight(body: Node3D):
 	if body == target_player:
@@ -202,7 +225,10 @@ func is_player_in_area() -> bool:
 	return detection_area.get_overlapping_bodies().has(target_player)
 
 func change_state(new_state: State):
-	if current_state == State.DEAD: return # Can't change state if dead
+	if current_state == State.DEAD: return 
+	# Only allow aggro transition if NOT friendly
+	if new_state == State.AGGRO and is_friendly: return
+	
 	if current_state == State.AGGRO and target_player != null and new_state != State.DEAD: return
 	
 	current_state = new_state
@@ -215,19 +241,16 @@ func change_state(new_state: State):
 func _on_died():
 	current_state = State.DEAD
 	velocity = Vector3.ZERO
-	# Disable collision so the player doesn't trip over a corpse
 	collision_layer = 0
-	collision_mask = 1 # Keep mask for ground floor only
+	collision_mask = 1 
 	safe_play("die")
-	
-	# Optional: Remove the enemy after some time
 	var timer = get_tree().create_timer(20.0)
 	timer.timeout.connect(queue_free)
 
 func safe_play(anim_name: String):
 	var n = "skeleton_stuff/rig_rig_" + anim_name
 	if anim_name == 'die':
-		anim_player.speed_scale = 2 # death animation is a little slow so speed up the player
+		anim_player.speed_scale = 2 
 	if anim_player.has_animation(n):
 		if anim_player.current_animation != n:
 			anim_player.play(n, 0.2)
@@ -240,6 +263,6 @@ func apply_knockback(force: Vector3):
 	if not multiplayer.is_server(): return
 	if current_state == State.DEAD: return
 	knockback_velocity = force * base_knockback
-	# Optional: If you want being hit to make them "mad"
-	if current_state != State.AGGRO:
+	# Only get aggressive from being hit if not friendly!
+	if current_state != State.AGGRO and not is_friendly:
 		change_state(State.AGGRO)

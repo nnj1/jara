@@ -132,6 +132,12 @@ spawn_path = NodePath("..")
 _spawnable_scenes = PackedStringArray("uid://bt5kw3117d1lr", "uid://kst44fvrkrry", "uid://nvy1u6piljjr", "uid://c32tlrwtrnruq")
 spawn_path = NodePath("..")
 
+[node name="friendlies" type="Node3D" parent="." unique_id=1516339250]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="friendlies" unique_id=956179253]
+_spawnable_scenes = PackedStringArray("uid://n2n3pfeoqlu7")
+spawn_path = NodePath("..")
+
 [node name="map" type="Node3D" parent="." unique_id=2028757765]
 
 [node name="GeneratedDungeon" parent="map" unique_id=1887088690 instance=ExtResource("7_leqql")]

@@ -1,4 +1,4 @@
-extends DumbEnemy
+extends DumbNPC
 
 func _ready() -> void:
 	super._ready()

@@ -260,6 +260,15 @@ func place_chandelier(x_unit, z_unit, y_unit = 2.0):
 	chandelier_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0 + (unit_size - aabb_size.x)/2, y_unit * unit_size + aabb_size.y/2.0 + (unit_size - aabb_size.y), z_unit * unit_size + aabb_size.z/2.0 + (unit_size - aabb_size.z)/2)
 	self.add_child(chandelier_instance)
 
+# FRIENDLIES PLACEMENT FUNCTIONS
+func spawn_vendor(x_unit, z_unit, y_unit = 0.0):
+	# Note: Only spawn on server if these are synced enemies!
+	var vendor_instance = preload('res://scenes/model_scenes/friendlies/vendor.tscn').instantiate()
+	vendor_instance.name = "Vendor_" + str(x_unit) + "_" + str(z_unit) # Unique Name
+	vendor_instance.position = Vector3(x_unit * unit_size + unit_size/2.0, y_unit * unit_size + 3.0, z_unit * unit_size + unit_size/2.0)
+	vendor_instance.rotation.y = rng.randf_range(0, 2*PI)
+	if multiplayer.is_server():
+		main_game_node.get_node('friendlies').add_child(vendor_instance, true)
 
 # ENEMY PLACEMENT FUNCTIONS
 

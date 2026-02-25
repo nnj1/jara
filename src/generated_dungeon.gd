@@ -389,6 +389,10 @@ func actually_populate_rooms():
 				var center_room_position_x = int((room_data.x_unit_bounds[0] + room_data.x_unit_bounds[1]) /2)
 				var center_room_position_z = int((room_data.z_unit_bounds[0] + room_data.z_unit_bounds[1]) /2)
 				placer.spawn_dragon(center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
+			elif room_data.type == ROOM_TYPES.START:
+				var center_room_position_x = int((room_data.x_unit_bounds[0] + room_data.x_unit_bounds[1]) /2)
+				var center_room_position_z = int((room_data.z_unit_bounds[0] + room_data.z_unit_bounds[1]) /2)
+				placer.spawn_vendor(center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
 			else:
 				for unit_x in range(room_data.x_unit_bounds[0], room_data.x_unit_bounds[1]):
 					for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1]):

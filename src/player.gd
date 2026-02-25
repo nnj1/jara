@@ -156,7 +156,7 @@ func apply_attack_impulse():
 			if target is Player:
 				# TODO: only do if PVP friendly fire is turned on
 				pass
-			if target is DumbEnemy:
+			if target is DumbNPC:
 				var health_component = target.get_node_or_null('HealthComponent')
 				if health_component:
 					# TODO: Make weapons apply different damage types
