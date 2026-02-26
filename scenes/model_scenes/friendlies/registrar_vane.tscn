@@ -474,6 +474,7 @@ timeline_name = "Registrar_Vane"
 walk_speed = 7.5
 run_speed = 15.0
 jump_velocity = 0.0
+base_knockback = 0.1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=976938728]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.50864506, 0)
@@ -494,6 +495,7 @@ max_db = 6.0
 replication_config = SubResource("SceneReplicationConfig_f3wux")
 
 [node name="HealthComponent" parent="." unique_id=1274160499 instance=ExtResource("10_gsfkn")]
+is_invincible = true
 
 [node name="Armature" type="Node3D" parent="." unique_id=441307347]
 transform = Transform3D(-600, 5.2453666e-05, 2.2928226e-12, 0, -2.6226833e-05, 600, 5.2453666e-05, 600, 2.6226833e-05, 0, 1.069776, 0)
