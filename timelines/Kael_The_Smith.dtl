@@ -1,0 +1,9 @@
+join Kael 1
+Kael: (Spits) Watch your feet. Oh, wait—I can't. Vane took mine with a dull hacksaw because I tried to forge a key to the main gate. Now I just forge 'Disposables' for people like you.
+- "Tell me about the metal you use."
+	Kael: This isn't iron. It’s 'God-Slayer' alloy, salvaged from the skeletons of the Steel-Gods we built during the Uprising. We thought we were liberating ourselves from the old heavens.
+	Kael: We won the war, but we lost the world. The alloy needs 'Friction' to stay hot. That's the secret of the Press. It’s the kinetic energy of a million people being crushed into paste.
+- "Is there a way to stop the Press?"
+	Kael: (Leans in) To stop the machine, you have to break the First Cog. But doing so would quench the Sun-Lamps above. Millions would freeze in their sleep. Are you a hero, or a mass murderer?
+- "Help us kill Vane." [if {GlobalVars.get_current_player().bosses_slain} > 1]
+	Kael: (Hushed) I’m working on it. I need a 'Piston Rod' from the Warden. If I can shard it into a bolt, it’ll pierce the Registrar’s 'Invincible' armor. 

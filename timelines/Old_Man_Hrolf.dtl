@@ -1,0 +1,9 @@
+join Hrolf 1
+Hrolf: (Counting coins) Gold! It’s the only thing that doesn't rot in Jara. Though, if you look closely, you can see the fingerprints of the dead pressed into the metal.
+- "Why are you so obsessed with these coins?"
+	Hrolf: Because gold isn't money anymore! It’s 'Condensed Time'! The Ministry stores the Vitality from the Press in these coins. If you have enough, you can buy a 'Stay of Execution.' 
+	Hrolf: Ten coins is a week of life. A hundred is a year in the Upper Tiers. I’m just trying to buy back the sons I sold to the Tithe-Collector.
+- "Open Shop"
+	do GlobalVars.get_current_player().open_shop()
+- "What if I refuse to pay?"
+	Hrolf: Then Vane takes your skin for the leather-works. Everything has a price in Jara. Even your defiance.

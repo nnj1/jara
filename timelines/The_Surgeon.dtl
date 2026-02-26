@@ -1,0 +1,11 @@
+join Surgeon 1
+Surgeon: (Cleaning a blade) Look at those 'empathy centers' in your brain, pulsing away. Such a waste of caloric energy. In the Press, you don't need to love. You only need to endure.
+- "What are you doing to the people here?"
+	Surgeon: I am 'Optimizing' the yield. A human body is 70% water—very poor for combustion. I replace the 'softness' with brass and iron. 
+	Surgeon: If I make your bones more rigid, the Press has to work harder to crush you. Harder work means more friction. 
+- "Upgrade Strength"
+	do GlobalVars.get_current_player().modify_stat("max_hp", -10)
+	do GlobalVars.get_current_player().modify_stat("strength", 5)
+	Surgeon: (Sound of a bone saw) There. Less meat, more machine. You're becoming a work of art.
+- "Have you 'optimized' yourself?"
+	Surgeon: I am a masterpiece of clockwork and bile. I haven't slept in twelve years. Sleep is just a rehearsal for death, and I have too much work to do.

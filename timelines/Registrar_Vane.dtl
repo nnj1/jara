@@ -1,0 +1,14 @@
+join Vane 1
+if {GlobalVars.get_current_player().bosses_slain} == 0:
+	Vane: Stand straight, Number 402. Or whatever your name was before the Ministry scrubbed it. You have that soft, pampered look of the Upper Tiers. Did you think your taxes bought you immunity from the Cull?
+	Vane: Jara doesn't care about your lineage. This pit is the Great Equalizer. We discovered long ago that a Duke's marrow burns just as bright as a beggar's when the Red Press stamps down. 
+	- "What is this 'Red Press'?"
+		Vane: [shake] Ignorance is a luxury of the living. The Press is the world's lung. When the Sun-God died, the sky began to freeze. We built the Press to squeeze 'Vitality' out of the surplus and pump it into the Sun-Lamps.
+		Vane: You aren't 'explorers.' You are fuel. Now, get into the hole before I decide to skip the 'combat' part of your processing and throw you in the gears myself.
+	- "Why were we chosen for the Cull?"
+		Vane: The algorithm is perfect. It calculates utility vs. consumption. You were found lacking. Perhaps you didn't pray enough, or perhaps you just breathed too much of the air reserved for your betters.
+	- "We won't go quietly."
+		Vane: [beat] They never do. They scream, they claw, they pray. But the machine is deaf. If you want to delay your appointment with the piston, bring me the Heart of the Warden. It keeps the gears lubricated.
+else:
+	Vane: You’re still here? The High Priests in the Spire are starting to notice your 'efficiency.' They like numbers that go up. 
+	Vane: Just remember: the more you kill, the more the Press demands. You aren't saving these wretches; you're just feeding the hunger with bigger portions.

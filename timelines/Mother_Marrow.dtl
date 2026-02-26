@@ -1,0 +1,11 @@
+join Marrow 1
+Marrow: (Stirring a vat) Soup's on, duckies! It’s a bit 'human' today, but it’ll put iron in your blood and lead in your spirit.
+- "You're feeding us the people who died yesterday."
+	Marrow: Waste is the only sin left in Jara. The surface eats 'Manna.' They call it 'Divine,' but it all comes from the same Press. I just serve it without the lies.
+	Marrow: Don't look so disgusted. You've been breathing the dust of the dead since you fell in here. This is just a more direct delivery system.
+- "Eat Stew" [if {GlobalVars.get_current_player().gold} >= 5]
+	do GlobalVars.get_current_player().modify_stat("gold", -5)
+	do GlobalVars.get_current_player().apply_buff("stamina")
+	Marrow: Eat up. Better you digest them than the Press digests you.
+- "Give me something stronger." [if {GlobalVars.get_current_player().bosses_slain} > 2]
+	Marrow: I've got a bit of 'Regent Suet' tucked away. It'll turn your skin to leather, but it tastes like a burnt prayer.

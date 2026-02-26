@@ -1,0 +1,9 @@
+join Elara 1
+Elara: (Whispering) The stone is humming again. It feels like... like a million bees under the floor. Do you hear them? Or is it just the souls in the intake valves?
+- "Why are your eyes glowing, Elara?"
+	Elara: Mother said it’s the 'Amber Glow.' It happens to children born near the Sun-Lamps. Vane says my eyes are stealing from the Republic.
+	Elara: But sometimes, when the Press hits the bottom, I see things. I see the Old God. He isn't dead... he’s just being chopped into pieces, over and over, to keep the cities warm.
+- "Does Vane hurt you?"
+	Elara: Only when I cry. He says tears are 'unrefined fluid.' I try to be dry. I try to be a good little spare part.
+- "What do you see in the dark?" [if {GlobalVars.get_current_player().lore_score} > 2]
+	Elara: I see the people who were here before you. They’re still here, you know. They’re just... part of the walls now. They’re watching you. They want to know if you'll be as loud as they were.

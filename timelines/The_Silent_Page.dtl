@@ -1,0 +1,10 @@
+join Page 1
+Narrator: The boy cannot speak—Vane took his tongue for 'whispering'—but he draws a picture in the mud. It shows a giant gear with a human heart jammed inside it.
+- "Is that the 'First Cog'?"
+	Narrator: He nods vigorously, pointing deep into the floor. He draws a line of 'Blood' connecting the Press to the Sun above. 
+- "Who were you before Jara?"
+	Narrator: He draws a picture of a library. Then he draws a giant fire. He looks at his hands and begins to tremble.
+- "Give Scraps" [if {GlobalVars.get_current_player().scraps} >= 1]
+	do GlobalVars.get_current_player().modify_stat("scraps", -1)
+	do GlobalVars.get_current_player().unlock_map_sector()
+	Narrator: He hands you a sharpened shard of glass and points toward the Warden's lair.

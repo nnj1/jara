@@ -1,0 +1,9 @@
+join Taskmaster 1
+Taskmaster: (Cracking a whip) Move it, meat! Vane’s looking for a reason to 'reassign' someone to the gears, and you’re at the top of my list.
+- "You were a prisoner once, weren't you?"
+	Taskmaster: I was a silk merchant once. I had a wife, a garden... then the 'Balance Act' passed. My shop was 'surplus.' My life was 'surplus.'
+	Taskmaster: When they threw me down here, Vane gave me a choice: Be the meat, or be the one who cuts it. I chose the whip. Wouldn't you?
+- "What happens to those who can't fight?"
+	Taskmaster: They go to Mother Marrow. Or they become 'Structural Reinforcement.' The walls of Jara aren't stone, kid. They're bone-ash and spit. 
+- "I'm going to kill Vane." [if {GlobalVars.get_current_player().aggression} > 10]
+	Taskmaster: [beat] If you do... make it hurt. Make it hurt as much as the day he took my name.
