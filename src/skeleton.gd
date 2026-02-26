@@ -206,7 +206,7 @@ func process_idle_logic(delta: float):
 func process_chatting_logic(_delta: float):
 	velocity.x = 0
 	velocity.z = 0
-	safe_play("idle")
+	safe_play("chatting")
 	# CAN ONLY LEAVE THIS STATE IF CHAT IS COMPLETE
 	#state_timer -= delta
 	#if state_timer <= 0: change_state(State.RANDOM_WALK)
@@ -263,9 +263,12 @@ func _on_died():
 	timer.timeout.connect(queue_free)
 
 func safe_play(anim_name: String):
-	var n = "skeleton_stuff/rig_rig_" + anim_name
 	if anim_name == 'die':
 		anim_player.speed_scale = 2 
+	if anim_name == 'chatting':
+		if not anim_player.has_animation('chatting'):
+			anim_name = 'idle'
+	var n = anim_name
 	if anim_player.has_animation(n):
 		if anim_player.current_animation != n:
 			anim_player.play(n, 0.2)

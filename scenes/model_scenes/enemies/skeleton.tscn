@@ -197,7 +197,7 @@ collision_mask = 7
 script = ExtResource("1_f3wux")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=85837886]
-libraries/skeleton_stuff = ExtResource("2_hhii0")
+libraries/ = ExtResource("2_hhii0")
 
 [node name="rig" type="Node3D" parent="." unique_id=96602003]
 transform = Transform3D(-0.15, 0, -1.3113417e-08, 0, 0.15, 0, 1.3113417e-08, 0, -0.15, 0, 0, 0)
