@@ -42,11 +42,11 @@ func take_damage_synced(amount: float, is_critical: bool = false) -> void:
 			amount = amount / 2.0
 			is_critical = false
 	
-	rpc_id(1, 'take_damage', amount, is_critical)
+	rpc('take_damage', amount, is_critical)
 	
 @rpc("any_peer","call_local","reliable")
 func take_damage(amount: float, is_critical: bool = false) -> void:
-	if not multiplayer.is_server() or is_dead or amount <= 0:
+	if not is_multiplayer_authority() or is_dead or amount <= 0:
 		return
 	
 	current_health = clamp(current_health - amount, 0, max_health)
@@ -58,12 +58,12 @@ func take_damage(amount: float, is_critical: bool = false) -> void:
 		_broadcast_death.rpc()
 
 ## Called by the server when a heal occurs (potions, lifesteal)
-func heal_synced(amount: float) -> void:
-	rpc_id(1, 'heal', amount)
+func heal_synced(amount: float = 100.0) -> void:
+	rpc('heal', amount)
 	
 @rpc("any_peer","call_local","reliable")
 func heal(amount: float) -> void:
-	if not multiplayer.is_server() or is_dead or amount <= 0:
+	if not is_multiplayer_authority() or is_dead or amount <= 0:
 		return
 		
 	current_health = min(current_health + amount, max_health)

@@ -32,11 +32,18 @@ Dialogic="*uid://ds2q0uclmolvu"
 
 [dialogic]
 
-directories/dch_directory={
-"cuck_maiden": "res://timelines/cuck_maiden.dch"
-}
+directories/dch_directory={}
 directories/dtl_directory={
-"vendor_timeline": "res://timelines/vendor_timeline.dtl"
+"Ghost_of_Jara": "res://timelines/Ghost_of_Jara.dtl",
+"Kael_The_Smith": "res://timelines/Kael_The_Smith.dtl",
+"Mother_Marrow": "res://timelines/Mother_Marrow.dtl",
+"Old_Man_Hrolf": "res://timelines/Old_Man_Hrolf.dtl",
+"Registrar_Vane": "res://timelines/Registrar_Vane.dtl",
+"Sister_Elara": "res://timelines/Sister_Elara.dtl",
+"The_Silent_Page": "res://timelines/The_Silent_Page.dtl",
+"The_Surgeon": "res://timelines/The_Surgeon.dtl",
+"The_Taskmaster": "res://timelines/The_Taskmaster.dtl",
+"The_Weeping_Nun": "res://timelines/The_Weeping_Nun.dtl"
 }
 layout/style_directory={
 "": "res://timelines/style.tres",

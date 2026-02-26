@@ -1,6 +1,8 @@
 extends CharacterBody3D
 class_name DumbNPC
 
+@onready var main_game_node = get_tree().get_root().get_node('Game')
+
 # --- NPC Settings ---
 @export_group("NPC Settings")
 @export var is_friendly: bool = false : set = set_is_friendly
@@ -62,6 +64,8 @@ func set_is_friendly(value: bool):
 ## Chat interaction functions
 func start_talking(player_path: NodePath):
 	if is_friendly and timeline_name != "":
+		# Erase "press E to chat message"
+		main_game_node.get_node('UI/raycast_center_message').text = ''
 		self.set_meta('interaction_message', null)
 		self.set_meta('interaction_function', null)
 		# Ensure we stop moving while talking

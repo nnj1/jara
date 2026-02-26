@@ -392,7 +392,10 @@ func actually_populate_rooms():
 			elif room_data.type == ROOM_TYPES.START:
 				var center_room_position_x = int((room_data.x_unit_bounds[0] + room_data.x_unit_bounds[1]) /2)
 				var center_room_position_z = int((room_data.z_unit_bounds[0] + room_data.z_unit_bounds[1]) /2)
-				placer.spawn_vendor(center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
+				placer.spawn_npc('registrar_vane', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
+				placer.spawn_npc('sister_elara', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
+
+				# TODO: spawn the other NPCs here too
 			else:
 				for unit_x in range(room_data.x_unit_bounds[0], room_data.x_unit_bounds[1]):
 					for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1]):
