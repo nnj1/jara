@@ -119,7 +119,7 @@ void fragment() {
 resource_name = "mat_0"
 render_priority = 0
 shader = SubResource("Shader_i7ltr")
-shader_parameter/body_expansion = 0.010000003734879997
+shader_parameter/body_expansion = 0.01000000373487999
 shader_parameter/belly_fatness = 0.0
 shader_parameter/height_center = 1.0
 shader_parameter/albedo = Color(1, 1, 1, 1)

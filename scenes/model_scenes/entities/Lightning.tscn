@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dgccc8jew0xkd"]
 
-[ext_resource type="Shader" uid="uid://uywau27h1pty" path="res://src/Lightning.gdshader" id="1_ahhc4"]
+[ext_resource type="Shader" uid="uid://uywau27h1pty" path="res://shaders/Lightning.gdshader" id="1_ahhc4"]
 [ext_resource type="Script" uid="uid://ds4384c4y0hhp" path="res://src/lightning.gd" id="1_c0dta"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_c0dta"]
