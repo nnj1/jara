@@ -13,11 +13,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		if not settings_menu:
 			settings_menu = preload('res://scenes/main_scenes/settings.tscn').instantiate()
 			$UI.add_child(settings_menu)
+			players_container.get_node(str(multiplayer.get_unique_id())).capture_mouse(false)
 		else:
 			settings_menu.queue_free()
 			settings_menu = false
-			# make player recapture mouse
-			players_container.get_node(str(multiplayer.get_unique_id())).capture_mouse(true)
+			# make player recapture mouse unless in dialogic chat
+			if not Dialogic.current_timeline:
+				players_container.get_node(str(multiplayer.get_unique_id())).capture_mouse(true)
+
 	if event.is_action_pressed("flyingcam"):
 		toggle_mode()
 	

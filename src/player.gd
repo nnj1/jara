@@ -261,12 +261,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		next_weapon()
 	if event.is_action_pressed("scroll_down"):
 		prev_weapon()
-	if event.is_action_pressed("ui_cancel") and not main_game_node.settings_menu:
-		capture_mouse(!is_mouse_captured)
-		
+
+	# if you press in the window it should capture the mouse
 	if event is InputEventMouseButton and event.pressed:
 		if not is_mouse_captured:
 			capture_mouse(true)
+			
 	if is_mouse_captured and event is InputEventMouseMotion:
 		_camera_rotation.y -= event.relative.x * sensitivity
 		_camera_rotation.x -= event.relative.y * sensitivity
