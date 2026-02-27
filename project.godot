@@ -86,6 +86,7 @@ layout/style_list=["res://timelines/style.tres"]
 layout/default_style="res://timelines/style.tres"
 glossary/default_case_sensitive=true
 variables={
+"CurrentPlayer": "",
 "met_vendor": false,
 "player_gold": 0
 }

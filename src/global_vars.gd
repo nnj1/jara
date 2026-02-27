@@ -1,8 +1,5 @@
 extends Node
-
-func get_current_player():
-	return get_tree().get_root().get_node('Game').get_node('players/' + str(multiplayer.get_unique_id()))
-
+	
 func get_files_with_extension(path: String, extension: String = "") -> Array:
 	var files = []
 	var dir = DirAccess.open(path)

@@ -76,50 +76,24 @@ var strength_modifier: float = 1.0 # 1.0 = 100% damage
 # --- Quest State ---
 var has_piston_rod: bool = false
 var optimized_by_surgeon: bool = false
-# --- Methods called by Dialogic [do] commands ---
+
+# --- Methods called via Dialogic ---
 ## Called by The Weeping Nun
 func heal_full() -> void:
 	$HealthComponent.heal_synced()
 	print("Player healed by the Nun's sacrifice.")
 	# You can trigger a screen flash or VFX here
-## Called by The Surgeon, Old Man Hrolf, and Mother Marrow
-## This is a generic handler for stat changes
-func modify_stat(stat_name: String, value: float) -> void:
-	match stat_name:
-		"max_hp":
-			$HealthComponent.max_health += value
-			$HealthComponent.current_health = clamp($HealthComponent.current_health, 0, $HealthComponent.max_health)
-			optimized_by_surgeon = true
-		"strength":
-			# value is a flat increase, e.g., 5 means +5% strength
-			strength_modifier += (value / 100.0)
-		"gold":
-			gold += int(value)
-		"scraps":
-			scraps += int(value)
-		"lore":
-			lore_score += int(value)
-	print("Stat updated: ", stat_name, " by ", value)
+	
 ## Called by Old Man Hrolf
 func open_shop() -> void:
 	print("Opening Shop UI...")
 	# Signal your UI manager to open the shop menu
 	# e.g., SignalBus.emit_signal("display_shop", self)
-## Called by Mother Marrow
-func apply_buff(buff_type: String) -> void:
-	match buff_type:
-		"stamina":
-			print("Stamina buff applied.")
-			# Add logic for temporary speed or stamina boost
-		"damage":
-			strength_modifier += 0.1
+	
 ## Called by The Silent Page
 func unlock_map_sector() -> void:
 	print("New map sector revealed.")
 	# Logic to reveal a fog-of-war area or add a marker
-# --- Helper for Aggression ---
-func add_aggression(amount: int) -> void:
-	aggression += amount
 
 func _ready() -> void:
 	# Turn off all flying camera
@@ -141,9 +115,19 @@ func _ready() -> void:
 	$HealthComponent.max_health = 100.0
 	$HealthComponent.damaged.connect(on_taking_damage)
 	$HealthComponent.parried.connect(on_successful_parry)
+	
 	if is_multiplayer_authority():
 		$HealthComponent.health_changed.connect(update_ui)
+		Dialogic.signal_event.connect(_on_dialogic_signal)
 	
+func _on_dialogic_signal(argument: String):
+	# This checks the "arg" you put in the .dtl file
+	match argument:
+		"heal_full":
+			heal_full()
+		"unlock_map":
+			unlock_map_sector()
+			
 # SIGNALS THAT JACK INTO THE UI	
 func update_ui(current_health, max_health):
 	var hp_label = main_game_node.get_node_or_null('UI/player_stats/VBoxContainer/HP_label')

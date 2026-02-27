@@ -3,9 +3,9 @@ Nun: (Sobbing) I signed the Cull Orders. I saw your names on the parchment and I
 - "Heal my wounds."
     Nun: (Reaches out with trembling hands) I will take your agony. It is the only penance I have left.
     [play_sound arg="res\://sfx/flesh_sear.wav"]
-    do GlobalVars.get_current_player().heal_full()
+    [signal arg="heal_full"]
     Nun: (Gasps) It is done. My heart grows heavier, but your limbs are light again. Go... before I lose the strength to stand.
 - "Why did the Church allow this?"
     Nun: We were terrified of the Dark. The High Priest said we had to 'Maintain the Altar.' He didn't tell us the Altar was a hydraulic piston. We betrayed the flock to save the Temple.
-- "Where is the High Priest now?" | [if {GlobalVars.get_current_player().lore_score} > 5]
+- "Where is the High Priest now?"
     Nun: He sits at the base of the Press, praying to the rhythm of the stamp. He believes the sound of crushing bone is the sound of God's forgiveness.
