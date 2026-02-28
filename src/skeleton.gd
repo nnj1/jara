@@ -56,7 +56,7 @@ func _ready() -> void:
 	if not is_multiplayer_authority():
 		detection_area.monitoring = false
 		detection_area.monitorable = false
-
+	
 func set_is_friendly(value: bool):
 	is_friendly = value
 	if value:
@@ -103,6 +103,7 @@ func stop_talking(player_path: NodePath):
 		self.set_meta('interaction_function', 'start_talking')
 
 func _physics_process(delta: float) -> void:
+	if not multiplayer.multiplayer_peer: return
 	if not multiplayer.is_server(): return # physics only runs on server (that is authority)
 	
 	if current_state == State.DEAD:

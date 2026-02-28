@@ -311,6 +311,7 @@ func _process(delta: float) -> void:
 				right_arm_animation_player.queue('return_from_block')
 
 func _physics_process(delta: float) -> void:
+	if not multiplayer.multiplayer_peer: return
 	# Only the owner handles input and calculates movement
 	if not is_multiplayer_authority() or not is_active: 
 		return
