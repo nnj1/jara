@@ -38,8 +38,8 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_kase7")
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_dw3oj"]
-size = Vector3(14, 8, 18)
+[sub_resource type="BoxShape3D" id="BoxShape3D_r2scc"]
+size = Vector3(14.012695, 7.701172, 18.180664)
 
 [node name="Spikes" type="Node3D" unique_id=1507821068]
 script = ExtResource("1_r2scc")
@@ -49,8 +49,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 0)
 mesh = SubResource("ArrayMesh_6v8ww")
 script = ExtResource("2_gbcto")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Cube_048" unique_id=526833318]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+[node name="Area3D" type="Area3D" parent="." unique_id=1724164333]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Cube_048/StaticBody3D" unique_id=2091633943]
-shape = SubResource("BoxShape3D_dw3oj")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1156816036]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.099121094, 0, 0.03955078)
+shape = SubResource("BoxShape3D_r2scc")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
