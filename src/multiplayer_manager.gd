@@ -191,6 +191,6 @@ func get_local_ip() -> String:
 	for ip in addresses:
 		# Filter for IPv4 and ignore the local loopback (127.0.0.1)
 		# and common virtual machine ranges (172.x)
-		if ":" not in ip and ip != "127.0.0.1" and (ip.begin_with("192.168.") or ip.begin_with("10.")):
+		if ":" not in ip and ip != "127.0.0.1" and (ip.begins_with("192.168.") or ip.begins_with("10.")):
 			return ip
 	return "No LAN IP Found"
