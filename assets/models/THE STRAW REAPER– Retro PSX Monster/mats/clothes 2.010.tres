@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cc6ur5xqr2w5h"]
+
+[ext_resource type="Texture2D" uid="uid://d1k1suepkljr4" path="res://assets/models/CARCAXIS – Retro PSX Monster/texture/pantalones mutant.png" id="1_6e2a0"]
+
+[resource]
+resource_name = "clothes 2.010"
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_6e2a0")
+emission_enabled = true

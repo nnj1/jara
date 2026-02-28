@@ -451,4 +451,5 @@ func server_lob_fireball():
 	# 2. Add the "Lob" (Angle it up slightly)
 	var launch_velocity = (target_dir + Vector3.UP * upward_bias).normalized() * lob_strength
 	# 3. Apply the force
-	fireball.linear_velocity = launch_velocity
+	fireball.apply_central_impulse(launch_velocity)
+	#fireball.linear_velocity = launch_velocity

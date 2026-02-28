@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://3nowo5qit8up"]
+
+[ext_resource type="Texture2D" uid="uid://565f6g7e2xga" path="res://assets/models/THE STRAW REAPER– Retro PSX Monster/texture/face scarecrow.png" id="1_h62ej"]
+
+[resource]
+resource_name = "head.009"
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_h62ej")
+emission_enabled = true

@@ -13,9 +13,14 @@ func _ready() -> void:
 	
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body.is_in_group("enemies"):
-		# Handle damage logic here
-		pass
-	queue_free() # Destroy fireball on impact
+		if body is DumbNPC:
+			var health_component = body.get_node_or_null('HealthComponent')
+			if health_component:
+				# TODO: Make weapons apply different damage types
+				var damage_amount = randi_range(25,50)
+				health_component.take_damage_synced(damage_amount, true if damage_amount > 20 else false)
+				#print('Damaged enemy')
+				queue_free() # Destroy fireball on impact
 
 func _on_timer_timeout() -> void:
 	queue_free() # Despawn after a few seconds if it hits nothing

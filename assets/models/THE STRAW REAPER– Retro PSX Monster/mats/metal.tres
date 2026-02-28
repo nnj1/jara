@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://b2kyxde5saeic"]
+
+[ext_resource type="Texture2D" uid="uid://dorscpuy2rnfp" path="res://assets/models/THE STRAW REAPER– Retro PSX Monster/texture/metal hoz.png" id="1_g4mwf"]
+
+[resource]
+resource_name = "metal"
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_g4mwf")
+emission_enabled = true

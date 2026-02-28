@@ -411,7 +411,9 @@ func actually_populate_rooms():
 								placer.spawn_skeleton(unit_x, unit_z, room_data.y_unit_bounds[0])
 							elif num < 0.75:
 								placer.spawn_monster(unit_x, unit_z, room_data.y_unit_bounds[0])
-
+							else:
+								placer.spawn_reaper(unit_x, unit_z, room_data.y_unit_bounds[0])
+						
 						if unit_x % 2 == 0 and unit_z % 2 == 0:
 							if rng.randf() < 0.1:
 								placer.place_hexagon(unit_x, unit_z, room_data.y_unit_bounds[0])

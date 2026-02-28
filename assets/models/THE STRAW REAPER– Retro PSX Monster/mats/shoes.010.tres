@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dup4h4wlp11iw"]
+
+[ext_resource type="Texture2D" uid="uid://dws6rtepm5gap" path="res://assets/models/THE STRAW REAPER– Retro PSX Monster/texture/shoes.png" id="1_j5oig"]
+
+[resource]
+resource_name = "shoes.010"
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_j5oig")
+emission_enabled = true

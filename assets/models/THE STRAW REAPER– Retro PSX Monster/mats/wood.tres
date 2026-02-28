@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bupde2pf7tt8w"]
+
+[ext_resource type="Texture2D" uid="uid://bqnir6w6yhr3" path="res://assets/models/THE STRAW REAPER– Retro PSX Monster/texture/wood.png" id="1_bu4r8"]
+
+[resource]
+resource_name = "wood"
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_bu4r8")
+emission_enabled = true

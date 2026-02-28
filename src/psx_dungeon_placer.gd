@@ -283,6 +283,15 @@ func spawn_skeleton(x_unit, z_unit, y_unit = 0.0):
 	skeleton_instance.rotation.y = rng.randf_range(0, 2*PI)
 	if multiplayer.is_server():
 		main_game_node.get_node('enemies').add_child(skeleton_instance, true)
+
+func spawn_reaper(x_unit, z_unit, y_unit = 0.0):
+	# Note: Only spawn on server if these are synced enemies!
+	var reaper_instance = preload('res://scenes/model_scenes/enemies/reaper.tscn').instantiate()
+	reaper_instance.name = "Reaper_" + str(x_unit) + "_" + str(z_unit) # Unique Name
+	reaper_instance.position = Vector3(x_unit * unit_size + unit_size/2.0, y_unit * unit_size + 3.0, z_unit * unit_size + unit_size/2.0)
+	reaper_instance.rotation.y = rng.randf_range(0, 2*PI)
+	if multiplayer.is_server():
+		main_game_node.get_node('enemies').add_child(reaper_instance, true)
 		
 func spawn_roach(x_unit, z_unit, y_unit = 0.0):
 	# Note: Only spawn on server if these are synced enemies!
