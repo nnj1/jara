@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://gd8imnxc4x6e"]
 
+[ext_resource type="Script" uid="uid://b2xu1orquebcl" path="res://src/spikes.gd" id="1_r2scc"]
 [ext_resource type="Material" uid="uid://csj0kp6mhs3of" path="res://assets/models/PSX_Dungeon/mats/N64.tres" id="2_epktu"]
 [ext_resource type="Script" uid="uid://b5voaf5ueou2g" path="res://src/tools/show_mesh_dimensions.gd" id="2_gbcto"]
 
@@ -37,9 +38,19 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_kase7")
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_dw3oj"]
+size = Vector3(14, 8, 18)
+
 [node name="Spikes" type="Node3D" unique_id=1507821068]
+script = ExtResource("1_r2scc")
 
 [node name="Cube_048" type="MeshInstance3D" parent="." unique_id=1501395812]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 0)
 mesh = SubResource("ArrayMesh_6v8ww")
 script = ExtResource("2_gbcto")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Cube_048" unique_id=526833318]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cube_048/StaticBody3D" unique_id=2091633943]
+shape = SubResource("BoxShape3D_dw3oj")

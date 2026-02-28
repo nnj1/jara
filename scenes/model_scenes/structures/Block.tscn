@@ -38,6 +38,7 @@ shadow_mesh = SubResource("ArrayMesh_h4rav")
 size = Vector3(20.000002, 20, 20)
 
 [node name="Block" type="StaticBody3D" unique_id=1210516483]
+collision_mask = 0
 
 [node name="Cube_042" type="MeshInstance3D" parent="." unique_id=139391791]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.999999, 0)

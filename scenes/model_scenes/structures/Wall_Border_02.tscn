@@ -45,6 +45,7 @@ mesh = SubResource("ArrayMesh_5pbkn")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Cube_058" unique_id=781840260]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Cube_058/StaticBody3D" unique_id=292607813]
 shape = SubResource("BoxShape3D_pcf4x")

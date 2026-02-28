@@ -46,6 +46,7 @@ mesh = SubResource("ArrayMesh_oy30i")
 script = ExtResource("2_hrbpu")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Cube_054" unique_id=1465181214]
+collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Cube_054/StaticBody3D" unique_id=419198084]
 shape = SubResource("ConcavePolygonShape3D_pjaug")

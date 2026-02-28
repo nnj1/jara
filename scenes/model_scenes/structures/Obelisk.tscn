@@ -47,7 +47,7 @@ data = PackedVector3Array(0, -0.0009, 0.0083, 0, 0.0011, 0.0083, 0.0016, 0.0011,
 [node name="Obelisk" type="Node3D" unique_id=1660070329]
 
 [node name="obelisk" type="MeshInstance3D" parent="." unique_id=1957710771]
-transform = Transform3D(300, 0, 0, 0, -1.3113417e-05, 300, 0, -300, -1.3113417e-05, 0, -0.80395424, 0)
+transform = Transform3D(300, 0, 0, 0, -1.3113417e-05, 300, 0, -300, -1.3113417e-05, 0, -0.019178748, 0)
 mesh = SubResource("ArrayMesh_1mymi")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="obelisk" unique_id=780106021]

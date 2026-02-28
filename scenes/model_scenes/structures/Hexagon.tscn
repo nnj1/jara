@@ -46,9 +46,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 0)
 mesh = SubResource("ArrayMesh_conv7")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Cylinder_018" unique_id=1592961172]
+collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Cylinder_018/StaticBody3D" unique_id=885822878]
 shape = SubResource("ConvexPolygonShape3D_udvbw")
 
 [node name="Obelisk" parent="." unique_id=1660070329 instance=ExtResource("2_yveb4")]
-transform = Transform3D(3, 0, 0, 0, 10, 0, 0, 0, 3, 0, 15.132408, 0)
+transform = Transform3D(3, 0, 0, 0, 10, 0, 0, 0, 3, 0, 4.045723, 0)

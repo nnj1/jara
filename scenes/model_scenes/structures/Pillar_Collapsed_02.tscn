@@ -45,6 +45,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4972229, -1.7277782, 0)
 mesh = SubResource("ArrayMesh_hpd35")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Cylinder_023" unique_id=39904941]
+collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Cylinder_023/StaticBody3D" unique_id=1492503721]
 shape = SubResource("ConvexPolygonShape3D_qfkr3")
