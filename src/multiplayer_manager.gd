@@ -4,7 +4,7 @@ extends Node
 const PORT = 9999              
 const LAN_PORT = 9991          
 const DEFAULT_IP = "localhost" 
-const BROADCAST_ADDRESS = "127.255.255.255"
+const BROADCAST_ADDRESS = "255.255.255.255"
 
 # --- Local Player State ---
 var player_name: String = "Pilgrim " 
