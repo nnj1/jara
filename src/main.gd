@@ -7,8 +7,9 @@ extends Node2D
 
 @onready var host_server_name = $"CanvasLayer/VBoxContainer/TabContainer/Create Server/ServerName"
 
-# To keep track of discovered servers and their IPs
+# To keep track of discovered servers and their IPs and PORTs
 var discovered_ips = []
+var discovered_ports = []
 
 func _ready():
 	MultiplayerManager.start_listening()
@@ -26,15 +27,18 @@ func _on_refresh_list_timeout():
 		# Clear and rebuild list to remove old servers
 		server_item_list.clear()
 		discovered_ips.clear()
+		discovered_ports.clear()
 		
 		for server in servers:
 			var display_text = "%s | Players: %d | IP: %s" % [server.name, server.count, server.ip]
 			server_item_list.add_item(display_text)
 			discovered_ips.append(server.ip)
+			discovered_ports.append(server.port)
 
 func _on_server_list_item_activated(index):
 	# Triggered when double-clicking or pressing enter on a list item
-	_connect_to_server(discovered_ips[index])
+	$CanvasLayer/VBoxContainer/HBoxContainer/HostName.text = discovered_ips[index]
+	$CanvasLayer/VBoxContainer/HBoxContainer/PortName.text = discovered_ports[index]
 
 func _on_join_manual_pressed():
 	_connect_to_server(manual_ip_input.text)

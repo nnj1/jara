@@ -156,6 +156,7 @@ grow_vertical = 2
 texture = ExtResource("2_gru0p")
 expand_mode = 2
 
+[connection signal="item_activated" from="CanvasLayer/VBoxContainer/TabContainer/Join Game/ServerList" to="." method="_on_server_list_item_activated"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/ClientButton" to="." method="_on_join_manual_pressed"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/ServerButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Button" to="." method="_on_button_pressed"]
