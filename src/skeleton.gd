@@ -50,6 +50,11 @@ func _ready() -> void:
 	$HealthComponent.died.connect($CreatureSoundPlayer.play_death)
 	$HealthComponent.damaged.connect($CreatureSoundPlayer.play_hurt)
 	$HealthComponent.died.connect(_on_died)
+	
+	# Turn off detection area, if you're not the server
+	if not is_multiplayer_authority():
+		detection_area.monitoring = false
+		detection_area.monitorable = false
 
 func set_is_friendly(value: bool):
 	is_friendly = value
@@ -68,8 +73,6 @@ func start_talking(player_path: NodePath):
 		main_game_node.get_node('UI/raycast_center_message').text = ''
 		self.set_meta('interaction_message', null)
 		self.set_meta('interaction_function', null)
-		# Ensure we stop moving while talking
-		velocity = Vector3.ZERO
 		# MAKE NPC LOOK AT PLAYER
 		var player = get_node(player_path)
 		look_at(player.position, Vector3.UP)
@@ -77,22 +80,30 @@ func start_talking(player_path: NodePath):
 		player.is_chatting = true
 		# Free mouse to use
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		change_state(State.CHATTING)
+		# MAKE NPC move into chatting state (REQUEST THE SERVER TO DO THIS)
+		rpc_id(1, 'change_state_sync', State.CHATTING)
 		Dialogic.start(timeline_name)
 		for connection in Dialogic.timeline_ended.get_connections():
 			Dialogic.timeline_ended.disconnect(connection.callable)
 		Dialogic.timeline_ended.connect(stop_talking.bind(player.get_path()))
-		
+	
+@rpc("any_peer","call_local","reliable")	
+func change_state_sync(given_state: State):
+	if multiplayer.is_server():
+		change_state(given_state)
+	
 func stop_talking(player_path: NodePath):
 	if is_friendly and timeline_name != "":
 		var player = get_node(player_path)
 		player.is_chatting = false
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		change_state(State.RANDOM_WALK)
+		rpc_id(1, 'change_state_sync', State.RANDOM_WALK)
 		self.set_meta('interaction_message', 'Press E to talk')
 		self.set_meta('interaction_function', 'start_talking')
 
 func _physics_process(delta: float) -> void:
+	if not is_multiplayer_authority(): return # physics only runs on server
+	
 	if current_state == State.DEAD:
 		if not is_on_floor():
 			velocity.y -= 14.8 * delta
