@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bu8ow7cdvh0nm"
+path="res://.godot/imported/Giant_Laugh.wav-39a146ea4731e69cd34169ba01da1bb1.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Fantasy Monsters/Fantasy Monsters/Giant_Laugh.wav"
+dest_files=["res://.godot/imported/Giant_Laugh.wav-39a146ea4731e69cd34169ba01da1bb1.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

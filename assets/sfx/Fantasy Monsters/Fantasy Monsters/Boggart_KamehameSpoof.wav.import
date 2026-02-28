@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://c8twa6ccayog5"
+path="res://.godot/imported/Boggart_KamehameSpoof.wav-99f7c9bab8a8f817fb85968eb947e1dc.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Fantasy Monsters/Fantasy Monsters/Boggart_KamehameSpoof.wav"
+dest_files=["res://.godot/imported/Boggart_KamehameSpoof.wav-99f7c9bab8a8f817fb85968eb947e1dc.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

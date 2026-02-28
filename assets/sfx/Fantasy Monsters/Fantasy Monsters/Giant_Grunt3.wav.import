@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://nnas0k38qqbt"
+path="res://.godot/imported/Giant_Grunt3.wav-ad3d12720f3e904a7e7d4aa01ecff471.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Fantasy Monsters/Fantasy Monsters/Giant_Grunt3.wav"
+dest_files=["res://.godot/imported/Giant_Grunt3.wav-ad3d12720f3e904a7e7d4aa01ecff471.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

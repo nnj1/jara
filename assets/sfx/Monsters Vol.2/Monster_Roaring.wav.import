@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dy0efw4o4litb"
+path="res://.godot/imported/Monster_Roaring.wav-2096aca59b75e5f1e8396e54dda1b295.sample"
+
+[deps]
+
+source_file="res://assets/sfx/Monsters Vol.2/Monster_Roaring.wav"
+dest_files=["res://.godot/imported/Monster_Roaring.wav-2096aca59b75e5f1e8396e54dda1b295.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

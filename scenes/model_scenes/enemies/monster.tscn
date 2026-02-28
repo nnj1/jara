@@ -6,11 +6,15 @@
 [ext_resource type="Texture2D" uid="uid://42gwb4cq04i6" path="res://assets/models/CARCAXIS – Retro PSX Monster/texture/pierna mutant monster.png" id="4_qalfa"]
 [ext_resource type="Texture2D" uid="uid://8dnxehjwfrmd" path="res://assets/models/CARCAXIS – Retro PSX Monster/texture/brazos mutant mosnter.png" id="5_dvoyc"]
 [ext_resource type="PackedScene" uid="uid://bhbf4qqd8vg5e" path="res://scenes/components/CreatureSoundPlayer.tscn" id="5_qalfa"]
-[ext_resource type="AudioStream" uid="uid://bb0gp8ydmixry" path="res://assets/sfx/Horror SFX Free/Monsters & Ghosts/Monster_growl_1.wav" id="6_dvoyc"]
 [ext_resource type="Texture2D" uid="uid://d1k1suepkljr4" path="res://assets/models/CARCAXIS – Retro PSX Monster/texture/pantalones mutant.png" id="6_efd2p"]
-[ext_resource type="AudioStream" uid="uid://cm11u8x0cpqc7" path="res://assets/sfx/Horror SFX Free/Monsters & Ghosts/Monster_grunt_long.wav" id="7_efd2p"]
-[ext_resource type="AudioStream" uid="uid://brdj54evce1ah" path="res://assets/sfx/Horror SFX Free/Monsters & Ghosts/Monster_grunt x2 (ghmmm).wav" id="8_0drry"]
+[ext_resource type="AudioStream" uid="uid://cvflkcvi4yx0r" path="res://assets/sfx/Fantasy Monsters/Fantasy Monsters/Giant_Grunt.wav" id="8_efd2p"]
+[ext_resource type="AudioStream" uid="uid://f5807edhf3pk" path="res://assets/sfx/Fantasy Monsters/Fantasy Monsters/Giant_Grunt2.wav" id="9_0drry"]
+[ext_resource type="AudioStream" uid="uid://nnas0k38qqbt" path="res://assets/sfx/Fantasy Monsters/Fantasy Monsters/Giant_Grunt3.wav" id="10_f2hj2"]
+[ext_resource type="AudioStream" uid="uid://okajeiptuglo" path="res://assets/sfx/Fantasy Monsters/Fantasy Monsters/Giant_Pain.wav" id="11_48rnn"]
 [ext_resource type="PackedScene" uid="uid://ekja4d65f3rr" path="res://scenes/components/HealthComponent.tscn" id="11_mw8m6"]
+[ext_resource type="AudioStream" uid="uid://bciflcwlgjthb" path="res://assets/sfx/Fantasy Monsters/Fantasy Monsters/Giant_Pain2.wav" id="12_touwq"]
+[ext_resource type="AudioStream" uid="uid://bytqw6kaudwau" path="res://assets/sfx/Fantasy Monsters/Fantasy Monsters/Giant_Pain3.wav" id="13_wbynu"]
+[ext_resource type="AudioStream" uid="uid://di0ehohiyg7g6" path="res://assets/sfx/Fantasy Monsters/Fantasy Monsters/Giant_Dizzy.wav" id="14_6rgeu"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g1vt3"]
 resource_name = "cabeza nativo 2.010"
@@ -2296,9 +2300,11 @@ skeleton = NodePath("..")
 libraries/ = SubResource("AnimationLibrary_dnj82")
 
 [node name="CreatureSoundPlayer" parent="." unique_id=948053947 instance=ExtResource("5_qalfa")]
-volume_db = 4.0
+volume_db = 10.0
 max_db = 6.0
-idle_sounds = Array[AudioStream]([ExtResource("6_dvoyc"), ExtResource("7_efd2p"), ExtResource("8_0drry"), null])
+idle_sounds = Array[AudioStream]([ExtResource("8_efd2p"), ExtResource("9_0drry"), ExtResource("10_f2hj2")])
+hurt_sounds = Array[AudioStream]([ExtResource("11_48rnn"), ExtResource("12_touwq"), ExtResource("13_wbynu")])
+death_sounds = Array[AudioStream]([ExtResource("14_6rgeu")])
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=976938728]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.1384516, 0)
