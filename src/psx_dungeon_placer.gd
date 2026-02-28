@@ -270,6 +270,7 @@ func spawn_npc(npc_scene_name: String, x_unit, z_unit, y_unit = 0.0):
 		npc_instance.position = Vector3(x_unit * unit_size + unit_size/2.0, y_unit * unit_size + 3.0, z_unit * unit_size + unit_size/2.0)
 		npc_instance.rotation.y = rng.randf_range(0, 2*PI)
 		if multiplayer.is_server():
+			npc_instance.set_multiplayer_authority(1)
 			main_game_node.get_node('friendlies').add_child(npc_instance, true)
 
 # ENEMY PLACEMENT FUNCTIONS

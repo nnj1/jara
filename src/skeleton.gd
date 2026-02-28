@@ -40,6 +40,7 @@ var knockback_velocity = Vector3.ZERO
 @onready var detection_area: Area3D = $DetectionArea
 
 func _ready() -> void:
+	
 	# Only connect detection if we aren't friendly
 	detection_area.body_entered.connect(_on_player_detected)
 	detection_area.body_exited.connect(_on_player_lost_sight)
@@ -102,7 +103,7 @@ func stop_talking(player_path: NodePath):
 		self.set_meta('interaction_function', 'start_talking')
 
 func _physics_process(delta: float) -> void:
-	if not is_multiplayer_authority(): return # physics only runs on server
+	if not multiplayer.is_server(): return # physics only runs on server (that is authority)
 	
 	if current_state == State.DEAD:
 		if not is_on_floor():
