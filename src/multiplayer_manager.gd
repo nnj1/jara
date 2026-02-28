@@ -149,7 +149,7 @@ func _cleanup_and_exit():
 # --- LAN DISCOVERY ---
 
 func _broadcast_presence():
-	var info = {"name": server_name, "port": PORT, "count": players.size()}
+	var info = {"name": server_name, "ip": get_local_ip(), "port": PORT, "count": players.size()}
 	var packet = JSON.stringify(info).to_utf8_buffer()
 	
 	udp_socket.set_dest_address(BROADCAST_ADDRESS, LAN_PORT)
@@ -185,3 +185,12 @@ func get_player_name(peer_id: int) -> String:
 	if players.has(id_string):
 		return players[id_string]["name"]
 	return "Unknown"
+
+func get_local_ip() -> String:
+	var addresses = IP.get_local_addresses()
+	for ip in addresses:
+		# Filter for IPv4 and ignore the local loopback (127.0.0.1)
+		# and common virtual machine ranges (172.x)
+		if ":" not in ip and ip != "127.0.0.1" and (ip.begin_with("192.168.") or ip.begin_with("10.")):
+			return ip
+	return "No LAN IP Found"
