@@ -86,7 +86,9 @@ layout/style_list=["res://timelines/style.tres"]
 layout/default_style="res://timelines/style.tres"
 glossary/default_case_sensitive=true
 variables={
-"CurrentPlayer": "",
+"aggression": 0,
+"bosses_slain": 0,
+"lore_score": 0,
 "met_vendor": false,
 "player_gold": 0
 }

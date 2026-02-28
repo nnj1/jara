@@ -396,6 +396,7 @@ func actually_populate_rooms():
 				placer.spawn_npc('the_weeping_nun', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
 				placer.spawn_npc('mother_marrow', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
 				placer.spawn_npc('the_silent_page', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
+				placer.spawn_npc('old_man_hrolf', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
 
 				# TODO: spawn the other NPCs here too
 			else:

@@ -1,5 +1,5 @@
 join Vane 1
-if {GlobalVars.get_current_player().bosses_slain} == 0:
+if {bosses_slain} == 0:
 	Vane: Stand straight, Number 402. Or whatever your name was before the Ministry scrubbed it. You have that soft, pampered look of the Upper Tiers. Did you think your taxes bought you immunity from the Cull?
 	Vane: Jara doesn't care about your lineage. This pit is the Great Equalizer. We discovered long ago that a Duke's marrow burns just as bright as a beggar's when the Red Press stamps down. 
 	- "What is this 'Red Press'?"
