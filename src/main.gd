@@ -38,7 +38,7 @@ func _on_refresh_list_timeout():
 func _on_server_list_item_activated(index):
 	# Triggered when double-clicking or pressing enter on a list item
 	$CanvasLayer/VBoxContainer/HBoxContainer/HostName.text = discovered_ips[index]
-	$CanvasLayer/VBoxContainer/HBoxContainer/PortName.text = discovered_ports[index]
+	$CanvasLayer/VBoxContainer/HBoxContainer/PortName.text = str(int(discovered_ports[index]))
 
 func _on_join_manual_pressed():
 	_connect_to_server(manual_ip_input.text)
