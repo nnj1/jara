@@ -54,7 +54,8 @@ var parry_timer:float = 0.0
 @export var parry_window_default: float = 1.0
 var held_object: EntityRigidBody = null
 var held_object_rotation_speed: float = 5.0
-var is_chatting: bool = false
+@onready var is_chatting: bool = false # determines if the player is chatting with an NPC
+@onready var is_typing_chat: bool = false # determines if the player is sending a message
 
 # Camera and various raycasts
 @onready var camera: Camera3D = $Camera3D
@@ -263,6 +264,7 @@ func capture_mouse(capture: bool) -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if capture else Input.MOUSE_MODE_VISIBLE
 
 func _handle_spell_inputs():
+	if is_typing_chat: return
 	# Handle spellcasting (Server-side spawn via RPC)
 	if Input.is_action_just_pressed("spell_1"):
 		rpc_id(1, "server_lob_fireball")
@@ -347,13 +349,13 @@ func _physics_process(delta: float) -> void:
 
 	# Movement logic
 	var input_dir := Vector2.ZERO
-	if is_mouse_captured and not is_chatting:
+	if is_mouse_captured and not is_chatting and not is_typing_chat:
 		input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	
 	var wish_dir := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
 	# --- FLYING LOGIC START ---
-	if Input.is_action_pressed("fly"):
+	if Input.is_action_pressed("fly") and not is_typing_chat:
 		# Move up at jump_velocity speed (or create a new fly_speed variable)
 		velocity.y = jump_velocity 
 		# While flying, we use air physics for horizontal movement so it feels floaty
@@ -365,7 +367,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		handle_air_physics(wish_dir, delta)
 		
-	if is_on_floor() and Input.is_action_just_pressed("jump") and not is_chatting:
+	if is_on_floor() and Input.is_action_just_pressed("jump") and not is_chatting and not is_typing_chat:
 		if not $jumpSound.playing:
 			$jumpSound.play()
 			
@@ -389,6 +391,7 @@ func _physics_process(delta: float) -> void:
 		handle_rigidbody_push()
 
 func _handle_view_effects(delta: float, input_dir: Vector2) -> void:
+	if is_typing_chat: return
 	if is_on_floor() and velocity.length() > 0.1:
 		_bob_time += delta * velocity.length() * 0.5
 		camera.position.y = _default_cam_height + sin(_bob_time * bob_freq) * bob_amp

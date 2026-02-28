@@ -28,6 +28,7 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
 		if not chat_input.has_focus():
 			chat_input.grab_focus()
+			main_game_node.get_node('players/' + str(multiplayer.get_unique_id())).is_typing_chat = true
 			# Consume the event so it doesn't trigger other things
 			get_viewport().set_input_as_handled()
 			
@@ -43,6 +44,7 @@ func _input(event: InputEvent) -> void:
 		if chat_input.has_focus():
 			chat_input.text = ''
 			chat_input.release_focus()
+			main_game_node.get_node('players/' + str(multiplayer.get_unique_id())).is_typing_chat = false
 			get_viewport().set_input_as_handled()
 			
 func _on_text_submitted(new_text: String):
@@ -53,6 +55,8 @@ func _on_text_submitted(new_text: String):
 	chat_input.clear()
 	# 3. Release focus so the player can move/play again
 	chat_input.release_focus()
+	main_game_node.get_node('players/' + str(multiplayer.get_unique_id())).is_typing_chat = false
+
 	
 	# TODO: 4. Do some local stuff if the chat contains a command and god mode is active
 	if MultiplayerManager.server_settings.god_mode:
