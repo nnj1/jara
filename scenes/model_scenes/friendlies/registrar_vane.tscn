@@ -27,13 +27,19 @@ properties/3/spawn = true
 properties/3/replication_mode = 2
 properties/4/path = NodePath("HealthComponent:max_health")
 properties/4/spawn = true
-properties/4/replication_mode = 0
+properties/4/replication_mode = 2
 properties/5/path = NodePath(".:is_friendly")
 properties/5/spawn = true
 properties/5/replication_mode = 2
 properties/6/path = NodePath(".:timeline_name")
 properties/6/spawn = true
 properties/6/replication_mode = 2
+properties/7/path = NodePath("AnimationPlayer:current_animation")
+properties/7/spawn = true
+properties/7/replication_mode = 2
+properties/8/path = NodePath("AnimationPlayer:speed_scale")
+properties/8/spawn = true
+properties/8/replication_mode = 2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1hwue"]
 resource_name = "Knight"
