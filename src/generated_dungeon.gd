@@ -406,12 +406,12 @@ func actually_populate_rooms():
 							for i in rng.randi_range(0, 4):
 								placer.place_skull(unit_x, unit_z, room_data.y_unit_bounds[0])
 						elif rng.randf() < 0.02:
-							var num = rng.randf()
-							if num < 0.5:
-								placer.spawn_skeleton(unit_x, unit_z, room_data.y_unit_bounds[0])
-							elif num < 0.75:
-								placer.spawn_monster(unit_x, unit_z, room_data.y_unit_bounds[0])
-							else:
+							#var num = rng.randf()
+							#if num < 0.5:
+								#placer.spawn_skeleton(unit_x, unit_z, room_data.y_unit_bounds[0])
+							#elif num < 0.75:
+								#placer.spawn_monster(unit_x, unit_z, room_data.y_unit_bounds[0])
+							#else:
 								placer.spawn_reaper(unit_x, unit_z, room_data.y_unit_bounds[0])
 						
 						if unit_x % 2 == 0 and unit_z % 2 == 0:

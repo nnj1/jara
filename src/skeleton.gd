@@ -25,6 +25,7 @@ var current_look_direction: Vector3 = Vector3.FORWARD
 @export_group("Slide Attack Variables")
 @export var slide_attack_cooldown: float = 0.5
 @onready var slide_attack_cooldown_timer: float = 0.0
+@export var slide_attack_enabled: bool = true
 
 # --- Internal Variables ---
 var current_state: State = State.IDLE
@@ -143,7 +144,7 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 	
 	# 4. Attack Logic (Disabled if friendly)
-	if target_player and not is_friendly:
+	if target_player and not is_friendly and slide_attack_enabled:
 		check_slide_attack(delta)
 
 func check_slide_attack(delta):
