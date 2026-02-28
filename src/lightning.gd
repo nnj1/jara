@@ -32,7 +32,7 @@ func _process(delta: float) -> void:
 				# TODO: only do if PVP friendly fire is turned on
 				if target.has_method('grow'):
 					target.grow(delta)
-			if target is DumbNPC:
+			if target.is_in_group('enemies'):
 				var health_component = target.get_node_or_null('HealthComponent')
 				if health_component:
 					attack_timer -= delta
