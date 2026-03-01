@@ -1,6 +1,7 @@
 extends Node3D
 
-@onready var main_game_node = get_parent() if get_tree().get_root().get_node_or_null('Game') == null else get_tree().get_root().get_node('Game')
+# Will house the main game node
+var main_game_node
 
 @export var unit_size: float = 20.0
 
@@ -63,11 +64,17 @@ extends Node3D
 @onready var stair_scene: PackedScene = preload('res://scenes/model_scenes/structures/Arch_Roof.tscn')
 enum ORIENT {POS_X, NEG_X, POS_Z, NEG_Z}
 
+# NPC SCENES
+@onready var npc_scenes = {
+	'mother_marrow' = preload('res://scenes/model_scenes/friendlies/mother_marrow.tscn'),
+	'old_man_hrolf' = preload('res://scenes/model_scenes/friendlies/old_man_hrolf.tscn'),
+	'registrar_vane' = preload('res://scenes/model_scenes/friendlies/registrar_vane.tscn'),
+	'the_silent_page' = preload('res://scenes/model_scenes/friendlies/the_silent_page.tscn'),
+	'the_weeping_nun' = preload('res://scenes/model_scenes/friendlies/the_weeping_nun.tscn'),
+}
+
 # Random Number generation
 @onready var rng: RandomNumberGenerator
-
-## DATABASE OF PLACED STRUCTURES
-@onready var placed_structures = {}
 
 ## ENTITY PLACEMENT FUNCTIONS
 
@@ -263,7 +270,7 @@ func place_chandelier(x_unit, z_unit, y_unit = 2.0):
 # FRIENDLIES PLACEMENT FUNCTIONS
 func spawn_npc(npc_scene_name: String, x_unit, z_unit, y_unit = 0.0):
 	# Note: Only spawn on server if these are synced enemies!
-	var npc_scene = load('res://scenes/model_scenes/friendlies/' + npc_scene_name + '.tscn')
+	var npc_scene = npc_scenes[npc_scene_name]
 	if npc_scene:
 		var npc_instance = npc_scene.instantiate()
 		npc_instance.name = "FriendlyNPC_" + str(x_unit) + "_" + str(z_unit) # Unique Name

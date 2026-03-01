@@ -1,13 +1,10 @@
 extends Node3D
 
-@onready var main_game_node = get_parent() if get_tree().get_root().get_node_or_null('Game') == null else get_tree().get_root().get_node('Game')
+@onready var main_game_node = self if get_tree().get_root().get_node_or_null('Game') == null else get_tree().get_root().get_node('Game')
 
 # --- RNG & Synchronization ---
 var rng := RandomNumberGenerator.new()
 var is_generated: bool = false
-
-# -- SETUP THE DUNGEON PLACER --
-@onready var placer = get_node('PsxDungeonPlacer')
 
 # SOME DEBUG SETTINGS
 @export var VIEW_ROOM_BOUNDING_BOXES: bool = true
@@ -46,6 +43,13 @@ var astar := AStar3D.new()
 
 func _ready() -> void:
 	
+	# set up the flying camera if we're debugging
+	if main_game_node == self:
+		$flying_camera.active = true
+	
+	# -- SETUP THE DUNGEON PLACER --
+	Placer.main_game_node = main_game_node
+	
 	if multiplayer.is_server():
 		# HOST: We already have the seed.
 		print("Host: Building with seed: ", MultiplayerManager.server_settings["map_seed"])
@@ -69,7 +73,7 @@ func generate_dungeon():
 	# Set the  RNG seed from the multiplayer manager
 	if MultiplayerManager:
 		rng.seed = MultiplayerManager.server_settings["map_seed"]
-	placer.rng = rng
+	Placer.rng = rng
 		
 	draw_dungeon_outline()
 	generate_rooms()
@@ -102,37 +106,37 @@ func spawn_server_only_entities():
 		var pos = segment.grid_pos
 		# add a potential roach
 		if rng.randf() < 0.05:
-			placer.spawn_roach(pos.x, pos.z, pos.y)
+			Placer.spawn_roach(pos.x, pos.z, pos.y)
 		
 	# spawn any special monsters if boss room
 	for room_data in rooms:
 		if room_data.type == ROOM_TYPES.BOSS:
 			var center_room_position_x = int((room_data.x_unit_bounds[0] + room_data.x_unit_bounds[1]) /2)
 			var center_room_position_z = int((room_data.z_unit_bounds[0] + room_data.z_unit_bounds[1]) /2)
-			placer.spawn_dragon(center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
+			Placer.spawn_dragon(center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
 		elif room_data.type == ROOM_TYPES.START:
 			var center_room_position_x = int((room_data.x_unit_bounds[0] + room_data.x_unit_bounds[1]) /2)
 			var center_room_position_z = int((room_data.z_unit_bounds[0] + room_data.z_unit_bounds[1]) /2)
-			placer.spawn_npc('registrar_vane', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
-			placer.spawn_npc('the_weeping_nun', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
-			placer.spawn_npc('mother_marrow', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
-			placer.spawn_npc('the_silent_page', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
-			placer.spawn_npc('old_man_hrolf', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
+			Placer.spawn_npc('registrar_vane', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
+			Placer.spawn_npc('the_weeping_nun', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
+			Placer.spawn_npc('mother_marrow', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
+			Placer.spawn_npc('the_silent_page', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
+			Placer.spawn_npc('old_man_hrolf', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
 			# TODO: spawn the other NPCs here too
 		else: # Otherwise spawn normal enemies and skulls
 			for unit_x in range(room_data.x_unit_bounds[0], room_data.x_unit_bounds[1]):
 				for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1]):
 					if rng.randf() < 0.05:
 						for i in rng.randi_range(0, 4):
-							placer.place_skull(unit_x, unit_z, room_data.y_unit_bounds[0])
+							Placer.place_skull(unit_x, unit_z, room_data.y_unit_bounds[0])
 					elif rng.randf() < 0.02:
 						var num = rng.randf()
 						if num < 0.5:
-							placer.spawn_skeleton(unit_x, unit_z, room_data.y_unit_bounds[0])
+							Placer.spawn_skeleton(unit_x, unit_z, room_data.y_unit_bounds[0])
 						elif num < 0.75:
-							placer.spawn_monster(unit_x, unit_z, room_data.y_unit_bounds[0])
+							Placer.spawn_monster(unit_x, unit_z, room_data.y_unit_bounds[0])
 						else:
-							placer.spawn_reaper(unit_x, unit_z, room_data.y_unit_bounds[0])
+							Placer.spawn_reaper(unit_x, unit_z, room_data.y_unit_bounds[0])
 					
 					if unit_x % 2 == 0 and unit_z % 2 == 0:
 						if rng.randf() < 0.27:
@@ -140,7 +144,7 @@ func spawn_server_only_entities():
 							if sub_roll < 0.22:
 								var things = ['barrel', 'chest', 'box']
 								var thing = things[rng.randi() % things.size()]
-								placer.call('place_' + thing, unit_x, unit_z, room_data.y_unit_bounds[0])
+								Placer.call('place_' + thing, unit_x, unit_z, room_data.y_unit_bounds[0])
 						
 func initialize_astar_grid():
 	astar.clear()
@@ -217,15 +221,15 @@ func actually_populate_hallways():
 		var below_pos = pos + Vector3i(0, -1, 0)
 		if not segment.faces.down and not is_pos_inside_any_room(below_pos) and not is_pos_hallway(below_pos):
 			if not is_any_room_connection(below_pos):
-				placer.place_block(below_pos.x, below_pos.z, below_pos.y)
+				Placer.place_block(below_pos.x, below_pos.z, below_pos.y)
 				hallway_segments_surroundings[below_pos] = true
-				#placer.place_roof_tile(below_pos.x, below_pos.z, below_pos.y)
+				#Placer.place_roof_tile(below_pos.x, below_pos.z, below_pos.y)
 			
 		# ROOF (Place a block above the path)
 		var top_pos = pos + Vector3i(0, 1, 0)
 		if not segment.faces.up and not is_pos_inside_any_room(top_pos) and not is_pos_hallway(top_pos):
 			if not is_any_room_connection(top_pos):
-				placer.place_block(top_pos.x, top_pos.z, top_pos.y)
+				Placer.place_block(top_pos.x, top_pos.z, top_pos.y)
 				hallway_segments_surroundings[top_pos] = true
 
 		# 2. HORIZONTAL WALLS
@@ -234,28 +238,28 @@ func actually_populate_hallways():
 		if not segment.faces.north and not is_pos_inside_any_room(north_pos) and not is_pos_hallway(north_pos):
 			# Only place block if it's NOT a door
 			if not is_any_room_connection(north_pos):
-				placer.place_block(north_pos.x, north_pos.z, north_pos.y)
+				Placer.place_block(north_pos.x, north_pos.z, north_pos.y)
 				hallway_segments_surroundings[north_pos] = true
 		
 		# Check South (+Z)
 		var south_pos = pos + Vector3i(0, 0, 1)
 		if not segment.faces.south and not is_pos_inside_any_room(south_pos) and not is_pos_hallway(south_pos):
 			if not is_any_room_connection(south_pos):
-				placer.place_block(south_pos.x, south_pos.z, south_pos.y)
+				Placer.place_block(south_pos.x, south_pos.z, south_pos.y)
 				hallway_segments_surroundings[south_pos] = true
 
 		# Check West (-X)
 		var west_pos = pos + Vector3i(-1, 0, 0)
 		if not segment.faces.west and not is_pos_inside_any_room(west_pos) and not is_pos_hallway(west_pos):
 			if not is_any_room_connection(west_pos):
-				placer.place_block(west_pos.x, west_pos.z, west_pos.y)
+				Placer.place_block(west_pos.x, west_pos.z, west_pos.y)
 				hallway_segments_surroundings[west_pos] = true
 				
 		# Check East (+X)
 		var east_pos = pos + Vector3i(1, 0, 0)
 		if not segment.faces.east and not is_pos_inside_any_room(east_pos) and not is_pos_hallway(east_pos):
 			if not is_any_room_connection(east_pos):
-				placer.place_block(east_pos.x, east_pos.z, east_pos.y)
+				Placer.place_block(east_pos.x, east_pos.z, east_pos.y)
 				hallway_segments_surroundings[east_pos] = true
 			
 func generate_connections() -> Dictionary:
@@ -371,14 +375,14 @@ func actually_populate_rooms():
 			for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1]):
 				# only place floor tile if there's not a block below it:
 				if not hallway_segments_surroundings.has(Vector3i(unit_x,  room_data.y_unit_bounds[0] - 1, unit_z)):
-					placer.place_floor_tile(unit_x, unit_z, room_data.y_unit_bounds[0])
+					Placer.place_floor_tile(unit_x, unit_z, room_data.y_unit_bounds[0])
 				
 		# Add roof 
 		for unit_x in range(room_data.x_unit_bounds[0], room_data.x_unit_bounds[1]):
 			for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1]):
-				placer.place_block(unit_x, unit_z, room_data.y_unit_bounds[1])
+				Placer.place_block(unit_x, unit_z, room_data.y_unit_bounds[1])
 				if rng.randf() < 0.25:
-					placer.place_chandelier(unit_x, unit_z, room_data.y_unit_bounds[1] - 1)
+					Placer.place_chandelier(unit_x, unit_z, room_data.y_unit_bounds[1] - 1)
 		
 		# Add wall borders and walls
 		for unit_x in range(room_data.x_unit_bounds[0], room_data.x_unit_bounds[0] + room_data.width + 1):
@@ -388,24 +392,24 @@ func actually_populate_rooms():
 					# place border and first wall
 					if not is_connection(room_data, Vector3i(unit_x, room_data.y_unit_bounds[0], unit_z)):
 						if not hallway_segments_surroundings.has(Vector3i(unit_x,  room_data.y_unit_bounds[0], unit_z)):
-							placer.place_z_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0])
-							placer.place_z_wall(unit_x, unit_z, room_data.y_unit_bounds[0] + 0.5)
+							Placer.place_z_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0])
+							Placer.place_z_wall(unit_x, unit_z, room_data.y_unit_bounds[0] + 0.5)
 						else:
-							placer.place_z_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0] + 1)
+							Placer.place_z_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0] + 1)
 					else:
-						placer.place_z_door_frame(unit_x, unit_z, room_data.y_unit_bounds[0])
-						#placer.remove_structure('Wall_z', unit_x, unit_z + 1, room_data.y_unit_bounds[0])
-						#placer.remove_structure('Wall_z', unit_x, unit_z - 1, room_data.y_unit_bounds[0])
-						placer.place_z_door(unit_x, unit_z, room_data.y_unit_bounds[0])
-						placer.place_z_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0] + 1)
+						Placer.place_z_door_frame(unit_x, unit_z, room_data.y_unit_bounds[0])
+						#Placer.remove_structure('Wall_z', unit_x, unit_z + 1, room_data.y_unit_bounds[0])
+						#Placer.remove_structure('Wall_z', unit_x, unit_z - 1, room_data.y_unit_bounds[0])
+						Placer.place_z_door(unit_x, unit_z, room_data.y_unit_bounds[0])
+						Placer.place_z_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0] + 1)
 						
 					# fill up with the rest of the walls
 					for y_offset in range(room_data.depth - 2):
-						placer.place_z_wall(unit_x, unit_z, room_data.y_unit_bounds[0] + 1.5 + y_offset)
+						Placer.place_z_wall(unit_x, unit_z, room_data.y_unit_bounds[0] + 1.5 + y_offset)
 					
 					# place arches
-					placer.place_z_arch(unit_x, unit_z, room_data.y_unit_bounds[0] + room_data.depth - 0.5)
-					placer.place_z_arch_fence(unit_x, unit_z, room_data.y_unit_bounds[0] + room_data.depth - 0.5)
+					Placer.place_z_arch(unit_x, unit_z, room_data.y_unit_bounds[0] + room_data.depth - 0.5)
+					Placer.place_z_arch_fence(unit_x, unit_z, room_data.y_unit_bounds[0] + room_data.depth - 0.5)
 		
 					pass
 					
@@ -413,24 +417,24 @@ func actually_populate_rooms():
 					# place border and first wall
 					if not is_connection(room_data, Vector3i(unit_x, room_data.y_unit_bounds[0], unit_z)):
 						if not hallway_segments_surroundings.has(Vector3i(unit_x,  room_data.y_unit_bounds[0], unit_z)):
-							placer.place_x_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0])
-							placer.place_x_wall(unit_x, unit_z, room_data.y_unit_bounds[0] + 0.5)
+							Placer.place_x_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0])
+							Placer.place_x_wall(unit_x, unit_z, room_data.y_unit_bounds[0] + 0.5)
 						else:
-							placer.place_x_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0] + 1)
+							Placer.place_x_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0] + 1)
 					else:
-						placer.place_x_door_frame(unit_x, unit_z, room_data.y_unit_bounds[0])
-						#placer.remove_structure('Wall_x', unit_x - 1, unit_z, room_data.y_unit_bounds[0])
-						#placer.remove_structure('Wall_x', unit_x + 1, unit_z, room_data.y_unit_bounds[0])
-						placer.place_x_door(unit_x, unit_z, room_data.y_unit_bounds[0])
-						placer.place_x_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0] + 1)
+						Placer.place_x_door_frame(unit_x, unit_z, room_data.y_unit_bounds[0])
+						#Placer.remove_structure('Wall_x', unit_x - 1, unit_z, room_data.y_unit_bounds[0])
+						#Placer.remove_structure('Wall_x', unit_x + 1, unit_z, room_data.y_unit_bounds[0])
+						Placer.place_x_door(unit_x, unit_z, room_data.y_unit_bounds[0])
+						Placer.place_x_wall_border(unit_x, unit_z, room_data.y_unit_bounds[0] + 1)
 					
 					# fill up with the rest of the walls
 					for y_offset in range(room_data.depth - 2):
-						placer.place_x_wall(unit_x, unit_z, room_data.y_unit_bounds[0] + 1.5 + y_offset)
+						Placer.place_x_wall(unit_x, unit_z, room_data.y_unit_bounds[0] + 1.5 + y_offset)
 					
 					# place arches
-					placer.place_x_arch(unit_x, unit_z, room_data.y_unit_bounds[0] + room_data.depth - 0.5)
-					placer.place_x_arch_fence(unit_x, unit_z, room_data.y_unit_bounds[0] + room_data.depth - 0.5)
+					Placer.place_x_arch(unit_x, unit_z, room_data.y_unit_bounds[0] + room_data.depth - 0.5)
+					Placer.place_x_arch_fence(unit_x, unit_z, room_data.y_unit_bounds[0] + room_data.depth - 0.5)
 					pass 
 		
 		# add non-enemy entities if it's not the start room
@@ -439,17 +443,17 @@ func actually_populate_rooms():
 				for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1]):
 					if unit_x % 2 == 0 and unit_z % 2 == 0:
 						if rng.randf() < 0.1:
-							placer.place_hexagon(unit_x, unit_z, room_data.y_unit_bounds[0])
+							Placer.place_hexagon(unit_x, unit_z, room_data.y_unit_bounds[0])
 						elif rng.randf() < 0.3:
 							var sub_roll = rng.randf()
 							if sub_roll < 0.33:
-								placer.place_pillar(unit_x, unit_z, room_data.y_unit_bounds[0])
+								Placer.place_pillar(unit_x, unit_z, room_data.y_unit_bounds[0])
 							elif sub_roll < 0.66:
 								var things = ['debris']
 								var thing = things[rng.randi() % things.size()]
-								placer.call('place_' + thing, unit_x, unit_z, room_data.y_unit_bounds[0])
+								Placer.call('place_' + thing, unit_x, unit_z, room_data.y_unit_bounds[0])
 							else:
-								placer.place_spike(unit_x, unit_z, room_data.y_unit_bounds[0])
+								Placer.place_spike(unit_x, unit_z, room_data.y_unit_bounds[0])
 		
 func create_room(room_data: Dictionary) -> Node3D:
 	var room_anchor = Node3D.new()
