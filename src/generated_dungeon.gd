@@ -119,7 +119,7 @@ func spawn_server_only_entities():
 			placer.spawn_npc('the_silent_page', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
 			placer.spawn_npc('old_man_hrolf', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
 			# TODO: spawn the other NPCs here too
-		else: # Otherwise spawn normal enemies an dskull
+		else: # Otherwise spawn normal enemies and skulls
 			for unit_x in range(room_data.x_unit_bounds[0], room_data.x_unit_bounds[1]):
 				for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1]):
 					if rng.randf() < 0.05:
@@ -133,7 +133,15 @@ func spawn_server_only_entities():
 							placer.spawn_monster(unit_x, unit_z, room_data.y_unit_bounds[0])
 						else:
 							placer.spawn_reaper(unit_x, unit_z, room_data.y_unit_bounds[0])
-							
+					
+					if unit_x % 2 == 0 and unit_z % 2 == 0:
+						if rng.randf() < 0.27:
+							var sub_roll = rng.randf()
+							if sub_roll < 0.22:
+								var things = ['barrel', 'chest', 'box']
+								var thing = things[rng.randi() % things.size()]
+								placer.call('place_' + thing, unit_x, unit_z, room_data.y_unit_bounds[0])
+						
 func initialize_astar_grid():
 	astar.clear()
 	# Step 1: Register all possible points in the dungeon volume
@@ -425,7 +433,7 @@ func actually_populate_rooms():
 					placer.place_x_arch_fence(unit_x, unit_z, room_data.y_unit_bounds[0] + room_data.depth - 0.5)
 					pass 
 		
-		# add non-enemy entities
+		# add non-enemy entities if it's not the start room
 		if room_data.type != ROOM_TYPES.START:
 			for unit_x in range(room_data.x_unit_bounds[0], room_data.x_unit_bounds[1]):
 				for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1]):
@@ -437,7 +445,7 @@ func actually_populate_rooms():
 							if sub_roll < 0.33:
 								placer.place_pillar(unit_x, unit_z, room_data.y_unit_bounds[0])
 							elif sub_roll < 0.66:
-								var things = ['barrel', 'debris', 'chest', 'box']
+								var things = ['debris']
 								var thing = things[rng.randi() % things.size()]
 								placer.call('place_' + thing, unit_x, unit_z, room_data.y_unit_bounds[0])
 							else:

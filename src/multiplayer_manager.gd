@@ -50,6 +50,8 @@ func generate_new_seed():
 
 func host_game():
 	var peer = ENetMultiplayerPeer.new()
+
+	
 	var error = peer.create_server(PORT, 10) 
 	if error != OK:
 		print("Failed to host: ", error)
@@ -69,6 +71,7 @@ func join_game(address: String):
 	if address.is_empty(): address = DEFAULT_IP
 	
 	var peer = ENetMultiplayerPeer.new()
+	
 	var error = peer.create_client(address, PORT)
 	if error != OK:
 		print("Failed to join: ", error)
