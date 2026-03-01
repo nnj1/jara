@@ -7,18 +7,7 @@
 [ext_resource type="Script" uid="uid://fkldrqw0lm67" path="res://src/multiplayer_spawner.gd" id="5_t5sjj"]
 [ext_resource type="PackedScene" uid="uid://d173umj203wf0" path="res://scenes/main_scenes/chat_box.tscn" id="6_leqql"]
 [ext_resource type="PackedScene" uid="uid://b0f7qglb0fvgu" path="res://scenes/maps/generated_dungeon.tscn" id="7_leqql"]
-
-[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_lnu2h"]
-
-[sub_resource type="Sky" id="Sky_lbhrr"]
-sky_material = SubResource("PhysicalSkyMaterial_lnu2h")
-
-[sub_resource type="Environment" id="Environment_yqjtg"]
-background_mode = 2
-background_color = Color(1, 1, 1, 1)
-sky = SubResource("Sky_lbhrr")
-glow_enabled = true
-glow_hdr_threshold = 1.5
+[ext_resource type="Environment" uid="uid://bsfhgu5nulsjw" path="res://resources/world_environment.tres" id="8_cfqos"]
 
 [node name="Game" type="Node3D" unique_id=390812690]
 script = ExtResource("1_ks7w8")
@@ -174,4 +163,4 @@ spawn_path = NodePath("..")
 VIEW_ROOM_CONNECTORS = false
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1948907850]
-environment = SubResource("Environment_yqjtg")
+environment = ExtResource("8_cfqos")

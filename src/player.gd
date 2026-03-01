@@ -315,7 +315,7 @@ func _process(delta: float) -> void:
 	# Only the owner handles input and calculates movement
 	if not is_multiplayer_authority() or not is_active: 
 		return
-	
+
 	if not is_chatting:
 		# 1. Input Polling (Spells & UI states)
 		_handle_spell_inputs()

@@ -1,0 +1,13 @@
+[gd_resource type="Environment" format=3 uid="uid://bsfhgu5nulsjw"]
+
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_lnu2h"]
+
+[sub_resource type="Sky" id="Sky_lbhrr"]
+sky_material = SubResource("PhysicalSkyMaterial_lnu2h")
+
+[resource]
+background_mode = 2
+background_color = Color(1, 1, 1, 1)
+sky = SubResource("Sky_lbhrr")
+glow_enabled = true
+glow_hdr_threshold = 1.5
