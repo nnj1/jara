@@ -80,13 +80,60 @@ func generate_dungeon():
 	var connection_matrix = generate_connections()
 	generate_hallways(connection_matrix)
 	
-	actually_populate_hallways()
-	
+	actually_populate_hallways() # ideally should only spawn staticbodies that don't sync
 	# rooms don't bother to place mesh if a block was placed by the populate_hallways so meshes don't overlap
-	actually_populate_rooms()
+	actually_populate_rooms() # ideally should only spawn staticbodies that don't sync
+	
 	center_camera()
 	move_player_to_start()
 	
+	# Phase 2: Server-Side Entities
+	# We wait two frames to ensure the SceneTree has indexed all the new walls
+	await get_tree().process_frame
+	await get_tree().process_frame
+	
+	if multiplayer.is_server() and SPAWN_ENTITIES:
+		spawn_server_only_entities()
+	
+# TODO: SLOWLY MOVE EVERYTHING WITH A MULTIPLAYER SYNCHRONIZER TO SPAWN HERE
+func spawn_server_only_entities():
+	# Spawn hallway specific things here
+	for segment in hallway_segments:
+		var pos = segment.grid_pos
+		# add a potential roach
+		if rng.randf() < 0.05:
+			placer.spawn_roach(pos.x, pos.z, pos.y)
+		
+	# spawn any special monsters if boss room
+	for room_data in rooms:
+		if room_data.type == ROOM_TYPES.BOSS:
+			var center_room_position_x = int((room_data.x_unit_bounds[0] + room_data.x_unit_bounds[1]) /2)
+			var center_room_position_z = int((room_data.z_unit_bounds[0] + room_data.z_unit_bounds[1]) /2)
+			placer.spawn_dragon(center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
+		elif room_data.type == ROOM_TYPES.START:
+			var center_room_position_x = int((room_data.x_unit_bounds[0] + room_data.x_unit_bounds[1]) /2)
+			var center_room_position_z = int((room_data.z_unit_bounds[0] + room_data.z_unit_bounds[1]) /2)
+			placer.spawn_npc('registrar_vane', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
+			placer.spawn_npc('the_weeping_nun', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
+			placer.spawn_npc('mother_marrow', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
+			placer.spawn_npc('the_silent_page', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
+			placer.spawn_npc('old_man_hrolf', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
+			# TODO: spawn the other NPCs here too
+		else: # Otherwise spawn normal enemies an dskull
+			for unit_x in range(room_data.x_unit_bounds[0], room_data.x_unit_bounds[1]):
+				for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1]):
+					if rng.randf() < 0.05:
+						for i in rng.randi_range(0, 4):
+							placer.place_skull(unit_x, unit_z, room_data.y_unit_bounds[0])
+					elif rng.randf() < 0.02:
+						var num = rng.randf()
+						if num < 0.5:
+							placer.spawn_skeleton(unit_x, unit_z, room_data.y_unit_bounds[0])
+						elif num < 0.75:
+							placer.spawn_monster(unit_x, unit_z, room_data.y_unit_bounds[0])
+						else:
+							placer.spawn_reaper(unit_x, unit_z, room_data.y_unit_bounds[0])
+							
 func initialize_astar_grid():
 	astar.clear()
 	# Step 1: Register all possible points in the dungeon volume
@@ -157,10 +204,6 @@ func center_camera():
 func actually_populate_hallways():
 	for segment in hallway_segments:
 		var pos = segment.grid_pos
-		
-		# add a potential roach
-		if rng.randf() < 0.05:
-			placer.spawn_roach(pos.x, pos.z, pos.y)
 
 		# 1. FLOOR (Place a floor block or tile)
 		var below_pos = pos + Vector3i(0, -1, 0)
@@ -382,51 +425,23 @@ func actually_populate_rooms():
 					placer.place_x_arch_fence(unit_x, unit_z, room_data.y_unit_bounds[0] + room_data.depth - 0.5)
 					pass 
 		
-		# add entities
-		if SPAWN_ENTITIES:
-			# spawn any special monsters if boss room
-			if room_data.type == ROOM_TYPES.BOSS:
-				var center_room_position_x = int((room_data.x_unit_bounds[0] + room_data.x_unit_bounds[1]) /2)
-				var center_room_position_z = int((room_data.z_unit_bounds[0] + room_data.z_unit_bounds[1]) /2)
-				placer.spawn_dragon(center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
-			elif room_data.type == ROOM_TYPES.START:
-				var center_room_position_x = int((room_data.x_unit_bounds[0] + room_data.x_unit_bounds[1]) /2)
-				var center_room_position_z = int((room_data.z_unit_bounds[0] + room_data.z_unit_bounds[1]) /2)
-				placer.spawn_npc('registrar_vane', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
-				placer.spawn_npc('the_weeping_nun', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
-				placer.spawn_npc('mother_marrow', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
-				placer.spawn_npc('the_silent_page', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
-				placer.spawn_npc('old_man_hrolf', center_room_position_x, center_room_position_z, room_data.y_unit_bounds[0])
-
-				# TODO: spawn the other NPCs here too
-			else:
-				for unit_x in range(room_data.x_unit_bounds[0], room_data.x_unit_bounds[1]):
-					for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1]):
-						if rng.randf() < 0.05:
-							for i in rng.randi_range(0, 4):
-								placer.place_skull(unit_x, unit_z, room_data.y_unit_bounds[0])
-						elif rng.randf() < 0.02:
-							var num = rng.randf()
-							if num < 0.5:
-								placer.spawn_skeleton(unit_x, unit_z, room_data.y_unit_bounds[0])
-							elif num < 0.75:
-								placer.spawn_monster(unit_x, unit_z, room_data.y_unit_bounds[0])
+		# add non-enemy entities
+		if room_data.type != ROOM_TYPES.START:
+			for unit_x in range(room_data.x_unit_bounds[0], room_data.x_unit_bounds[1]):
+				for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1]):
+					if unit_x % 2 == 0 and unit_z % 2 == 0:
+						if rng.randf() < 0.1:
+							placer.place_hexagon(unit_x, unit_z, room_data.y_unit_bounds[0])
+						elif rng.randf() < 0.3:
+							var sub_roll = rng.randf()
+							if sub_roll < 0.33:
+								placer.place_pillar(unit_x, unit_z, room_data.y_unit_bounds[0])
+							elif sub_roll < 0.66:
+								var things = ['barrel', 'debris', 'chest', 'box']
+								var thing = things[rng.randi() % things.size()]
+								placer.call('place_' + thing, unit_x, unit_z, room_data.y_unit_bounds[0])
 							else:
-								placer.spawn_reaper(unit_x, unit_z, room_data.y_unit_bounds[0])
-						
-						if unit_x % 2 == 0 and unit_z % 2 == 0:
-							if rng.randf() < 0.1:
-								placer.place_hexagon(unit_x, unit_z, room_data.y_unit_bounds[0])
-							elif rng.randf() < 0.3:
-								var sub_roll = rng.randf()
-								if sub_roll < 0.33:
-									placer.place_pillar(unit_x, unit_z, room_data.y_unit_bounds[0])
-								elif sub_roll < 0.66:
-									var things = ['barrel', 'debris', 'chest', 'box']
-									var thing = things[rng.randi() % things.size()]
-									placer.call('place_' + thing, unit_x, unit_z, room_data.y_unit_bounds[0])
-								else:
-									placer.place_spike(unit_x, unit_z, room_data.y_unit_bounds[0])
+								placer.place_spike(unit_x, unit_z, room_data.y_unit_bounds[0])
 		
 func create_room(room_data: Dictionary) -> Node3D:
 	var room_anchor = Node3D.new()
