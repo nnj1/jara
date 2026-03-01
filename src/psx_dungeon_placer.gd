@@ -266,7 +266,7 @@ func spawn_npc(npc_scene_name: String, x_unit, z_unit, y_unit = 0.0):
 	var npc_scene = load('res://scenes/model_scenes/friendlies/' + npc_scene_name + '.tscn')
 	if npc_scene:
 		var npc_instance = npc_scene.instantiate()
-		npc_instance.name = "Vendor_" + str(x_unit) + "_" + str(z_unit) # Unique Name
+		npc_instance.name = "FriendlyNPC_" + str(x_unit) + "_" + str(z_unit) # Unique Name
 		npc_instance.position = Vector3(x_unit * unit_size + unit_size/2.0, y_unit * unit_size + 3.0, z_unit * unit_size + unit_size/2.0)
 		npc_instance.rotation.y = rng.randf_range(0, 2*PI)
 		if multiplayer.is_server():
