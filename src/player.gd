@@ -442,7 +442,7 @@ func handle_ground_physics(wish_dir: Vector3, delta: float) -> void:
 		var drop = speed * friction * delta
 		velocity *= max(speed - drop, 0) / speed
 	accelerate(wish_dir, walk_speed, run_acceleration, delta)
-	if is_mouse_captured and Input.is_action_just_pressed("jump"):
+	if is_mouse_captured and Input.is_action_just_pressed("jump") and not is_typing_chat:
 		velocity.y = jump_velocity
 
 func handle_air_physics(wish_dir: Vector3, delta: float) -> void:

@@ -35,6 +35,7 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("console"):
 		if not chat_input.has_focus():
 			chat_input.grab_focus()
+			main_game_node.get_node('players/' + str(multiplayer.get_unique_id())).is_typing_chat = true
 			# Consume the event so it doesn't trigger other things
 			get_viewport().set_input_as_handled()
 			chat_input.text = '/'
