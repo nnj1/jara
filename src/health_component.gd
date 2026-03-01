@@ -68,7 +68,7 @@ func heal(amount: float) -> void:
 	if not is_multiplayer_authority() or is_dead or amount <= 0:
 		return
 		
-	current_health = min(current_health + amount, max_health)
+	current_health = clamp(current_health + amount, 0, max_health)
 	
 	# Broadcast healing visuals to everyone
 	_play_heal_vfx.rpc(amount)

@@ -136,7 +136,6 @@ func update_ui(current_health, max_health, current_mana = 100, max_mana = 100):
 	var hp_bar = main_game_node.get_node_or_null('UI/player_stats/VBoxContainer/HP_bar')
 	var mp_label = main_game_node.get_node_or_null('UI/player_stats/VBoxContainer/MP_label')
 	var mp_bar = main_game_node.get_node_or_null('UI/player_stats/VBoxContainer/MP_bar')
-
 	if hp_label:
 		hp_label.text = 'HP: ' + str(int(current_health)) + '/' + str(int(max_health))
 	if hp_bar:
@@ -170,20 +169,24 @@ func on_taking_damage(amount):
 		
 # --- ANIMATION FOR TAKING DAMAGE ---
 func on_death():
+	main_game_node.flash_title_card('YOU DIED.', 6.0)
+	self.is_active = false
 	var tween = create_tween()
-	
 	# Transition the X rotation to the target angle
-	tween.tween_property(camera, "rotation_degrees:x", PI/2, 0.5)\
+	tween.tween_property(camera, "rotation:x", PI/2, 2.0)\
 		.set_trans(Tween.TRANS_QUAD)\
 		.set_ease(Tween.EASE_IN_OUT)
+	tween.tween_interval(4.0)
 	#main_game_node.fade_out_and_in(6.0)
-	main_game_node.flash_title_card('YOU DIED.', 6.0)
 	
 	# reset position to start of dungeon
+	await tween.finished
 	self.position = main_game_node.get_spawn_position()
+	camera.rotation.x = 0
+	self.is_active = true
 	
-	# reset with full health
-	$HealthComponent.heal($HealthComponent.max_health)
+	# reset with half as much health
+	$HealthComponent.current_health = $HealthComponent.max_health / 2.0
 
 func tilt_camera_3d(intensity: float = 0.05, duration: float = 0.1):
 	var tween = create_tween()
@@ -338,7 +341,7 @@ func _process(delta: float) -> void:
 				right_arm_animation_player.play("block")
 		
 		if Input.is_action_just_released('right_click'):
-			if len(right_arm_animation_player.get_queue()) == 0:
+			if len(right_arm_animation_player.get_queue()) == 0 and right_arm_animation_player.current_animation != 'stab':
 				right_arm_animation_player.queue('return_from_block')
 
 func _physics_process(delta: float) -> void:
