@@ -39,6 +39,34 @@ func get_spawn_position() -> Vector3:
 	print("Warning: Map not ready for spawn position, using default.")
 	return Vector3(0, 5, 0) 
 
+func fade_out_and_in(duration: float = 1.0):
+	# 1. Create the tween
+	var tween = create_tween()
+	
+	# Define your colors
+	var transparent = Color(0, 0, 0, 0)
+	var black = Color(0.0, 0.0, 0.0, 1.0)  # BLACK
+	
+	$UI/ColorRect.color = transparent
+	tween.tween_property($UI/ColorRect, "color", black, duration/2.0).set_trans(Tween.TRANS_SINE)
+	tween.tween_property($UI/ColorRect, "color", transparent,  duration/2.0).set_trans(Tween.TRANS_SINE)
+
+
+func flash_title_card(message: String, duration: float = 1.0):
+	var label = $UI/title_card
+	label.text = message
+	label.self_modulate.a = 0
+	label.show()
+	
+	var tween = create_tween()
+	# Fade In
+	tween.tween_property(label, "self_modulate:a", 1.0, duration/3.0)
+	# Wait for 2 seconds
+	tween.tween_interval(duration/3.0)
+	# Fade Out
+	tween.tween_property(label, "self_modulate:a", 0.0, duration/3.0)
+		
+
 func toggle_mode():
 	if not multiplayer.is_server(): return
 	
@@ -62,6 +90,7 @@ func flash_damage_animation():
 	# Define your colors
 	var transparent = Color(1, 0, 0, 0)      # Red, but invisible
 	var light_red = Color(1, 0.3, 0.3, 0.6)  # Semi-transparent light red
+	$UI/ColorRect.color = transparent
 	
 	# 2. Flash TO light red (takes 0.1 seconds)
 	tween.tween_property($UI/ColorRect, "color", light_red, 0.1).set_trans(Tween.TRANS_SINE)

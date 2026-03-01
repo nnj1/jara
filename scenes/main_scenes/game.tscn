@@ -93,10 +93,24 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "HP: 100/100"
 
+[node name="HP_bar" type="ProgressBar" parent="UI/player_stats/VBoxContainer" unique_id=2043126738]
+layout_mode = 2
+size_flags_vertical = 3
+max_value = 1.0
+value = 1.0
+show_percentage = false
+
 [node name="MP_label" type="Label" parent="UI/player_stats/VBoxContainer" unique_id=52260818]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "MP: 100/100"
+
+[node name="MP_bar" type="ProgressBar" parent="UI/player_stats/VBoxContainer" unique_id=995220530]
+layout_mode = 2
+size_flags_vertical = 3
+max_value = 1.0
+value = 1.0
+show_percentage = false
 
 [node name="room_info" type="HBoxContainer" parent="UI" unique_id=138090172]
 anchors_preset = 1
@@ -117,6 +131,22 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_alignment = 2
+
+[node name="title_card" type="Label" parent="UI" unique_id=627549353]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -10.5
+offset_right = 20.0
+offset_bottom = 10.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 90
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="players" type="Node3D" parent="." unique_id=508872652]
 

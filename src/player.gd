@@ -116,6 +116,7 @@ func _ready() -> void:
 	$HealthComponent.max_health = 100.0
 	$HealthComponent.damaged.connect(on_taking_damage)
 	$HealthComponent.parried.connect(on_successful_parry)
+	$HealthComponent.died.connect(on_death)
 	
 	if is_multiplayer_authority():
 		$HealthComponent.health_changed.connect(update_ui)
@@ -130,10 +131,21 @@ func _on_dialogic_signal(argument: String):
 			unlock_map_sector()
 			
 # SIGNALS THAT JACK INTO THE UI	
-func update_ui(current_health, max_health):
+func update_ui(current_health, max_health, current_mana = 100, max_mana = 100):
 	var hp_label = main_game_node.get_node_or_null('UI/player_stats/VBoxContainer/HP_label')
+	var hp_bar = main_game_node.get_node_or_null('UI/player_stats/VBoxContainer/HP_bar')
+	var mp_label = main_game_node.get_node_or_null('UI/player_stats/VBoxContainer/MP_label')
+	var mp_bar = main_game_node.get_node_or_null('UI/player_stats/VBoxContainer/MP_bar')
+
 	if hp_label:
 		hp_label.text = 'HP: ' + str(int(current_health)) + '/' + str(int(max_health))
+	if hp_bar:
+		hp_bar.value = current_health / float(max_health)
+	
+	if mp_label:
+		mp_label.text = 'MP: ' + str(int(current_mana)) + '/' + str(int(max_mana))
+	if hp_bar:
+		mp_bar.value = current_mana / float(max_mana)
 
 # --- ANIMATION FOR SUCCESSFUL PARRY ---
 func on_successful_parry():
@@ -156,6 +168,23 @@ func on_taking_damage(amount):
 		$blockSound.play()
 		tilt_camera_3d(0.025 * amount)
 		
+# --- ANIMATION FOR TAKING DAMAGE ---
+func on_death():
+	var tween = create_tween()
+	
+	# Transition the X rotation to the target angle
+	tween.tween_property(camera, "rotation_degrees:x", PI/2, 0.5)\
+		.set_trans(Tween.TRANS_QUAD)\
+		.set_ease(Tween.EASE_IN_OUT)
+	#main_game_node.fade_out_and_in(6.0)
+	main_game_node.flash_title_card('YOU DIED.', 6.0)
+	
+	# reset position to start of dungeon
+	self.position = main_game_node.get_spawn_position()
+	
+	# reset with full health
+	$HealthComponent.heal($HealthComponent.max_health)
+
 func tilt_camera_3d(intensity: float = 0.05, duration: float = 0.1):
 	var tween = create_tween()
 	# Rotate on the Z axis (Roll)
