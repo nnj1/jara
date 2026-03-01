@@ -12,29 +12,6 @@ height = 10.707914
 [sub_resource type="SphereShape3D" id="SphereShape3D_hklau"]
 radius = 30.0
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_f3wux"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:rotation")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath("HealthComponent:current_health")
-properties/2/spawn = true
-properties/2/replication_mode = 2
-properties/3/path = NodePath("HealthComponent:is_dead")
-properties/3/spawn = true
-properties/3/replication_mode = 2
-properties/4/path = NodePath("HealthComponent:max_health")
-properties/4/spawn = true
-properties/4/replication_mode = 0
-properties/5/path = NodePath(".:is_friendly")
-properties/5/spawn = true
-properties/5/replication_mode = 2
-properties/6/path = NodePath(".:timeline_name")
-properties/6/spawn = true
-properties/6/replication_mode = 2
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mdwip"]
 resource_name = "Material"
 vertex_color_use_as_albedo = true
@@ -669,6 +646,35 @@ _data = {
 &"walk": SubResource("Animation_cphb7")
 }
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_b1umk"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("HealthComponent:current_health")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath("HealthComponent:is_dead")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+properties/4/path = NodePath("HealthComponent:max_health")
+properties/4/spawn = true
+properties/4/replication_mode = 2
+properties/5/path = NodePath(".:is_friendly")
+properties/5/spawn = true
+properties/5/replication_mode = 2
+properties/6/path = NodePath(".:timeline_name")
+properties/6/spawn = true
+properties/6/replication_mode = 2
+properties/7/path = NodePath("AnimationPlayer:current_animation")
+properties/7/spawn = true
+properties/7/replication_mode = 2
+properties/8/path = NodePath("AnimationPlayer:speed_scale")
+properties/8/spawn = true
+properties/8/replication_mode = 2
+
 [node name="TheWeepingNun" type="CharacterBody3D" unique_id=125769071]
 collision_layer = 2
 collision_mask = 7
@@ -694,9 +700,6 @@ shape = SubResource("SphereShape3D_hklau")
 [node name="CreatureSoundPlayer" parent="." unique_id=948053947 instance=ExtResource("2_dpa0b")]
 volume_db = 4.0
 max_db = 6.0
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1019377123]
-replication_config = SubResource("SceneReplicationConfig_f3wux")
 
 [node name="HealthComponent" parent="." unique_id=1274160499 instance=ExtResource("3_d7ktc")]
 is_invincible = true
@@ -853,3 +856,6 @@ skeleton = NodePath("..")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=589151988]
 libraries/ = SubResource("AnimationLibrary_on7ml")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1254072260]
+replication_config = SubResource("SceneReplicationConfig_b1umk")

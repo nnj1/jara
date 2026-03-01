@@ -17,29 +17,6 @@ height = 11.835751
 [sub_resource type="SphereShape3D" id="SphereShape3D_hklau"]
 radius = 30.0
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_f3wux"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:rotation")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath("HealthComponent:current_health")
-properties/2/spawn = true
-properties/2/replication_mode = 2
-properties/3/path = NodePath("HealthComponent:is_dead")
-properties/3/spawn = true
-properties/3/replication_mode = 2
-properties/4/path = NodePath("HealthComponent:max_health")
-properties/4/spawn = true
-properties/4/replication_mode = 0
-properties/5/path = NodePath(".:is_friendly")
-properties/5/spawn = true
-properties/5/replication_mode = 2
-properties/6/path = NodePath(".:timeline_name")
-properties/6/spawn = true
-properties/6/replication_mode = 2
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0f8m1"]
 albedo_texture = ExtResource("4_oph25")
 
@@ -177,6 +154,35 @@ _data = {
 &"walk": ExtResource("9_j0ux4")
 }
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_j0taw"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("HealthComponent:current_health")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath("HealthComponent:is_dead")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+properties/4/path = NodePath("HealthComponent:max_health")
+properties/4/spawn = true
+properties/4/replication_mode = 2
+properties/5/path = NodePath(".:is_friendly")
+properties/5/spawn = true
+properties/5/replication_mode = 2
+properties/6/path = NodePath(".:timeline_name")
+properties/6/spawn = true
+properties/6/replication_mode = 2
+properties/7/path = NodePath("AnimationPlayer:current_animation")
+properties/7/spawn = true
+properties/7/replication_mode = 2
+properties/8/path = NodePath("AnimationPlayer:speed_scale")
+properties/8/spawn = true
+properties/8/replication_mode = 2
+
 [node name="Old_Man_Hrolf" type="CharacterBody3D" unique_id=125769071]
 collision_layer = 2
 collision_mask = 7
@@ -202,9 +208,6 @@ shape = SubResource("SphereShape3D_hklau")
 [node name="CreatureSoundPlayer" parent="." unique_id=948053947 instance=ExtResource("2_lvxqx")]
 volume_db = 4.0
 max_db = 6.0
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1019377123]
-replication_config = SubResource("SceneReplicationConfig_f3wux")
 
 [node name="HealthComponent" parent="." unique_id=1274160499 instance=ExtResource("3_nmb7v")]
 is_invincible = true
@@ -509,3 +512,6 @@ skeleton = NodePath("..")
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=851520299]
 root_node = NodePath("../rig")
 libraries/ = SubResource("AnimationLibrary_8dlco")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1401563922]
+replication_config = SubResource("SceneReplicationConfig_j0taw")
