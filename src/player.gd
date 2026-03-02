@@ -333,15 +333,16 @@ func _process(delta: float) -> void:
 			apply_attack_impulse()
 			
 		# attack and parry animations
-		if Input.is_action_just_pressed('left_click'):
-			if not right_arm_animation_player.is_playing():
-				right_arm_animation_player.play("stab")
-		elif Input.is_action_just_pressed('right_click'):
-			if not right_arm_animation_player.is_playing():
-				right_arm_animation_player.play("block")
-		if Input.is_action_just_released('right_click'):
-			if right_arm_animation_player.current_animation != 'return_from_block':
-				right_arm_animation_player.queue('return_from_block')
+		if not main_game_node.settings_menu and not main_game_node.game_menu.visible:
+			if Input.is_action_just_pressed('left_click'):
+				if not right_arm_animation_player.is_playing():
+					right_arm_animation_player.play("stab")
+			elif Input.is_action_just_pressed('right_click'):
+				if not right_arm_animation_player.is_playing():
+					right_arm_animation_player.play("block")
+			if Input.is_action_just_released('right_click'):
+				if right_arm_animation_player.current_animation != 'return_from_block':
+					right_arm_animation_player.queue('return_from_block')
 
 func _physics_process(delta: float) -> void:
 	if not multiplayer.multiplayer_peer: return

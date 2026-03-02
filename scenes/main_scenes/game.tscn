@@ -121,6 +121,35 @@ layout_mode = 2
 size_flags_vertical = 3
 horizontal_alignment = 2
 
+[node name="game_menu" type="TabContainer" parent="UI" unique_id=1164065363]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -332.0
+offset_top = -168.0
+offset_right = 352.0
+offset_bottom = 176.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+current_tab = 0
+
+[node name="Player" type="PanelContainer" parent="UI/game_menu" unique_id=1507424872]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Inventory" type="PanelContainer" parent="UI/game_menu" unique_id=1846934796]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Equipment" type="PanelContainer" parent="UI/game_menu" unique_id=1444770270]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
 [node name="title_card" type="Label" parent="UI" unique_id=627549353]
 anchors_preset = 8
 anchor_left = 0.5

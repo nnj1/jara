@@ -4,13 +4,17 @@ extends Node3D
 @onready var players_container = $players
 @onready var fly_cam = $flying_camera
 @onready var map_node = $map
+@onready var game_menu = $UI/game_menu
 
 # internal variables
 var settings_menu = null
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
-		if not settings_menu:
+		if game_menu.visible:
+			game_menu.hide()
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		elif not settings_menu:
 			settings_menu = preload('res://scenes/main_scenes/settings.tscn').instantiate()
 			$UI.add_child(settings_menu)
 			players_container.get_node(str(multiplayer.get_unique_id())).capture_mouse(false)
@@ -23,9 +27,14 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("flyingcam"):
 		toggle_mode()
+		
+	if event.is_action_pressed("game_menu"):
+		game_menu.visible = !game_menu.visible
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if game_menu.visible else Input.MOUSE_MODE_CAPTURED
 	
 func _ready() -> void:
 	fly_cam.active = false
+	game_menu.hide()
 
 ## Updated with safety checks
 func get_spawn_position() -> Vector3:
