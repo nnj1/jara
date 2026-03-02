@@ -443,7 +443,13 @@ func actually_populate_rooms():
 				for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1]):
 					if unit_x % 2 == 0 and unit_z % 2 == 0:
 						if rng.randf() < 0.1:
-							Placer.place_hexagon(unit_x, unit_z, room_data.y_unit_bounds[0])
+							var sub_roll = rng.randf()
+							if sub_roll < 0.33:
+								Placer.place_hexagon(unit_x, unit_z, room_data.y_unit_bounds[0])
+							elif sub_roll < 0.66:
+								Placer.place_hexagon_obelisk(unit_x, unit_z, room_data.y_unit_bounds[0])
+							else:
+								Placer.place_hexagon_cauldron(unit_x, unit_z, room_data.y_unit_bounds[0])								
 						elif rng.randf() < 0.3:
 							var sub_roll = rng.randf()
 							if sub_roll < 0.33:

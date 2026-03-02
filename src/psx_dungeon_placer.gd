@@ -39,6 +39,10 @@ var main_game_node
 
 # FLOOR DECORATORS
 @onready var hexagon_scene: PackedScene = preload('res://scenes/model_scenes/structures/Hexagon.tscn')
+@onready var hexagon_scene_obelisk: PackedScene = preload('res://scenes/model_scenes/structures/Hexagon_obelisk.tscn')
+@onready var hexagon_scene_cauldron: PackedScene = preload('res://scenes/model_scenes/structures/Hexagon_cauldron.tscn')
+@onready var all_hexagons = [hexagon_scene, hexagon_scene_obelisk, hexagon_scene_cauldron]
+
 @onready var debris_scene: PackedScene = preload('res://scenes/model_scenes/structures/Debris.tscn')
 @onready var barrel_scene: PackedScene = preload('res://scenes/model_scenes/entities/Barrel.tscn')
 @onready var chest_scene: PackedScene = preload('res://scenes/model_scenes/entities/Chest.tscn')
@@ -135,6 +139,18 @@ func place_stair(x_unit, z_unit, y_unit = 0.0, orientation = ORIENT.POS_X):
 	
 func place_hexagon(x_unit, z_unit, y_unit = 0.0):
 	var hexagon_instance = hexagon_scene.instantiate()
+	var aabb_size = get_first_mesh_size(hexagon_instance)
+	hexagon_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0)
+	self.add_child(hexagon_instance)
+
+func place_hexagon_obelisk(x_unit, z_unit, y_unit = 0.0):
+	var hexagon_instance = hexagon_scene_obelisk.instantiate()
+	var aabb_size = get_first_mesh_size(hexagon_instance)
+	hexagon_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0)
+	self.add_child(hexagon_instance)
+	
+func place_hexagon_cauldron(x_unit, z_unit, y_unit = 0.0):
+	var hexagon_instance = hexagon_scene_cauldron.instantiate()
 	var aabb_size = get_first_mesh_size(hexagon_instance)
 	hexagon_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0)
 	self.add_child(hexagon_instance)
