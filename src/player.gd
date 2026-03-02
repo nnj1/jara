@@ -339,9 +339,8 @@ func _process(delta: float) -> void:
 		elif Input.is_action_just_pressed('right_click'):
 			if not right_arm_animation_player.is_playing():
 				right_arm_animation_player.play("block")
-		
 		if Input.is_action_just_released('right_click'):
-			if len(right_arm_animation_player.get_queue()) == 0 and right_arm_animation_player.current_animation != 'stab':
+			if right_arm_animation_player.current_animation != 'return_from_block':
 				right_arm_animation_player.queue('return_from_block')
 
 func _physics_process(delta: float) -> void:
