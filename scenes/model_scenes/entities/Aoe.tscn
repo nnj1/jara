@@ -12,9 +12,10 @@ cap_bottom = false
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ihgt8"]
 render_priority = 0
 shader = ExtResource("1_dey7l")
-shader_parameter/color = Color(0.432765, 1, 0, 0.22900002)
+shader_parameter/color = Color(0, 1, 0, 1)
 shader_parameter/extra_opacity = 0.1200000057
 shader_parameter/speed = Vector2(0, -0.3)
+shader_parameter/rings_opacity = 0.1390000066025
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6dype"]
 render_priority = 0
@@ -54,5 +55,4 @@ draw_pass_1 = SubResource("QuadMesh_6dype")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1198070297]
 light_color = Color(0, 0.8792635, 0, 1)
-light_energy = 10.0
 omni_range = 50.0

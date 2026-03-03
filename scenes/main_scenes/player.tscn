@@ -22,7 +22,6 @@
 [ext_resource type="PackedScene" uid="uid://dydjr2dffpu1k" path="res://scenes/model_scenes/entities/Holy.tscn" id="18_jsgyb"]
 [ext_resource type="PackedScene" uid="uid://ekja4d65f3rr" path="res://scenes/components/HealthComponent.tscn" id="19_7cpqj"]
 [ext_resource type="PackedScene" uid="uid://bhbf4qqd8vg5e" path="res://scenes/components/CreatureSoundPlayer.tscn" id="20_gp5m8"]
-[ext_resource type="PackedScene" uid="uid://dlaiuqgjc7fps" path="res://scenes/model_scenes/entities/Aoe.tscn" id="21_yc74n"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_40gj3"]
 radius = 2.0
@@ -1593,14 +1592,14 @@ bus = &"Sfx"
 [node name="weapons" type="Node3D" parent="right_arm" unique_id=1626193374]
 transform = Transform3D(1.0000001, 0, 0, 0, 0.9103514, 0.4138353, 0, -0.4138353, 0.9103514, 2.054556, 1.3014469, -1.877273)
 
-[node name="longsword2" type="Node3D" parent="right_arm/weapons" unique_id=431304681]
+[node name="longsword" type="Node3D" parent="right_arm/weapons" unique_id=431304681]
 transform = Transform3D(3.0000007, 0, 0, 0, 3.0000007, 2.3841858e-07, 0, -2.3841858e-07, 3.0000005, 0, 2.1731, 4.7683716e-07)
 
-[node name="longsword" type="MeshInstance3D" parent="right_arm/weapons/longsword2" unique_id=1884341947]
+[node name="longsword" type="MeshInstance3D" parent="right_arm/weapons/longsword" unique_id=1884341947]
 transform = Transform3D(-0.21256995, 0, 0.97714585, 0, 1, 0, -0.97714585, 0, -0.21256995, 0, 0, 0)
 mesh = SubResource("ArrayMesh_efl2s")
 
-[node name="GPUParticles3D" type="GPUParticles3D" parent="right_arm/weapons/longsword2" unique_id=196243565]
+[node name="GPUParticles3D" type="GPUParticles3D" parent="right_arm/weapons/longsword" unique_id=196243565]
 emitting = false
 amount = 100
 one_shot = true
@@ -1608,46 +1607,46 @@ explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_myrgg")
 draw_pass_1 = SubResource("QuadMesh_86w2i")
 
-[node name="halberd2" type="Node3D" parent="right_arm/weapons" unique_id=1154285870]
+[node name="halberd" type="Node3D" parent="right_arm/weapons" unique_id=1154285870]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 visible = false
 
-[node name="halberd" type="MeshInstance3D" parent="right_arm/weapons/halberd2" unique_id=937984384]
+[node name="halberd" type="MeshInstance3D" parent="right_arm/weapons/halberd" unique_id=937984384]
 mesh = SubResource("ArrayMesh_0uxch")
 
-[node name="dagger2" type="Node3D" parent="right_arm/weapons" unique_id=1060598487]
+[node name="dagger" type="Node3D" parent="right_arm/weapons" unique_id=1060598487]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 visible = false
 
-[node name="dagger" type="MeshInstance3D" parent="right_arm/weapons/dagger2" unique_id=356728830]
+[node name="dagger" type="MeshInstance3D" parent="right_arm/weapons/dagger" unique_id=356728830]
 mesh = SubResource("ArrayMesh_ew17p")
 
-[node name="katana2" type="Node3D" parent="right_arm/weapons" unique_id=644194978]
+[node name="katana" type="Node3D" parent="right_arm/weapons" unique_id=644194978]
 transform = Transform3D(-3, 0, 2.6226832e-07, 0, 3, 0, -2.6226832e-07, 0, -3, 0, 0, 0)
 visible = false
 
-[node name="katana" type="MeshInstance3D" parent="right_arm/weapons/katana2" unique_id=1012150820]
+[node name="katana" type="MeshInstance3D" parent="right_arm/weapons/katana" unique_id=1012150820]
 mesh = SubResource("ArrayMesh_nb4fj")
 
-[node name="mace2" type="Node3D" parent="right_arm/weapons" unique_id=1650576448]
+[node name="mace" type="Node3D" parent="right_arm/weapons" unique_id=1650576448]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 visible = false
 
-[node name="mace" type="MeshInstance3D" parent="right_arm/weapons/mace2" unique_id=540442920]
+[node name="mace" type="MeshInstance3D" parent="right_arm/weapons/mace" unique_id=540442920]
 mesh = SubResource("ArrayMesh_urfhx")
 
-[node name="spear2" type="Node3D" parent="right_arm/weapons" unique_id=767408421]
+[node name="spear" type="Node3D" parent="right_arm/weapons" unique_id=767408421]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 visible = false
 
-[node name="spear" type="MeshInstance3D" parent="right_arm/weapons/spear2" unique_id=1472000419]
+[node name="spear" type="MeshInstance3D" parent="right_arm/weapons/spear" unique_id=1472000419]
 mesh = SubResource("ArrayMesh_wkjdh")
 
-[node name="war_hammer2" type="Node3D" parent="right_arm/weapons" unique_id=1053840818]
+[node name="war_hammer" type="Node3D" parent="right_arm/weapons" unique_id=1053840818]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 visible = false
 
-[node name="war_hammer" type="MeshInstance3D" parent="right_arm/weapons/war_hammer2" unique_id=1561387834]
+[node name="war_hammer" type="MeshInstance3D" parent="right_arm/weapons/war_hammer" unique_id=1561387834]
 mesh = SubResource("ArrayMesh_yjcdc")
 
 [node name="zweinhander" type="Node3D" parent="right_arm/weapons" unique_id=1346877206]
@@ -1677,9 +1676,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.6199589, -2.8978329)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.716469, 0)
 
 [node name="Holy" parent="aoe_spells" unique_id=1896246784 instance=ExtResource("18_jsgyb")]
-visible = false
-
-[node name="Aoe" parent="aoe_spells" unique_id=1854692721 instance=ExtResource("21_yc74n")]
 visible = false
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=904833346]

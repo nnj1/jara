@@ -188,6 +188,7 @@ func on_death():
 	
 	# reset with half as much health
 	$HealthComponent.current_health = $HealthComponent.max_health / 2.0
+	$HealthComponent.is_dead = false
 
 func tilt_camera_3d(intensity: float = 0.05, duration: float = 0.1):
 	var tween = create_tween()

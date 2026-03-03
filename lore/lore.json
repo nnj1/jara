@@ -1,0 +1,97 @@
+{
+  "weapons": [
+	{
+	  "id": "longsword",
+	  "name": "Longsword",
+	  "damage": 15,
+	  "weight": 3.0,
+	  "type": "stab",
+	  "attack_impulse": 45,
+	  "parry_window_default": 0.6,
+	  "blocking_modifier": 0.7,
+	  "description": "Standard issue for the Ministry’s low-tier Tithe-Collectors. Its God-Slayer alloy edge is thin, designed more for keeping the 'surplus' in line than actual warfare."
+	},
+	{
+	  "id": "halberd",
+	  "name": "Halberd",
+	  "damage": 18,
+	  "weight": 5.5,
+	  "type": "stab",
+	  "attack_impulse": 70,
+	  "parry_window_default": 0.4,
+	  "blocking_modifier": 0.4,
+	  "description": "A heavy polearm used to guard the intake valves of the Red Press. Its reach allows a guard to execute prisoners without getting blood on their pristine Ministry silks."
+	},
+	{
+	  "id": "dagger",
+	  "name": "Dagger",
+	  "damage": 8,
+	  "weight": 0.5,
+	  "type": "stab",
+	  "attack_impulse": 10,
+	  "parry_window_default": 0.9,
+	  "blocking_modifier": 0.95,
+	  "description": "Often fashioned from the shard of a broken piston. It's the favored tool of the desperate in Jara; small enough to hide from a Taskmaster's search, sharp enough to end a life for a scrap of gold."
+	},
+	{
+	  "id": "katana",
+	  "name": "Katana",
+	  "damage": 16,
+	  "weight": 2.5,
+	  "type": "stab",
+	  "attack_impulse": 40,
+	  "parry_window_default": 0.7,
+	  "blocking_modifier": 0.8,
+	  "description": "An artifact from the Old World Republic. While its origin is forgotten, its soul-tempered steel hums with a faint vibration, as if mourning the Sun-God's fall."
+	},
+	{
+	  "id": "mace",
+	  "name": "Mace",
+	  "damage": 14,
+	  "weight": 4.0,
+	  "type": "stab",
+	  "attack_impulse": 65,
+	  "parry_window_default": 0.5,
+	  "blocking_modifier": 0.5,
+	  "description": "A brutal, blunt instrument. Kael the Smith claims these are better than swords for Jara; the Press doesn't care if a body is cut or crushed, so why should you?"
+	},
+	{
+	  "id": "spear",
+	  "name": "Spear",
+	  "damage": 13,
+	  "weight": 3.5,
+	  "type": "stab",
+	  "attack_impulse": 50,
+	  "parry_window_default": 0.55,
+	  "blocking_modifier": 0.6,
+	  "description": "The 'Peasant’s Piston.' A simple weapon used during the Great Harvest. It kept the Steel-Gods at bay, though it could not stop the long winter that followed."
+	},
+	{
+	  "id": "war_hammer",
+	  "name": "War Hammer",
+	  "damage": 20,
+	  "weight": 6.0,
+	  "type": "stab",
+	  "attack_impulse": 90,
+	  "parry_window_default": 0.3,
+	  "blocking_modifier": 0.3,
+	  "description": "Forged from a literal structural bolt from the Sun-Lamps. It strikes with the weight of the Ministry’s laws, pulverizing anything that refuses to be processed."
+	},
+	{
+	  "id": "zweinhander",
+	  "name": "Zweinhander",
+	  "damage": 22,
+	  "weight": 8.0,
+	  "type": "stab",
+	  "attack_impulse": 100,
+	  "parry_window_default": 0.25,
+	  "blocking_modifier": 0.2,
+	  "description": "The 'Executioner’s Lever.' It takes a massive toll on the wielder's stamina, much like how the Red Press drains the marrow of Jara to keep the gears turning."
+	}
+  ],
+  "history": {
+	"the_golden_republic": "Before the frost, the world was governed by the Golden Republic, a civilization that achieved the impossible: the automation of grace. Through the creation of the Steel-Gods, humanity liberated itself from the whims of nature. For centuries, these massive clockwork deities maintained the climate and the harvest, led by a central Sun-God that bathed the world in perpetual, benevolent light. This era, now known as the Age of Hubris, was defined by a belief that suffering had been permanently deleted from the human condition.",
+	"the_great_harvest": "The peace ended when the Republic realized the Steel-Gods required a fuel they could no longer find in the earth: Vitality. The gods began to starve, and as they did, the sun flickered. In a desperate attempt to maintain their utopia, the Republic initiated the Great Harvest, a brutal civil war where the Ministry of Equilibrium was formed to 'cull' the unproductive and feed them into the god-machines. It was an act of deicide through over-consumption; humanity eventually rose up and used the God-Slayer alloy to shatter their clockwork masters, but in doing so, they extinguished the sun itself.",
+	"the_rise_of_jara": "With the Sun-God dead, the Long Winter began. To prevent total extinction, the remnants of the Ministry built the Red Press deep within the pit of Jara. They realized they could no longer sustain a whole world, only a few 'Upper Tiers.' The Press was designed as a bio-mechanical lung—a heart for a dead god—that converts the kinetic energy of human suffering into heat and light. Now, Jara exists as a grim hierarchy: the Upper Tiers live in the artificial glow of the Sun-Lamps, while the 'surplus' is sent below to be processed by the pistons, ensuring the world’s survival at the cost of its soul."
+  }
+}

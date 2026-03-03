@@ -1,4 +1,40 @@
 extends Node
+
+var lore_data = {}
+var save_data = {}
+
+func _ready() -> void:
+	lore_data = load_json_with_resource_loader('res://lore/lore.json')
+
+func save_json_to_user_dir(data: Dictionary, filename: String):
+	# 1. Define the full path (user:// is the persistent save folder)
+	var full_path = "user://" + filename
+	
+	# 2. Convert the Dictionary/Array into a formatted JSON string
+	# The 'true' argument adds indentations (tabs) for human readability
+	var json_string = JSON.stringify(data, "\t")
+	
+	# 3. Open the file for writing
+	var file = FileAccess.open(full_path, FileAccess.WRITE)
+	
+	if file:
+		# 4. Store the string and close the file
+		file.store_string(json_string)
+		file.close() # Good practice, though FileAccess closes when it leaves scope
+		print("Successfully saved JSON to: ", ProjectSettings.globalize_path(full_path))
+	else:
+		push_error("Failed to open file for writing: " + full_path)
+		
+func load_json_with_resource_loader(path: String):
+	# 1. Load the file as a JSON resource
+	var json_resource = load(path) as JSON
+	
+	if json_resource:
+		# 2. Access the 'data' property to get your Dictionary or Array
+		return json_resource.data
+		#print(data)
+	else:
+		push_error("Failed to load JSON resource at: " + path)
 	
 func get_files_with_extension(path: String, extension: String = "") -> Array:
 	var files = []
