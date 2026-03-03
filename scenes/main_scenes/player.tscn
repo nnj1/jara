@@ -22,6 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://dydjr2dffpu1k" path="res://scenes/model_scenes/entities/Holy.tscn" id="18_jsgyb"]
 [ext_resource type="PackedScene" uid="uid://ekja4d65f3rr" path="res://scenes/components/HealthComponent.tscn" id="19_7cpqj"]
 [ext_resource type="PackedScene" uid="uid://bhbf4qqd8vg5e" path="res://scenes/components/CreatureSoundPlayer.tscn" id="20_gp5m8"]
+[ext_resource type="PackedScene" uid="uid://dlaiuqgjc7fps" path="res://scenes/model_scenes/entities/Aoe.tscn" id="21_yc74n"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_40gj3"]
 radius = 2.0
@@ -1676,6 +1677,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.6199589, -2.8978329)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.716469, 0)
 
 [node name="Holy" parent="aoe_spells" unique_id=1896246784 instance=ExtResource("18_jsgyb")]
+visible = false
+
+[node name="Aoe" parent="aoe_spells" unique_id=1854692721 instance=ExtResource("21_yc74n")]
 visible = false
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=904833346]

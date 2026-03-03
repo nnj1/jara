@@ -307,6 +307,10 @@ func _handle_spell_inputs():
 		$aoe_spells/Holy.is_active = true
 	if Input.is_action_just_released("spell_2"):
 		$aoe_spells/Holy.is_active = false
+	if Input.is_action_pressed("spell_4"):
+		$aoe_spells/Aoe.is_active = true
+	if Input.is_action_just_released("spell_4"):
+		$aoe_spells/Aoe.is_active = false
 	if Input.is_action_pressed("spell_q"):
 		$left_arm/spells/Lightning.is_active = true
 		$left_arm/spells/Lightning.show()
