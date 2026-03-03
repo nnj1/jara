@@ -1,16 +1,16 @@
 [gd_resource type="VisualShader" format=3 uid="uid://daw0k7l55jn7t"]
 
-[ext_resource type="Texture2D" uid="uid://dga4ji1oihjx3" path="res://assets/sprites/vfx_textures/spotlight_4.png" id="1_raauo"]
+[ext_resource type="Texture2D" uid="uid://dga4ji1oihjx3" path="res://assets/sprites/vfx_textures/spotlight_4.png" id="1_1mjkk"]
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_xjp1a"]
 expanded_output_ports = [0]
-texture = ExtResource("1_raauo")
+texture = ExtResource("1_1mjkk")
 
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_raauo"]
 parameter_name = "color"
 
 [sub_resource type="VisualShaderNodeBillboard" id="VisualShaderNodeBillboard_xjp1a"]
-billboard_type = 2
+billboard_type = 3
 
 [resource]
 nodes/vertex/2/node = SubResource("VisualShaderNodeBillboard_xjp1a")
@@ -20,4 +20,4 @@ nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_xjp1a")
 nodes/fragment/2/position = Vector2(-20, 160)
 nodes/fragment/3/node = SubResource("VisualShaderNodeColorParameter_raauo")
 nodes/fragment/3/position = Vector2(80, -60)
-nodes/fragment/connections = PackedInt32Array(2, 1, 0, 1, 3, 0, 0, 0)
+nodes/fragment/connections = PackedInt32Array(3, 0, 0, 0, 2, 0, 0, 1)

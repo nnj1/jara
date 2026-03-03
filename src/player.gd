@@ -308,9 +308,14 @@ func _handle_spell_inputs():
 	if Input.is_action_just_released("spell_2"):
 		$aoe_spells/Holy.is_active = false
 	if Input.is_action_pressed("spell_4"):
-		$aoe_spells/Aoe.is_active = true
+		var aoe_instance = preload('res://scenes/model_scenes/entities/Aoe.tscn').instantiate()
+		aoe_instance.position = $aoe_spells.global_position
+		main_game_node.get_node('entities').add_child(aoe_instance, true)
+		aoe_instance.is_active = true
+		#$aoe_spells/Aoe.is_active = true
 	if Input.is_action_just_released("spell_4"):
-		$aoe_spells/Aoe.is_active = false
+		#$aoe_spells/Aoe.is_active = false
+		pass
 	if Input.is_action_pressed("spell_q"):
 		$left_arm/spells/Lightning.is_active = true
 		$left_arm/spells/Lightning.show()
