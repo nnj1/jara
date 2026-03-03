@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://boagnrysleo5p"]
+
+[ext_resource type="Script" uid="uid://cwqglfresnqpv" path="res://src/planet.gd" id="1_en363"]
+[ext_resource type="AudioStream" uid="uid://clkitaq8jxywp" path="res://assets/sfx/Free Fantasy SFX Pack By TomMusic/OGG Files/SFX/Spells/Fireball 1.ogg" id="3_emyhp"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_en363"]
+
+[sub_resource type="Gradient" id="Gradient_nqms4"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_emyhp"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_m53f1"]
+noise = SubResource("FastNoiseLite_emyhp")
+color_ramp = SubResource("Gradient_nqms4")
+seamless = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wfnvf"]
+resource_local_to_scene = true
+transparency = 1
+albedo_texture = SubResource("NoiseTexture2D_m53f1")
+emission_enabled = true
+emission = Color(2.454227, 0, 0, 1)
+emission_energy_multiplier = 10.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_fxnhy"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_wfnvf")
+radius = 2.0
+height = 4.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_en363"]
+radius = 2.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_nqms4"]
+radius = 2.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_nqms4"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:linear_velocity")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:angular_velocity")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+
+[node name="Planet" type="RigidBody3D" unique_id=234979782 groups=["projectiles"]]
+collision_layer = 4
+collision_mask = 7
+physics_material_override = SubResource("PhysicsMaterial_en363")
+script = ExtResource("1_en363")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1227347789]
+mesh = SubResource("SphereMesh_fxnhy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1966939374]
+shape = SubResource("SphereShape3D_en363")
+
+[node name="Area3D" type="Area3D" parent="." unique_id=1465308850]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1108324839]
+shape = SubResource("SphereShape3D_nqms4")
+
+[node name="Timer" type="Timer" parent="." unique_id=1582769026]
+wait_time = 10.0
+one_shot = true
+autostart = true
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=861562741]
+replication_config = SubResource("SceneReplicationConfig_nqms4")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1122024133]
+light_color = Color(1, 0, 0, 1)
+light_energy = 10.0
+omni_range = 30.0
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1553212253]
+stream = ExtResource("3_emyhp")
+autoplay = true
+bus = &"Sfx"
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

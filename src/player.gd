@@ -32,6 +32,7 @@ class_name Player
 @export var tilt_speed: float = 5.0
 
 ## Spell Settings
+@onready var planet_scene: PackedScene = preload('res://scenes/model_scenes/entities/Planet.tscn')
 @onready var fireball_scene: PackedScene = preload('res://scenes/model_scenes/entities/Fireball.tscn')
 @export var lob_strength: float = 30.0
 @export var upward_bias: float = 0.3 # Adds the "lob" arch
@@ -299,6 +300,8 @@ func _handle_spell_inputs():
 	if is_typing_chat: return
 	# Handle spellcasting (Server-side spawn via RPC)
 	if Input.is_action_just_pressed("spell_1"):
+		rpc_id(1, "server_lob_planet")
+	if Input.is_action_just_pressed("spell_3"):
 		rpc_id(1, "server_lob_fireball")
 	if Input.is_action_pressed("spell_2"):
 		$aoe_spells/Holy.is_active = true
@@ -468,20 +471,40 @@ func handle_rigidbody_push() -> void:
 			collider.apply_impulse_synced(push_dir * impact_strength)
 
 @rpc("any_peer", "call_local", "reliable")
-func server_lob_fireball():
-	# Only the server should instantiate the fireball to keep it synced
+func server_lob_planet():
+	# Only the server should instantiate the planet to keep it synced
 	if not multiplayer.is_server():
 		return
 		
-	var fireball = fireball_scene.instantiate()
-	# Add fireball to the root scene so it doesn't move with the player
-	main_game_node.get_node('entities').add_child(fireball, true)
+	var planet = planet_scene.instantiate()
+	# Add planet to the root scene so it doesn't move with the player
+	main_game_node.get_node('entities').add_child(planet, true)
 	# Position it at the wizard's hand/staff
-	fireball.global_position = muzzle.global_position
+	planet.global_position = muzzle.global_position
 	# 1. Get the direction from the RayCast (Server uses camera rotation synced from client)
 	var target_dir = -camera.global_transform.basis.z 
 	# 2. Add the "Lob" (Angle it up slightly)
 	var launch_velocity = (target_dir + Vector3.UP * upward_bias).normalized() * lob_strength
 	# 3. Apply the force
-	fireball.apply_central_impulse(launch_velocity)
-	#fireball.linear_velocity = launch_velocity
+	planet.apply_central_impulse(launch_velocity)
+	#planet.linear_velocity = launch_velocity
+
+@rpc("any_peer", "call_local", "reliable")
+func server_lob_fireball():
+	# Only the server should instantiate the planet to keep it synced
+	if not multiplayer.is_server():
+		return
+		
+	var fireball = fireball_scene.instantiate()
+	# Add planet to the root scene so it doesn't move with the player
+	main_game_node.get_node('entities').add_child(fireball, true)
+	# Position it at the wizard's hand/staff
+	fireball.global_position = muzzle.global_position
+	fireball.rotation.x = PI/2
+	# 1. Get the direction from the RayCast (Server uses camera rotation synced from client)
+	var target_dir = -camera.global_transform.basis.z 
+	# 2. Add the "Lob" (Angle it up slightly)
+	var launch_velocity = (target_dir + Vector3.UP * upward_bias).normalized() * lob_strength
+	# 3. Apply the force
+	#fireball.apply_central_impulse(launch_velocity)
+	fireball.linear_velocity = launch_velocity
