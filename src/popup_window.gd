@@ -45,7 +45,7 @@ func _input(event):
 		get_viewport().set_input_as_handled()
 		
 	if event.is_action_pressed('ui_cancel'):
-		queue_free()
+		_on_button_pressed()
 		
 		# This stops the input from reaching other nodes or the UI
 		get_viewport().set_input_as_handled()

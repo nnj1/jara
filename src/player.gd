@@ -389,8 +389,8 @@ func _physics_process(delta: float) -> void:
 					var entity_data = held_object.entity_data
 					var popup_scene = preload('res://scenes/main_scenes/popup_window.tscn').instantiate()
 					# TODO: Can make this more complicated
-					popup_scene.contents_bb_code = str(entity_data)
-					popup_scene.window_title = held_object.name
+					popup_scene.contents_bb_code = str(entity_data.contents)
+					popup_scene.window_title = str(entity_data.title)
 					Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 					main_game_node.get_node('UI').add_child(popup_scene)
 			elif held_object.is_consumable:
