@@ -172,7 +172,7 @@ vertical_alignment = 1
 [node name="entities" type="Node3D" parent="." unique_id=173960560]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="entities" unique_id=527765206]
-_spawnable_scenes = PackedStringArray("uid://bdxxc581qwkiy", "uid://ilesyvvern2n", "uid://bprdxjd0hbbx7", "uid://d122ry6ihpdru", "uid://bjjm5qn5tnrap", "uid://d122ry6ihpdru", "uid://b8q6i12tir7ti", "uid://d1gud6mb4eixa", "uid://b3dfvf8865ej5", "uid://df6nrafkog1li")
+_spawnable_scenes = PackedStringArray("uid://bdxxc581qwkiy", "uid://ilesyvvern2n", "uid://bprdxjd0hbbx7", "uid://d122ry6ihpdru", "uid://bjjm5qn5tnrap", "uid://d122ry6ihpdru", "uid://b8q6i12tir7ti", "uid://d1gud6mb4eixa", "uid://b3dfvf8865ej5", "uid://df6nrafkog1li", "uid://c6wy70wy2cdyc")
 spawn_path = NodePath("..")
 
 [node name="enemies" type="Node3D" parent="." unique_id=700377337]

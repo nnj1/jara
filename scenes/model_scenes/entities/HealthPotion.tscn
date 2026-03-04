@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://bk2hg54h5xt5f"]
 
-[ext_resource type="Script" uid="uid://dv7lhyh4wgyt7" path="res://src/entity_rigid_body.gd" id="1_tur4c"]
+[ext_resource type="Script" uid="uid://caxunpxvllfqb" path="res://src/health_potion.gd" id="1_tur4c"]
 [ext_resource type="Texture2D" uid="uid://dbwywcuxhsjnx" path="res://assets/models/MagicMan-PSX Assets/Textures/potionTex.png" id="2_tur4c"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_r2rjo"]

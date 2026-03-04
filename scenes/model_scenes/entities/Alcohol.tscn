@@ -1,0 +1,85 @@
+[gd_scene format=4 uid="uid://c6wy70wy2cdyc"]
+
+[ext_resource type="Script" uid="uid://dv7lhyh4wgyt7" path="res://src/entity_rigid_body.gd" id="1_n8msx"]
+[ext_resource type="Texture2D" uid="uid://dtg05u37r3n60" path="res://assets/models/Fantasy PSX Objects/items_items.png" id="2_n8msx"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_r2rjo"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_w04qw"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+properties/2/path = NodePath(".:linear_velocity")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath(".:angular_velocity")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+properties/4/path = NodePath(".:is_held")
+properties/4/spawn = true
+properties/4/replication_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i0u1b"]
+resource_name = "items"
+transparency = 4
+cull_mode = 2
+albedo_texture = ExtResource("2_n8msx")
+texture_filter = 2
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_art3p"]
+_surfaces = [{
+"aabb": AABB(-0.17320508, -0.2, -0.2, 0.41567734, 0.51396656, 0.4),
+"format": 34896613377,
+"index_count": 132,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAAAAIABAADAAAAAQAFAAIAAwAEAAYAAwAHAAEAAwAGAAgAAwAIAAcABgAEAAkABAACAAoACQAEAAoABgAJAAsACQAKAAsACAAGAAwACAAMAAcABgALAAwAAgANAAoAAgAFAA0ACgAOAAsACgANAA4ACwAPAAwACwAOAA8ADQAQAA4ADgAQABEADgARAA8ADQASABAABQASAA0ADwARABMABQAUABIADAAPABUADwATABUADAAVAAcAFQATABYAFwAUAAUABwAVABcAFwAWABQAFQAWABcABwAXAAEAAQAXAAUAGAAZABoAGAAbABkAHAAdAB4AHAAfAB0A"),
+"name": "items",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 32,
+"vertex_data": PackedByteArray("q2oAAAAAAABW1WyV/z8AAKtqbJUAAAAAVtUAAP8/AAAAAAAA/z8AAKtqO8f/PwAAq2oAAP//AABW1WyV/78AAFbVAAD/vwAAAAAAAP+/AAAAAGyV/z8AAAAAbJX/vwAAq2pslf//AABVNTvH/18AAFU1O8f/nwAAq2o7x/+/AABVNQr5/58AAKtqCvn/vwAAVTUK+f9fAAAAoAr5/58AAKtqCvn/PwAAAKA7x/+fAAAAoAr5/18AAACgO8f/XwAAP4MHj/9/AAD//7rz/38AALfrw4L/fwAAh5f///9/AAADGPT75NUAAFO99PsaKgAAU730++TVAAADGPT7GioAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_gt33d"]
+resource_name = "items_Cylinder"
+_surfaces = [{
+"aabb": AABB(-0.17320508, -0.2, -0.2, 0.41567734, 0.51396656, 0.4),
+"attribute_data": PackedByteArray("ERyz/uAQDekRHA3p4BCz/hEcs/7gEA3pERwN6eAQs/4RHLP+4BAN6REcDengELP+ERyz/uAQDekRHA3p4BCz/uAQDelFGerlERwN6awT6uURHLP+4BAN6REcDengELP+ERyz/uAQDekRHA3p4BCz/poQEvTLHBL0shaN8LIWoP6aEBz7yxwc+6wT6uVFGTTiRRnq5awTNOLgEA3pRRnq5REcDemsE+rl4BAN6UUZ6uURHA3prBPq5eAQDelFGerlERwN6awT6uXgEA3pRRnq5REcDemsE+rl4BAN6UUZ6uURHA3prBPq5awT6uVFGTTiRRnq5awTNOKsE+rlRRk04kUZ6uWsEzTirBPq5UUZNOJFGerlrBM04qwT6uVFGTTiRRnq5awTNOKsE+rlRRk04kUZ6uWsEzTi7xBg4IYdydOGHWDg7xDJ05kgqeC0KY7XtCmp4Jkgjtc="),
+"format": 34896613399,
+"index_count": 132,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUAGAAZABoAGAAbABkAHAAdAB4AHQAcAB8AHwAcACAAHQAfACEAIgAjACQAIgAlACMAJgAnACgAJgApACcAKgArACwAKgAtACsALgAvADAALgAxAC8AMgAzADQAMgA1ADMANgA3ADgANgA5ADcAOgA7ADwAOgA9ADsAPgA/AEAAPgBBAD8AQgBDAEQAQgBFAEMARgBHAEgARgBJAEcASgBLAEwASgBNAEsATgBPAFAATgBRAE8AUgBTAFQAUgBVAFMA"),
+"material": SubResource("StandardMaterial3D_i0u1b"),
+"name": "items",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 86,
+"vertex_data": PackedByteArray("q2oAAAAAqepW1WyV/z+p6qtqbJUAAKnqVtUAAP8/qepW1QAA/z//v1bVbJX/v/+/VtVslf8//79W1QAA/7//v1bVAAD/v1SVq2pslf//VJVW1WyV/79UlatqAAD//1SVq2oAAP//VJUAAGyV/79UlatqbJX//1SVAAAAAP+/VJVW1WyV/7/7xACgO8f/X/vEVtVslf8/+8QAoDvH/5/7xAAAAAD/v/+/AABslf8//78AAGyV/7//vwAAAAD/P/+/AAAAAP8/qeqramyVAACp6gAAbJX/P6nqq2oAAAAAqeoAAAAA/z//P1bVAAD/P/8/q2oAAAAA/z+ragAA////PwAAAAD/v/8/VtUAAP+//z9VNTvH/1//v1U1Cvn/n/+/VTU7x/+f/79VNQr5/1//vwAAbJX/P/vEVTU7x/+f+8QAAGyV/7/7xFU1O8f/X/vEVtVslf8/CeyrajvH/z8J7KtqbJUAAAnsAKA7x/9fCeyramyV///KowCgO8f/n8qjVtVslf+/yqOrajvH/7/Ko6tqbJUAAAnsVTU7x/9fCewAAGyV/z8J7KtqO8f/PwnsAABslf+/yqOrajvH/7/Ko6tqbJX//8qjVTU7x/+fyqOrajvH/79UlQCgCvn/n1SVAKA7x/+fVJWragr5/79UlQCgO8f/X6nqq2oK+f8/qeqrajvH/z+p6gCgCvn/X6nqq2o7x/8/qepVNQr5/1+p6lU1O8f/X6nqq2oK+f8/qepVNTvH/59UlatqCvn/v1SVq2o7x/+/VJVVNQr5/59UlQCgO8f/n/+/AKAK+f9f/78AoDvH/1//vwCgCvn/n/+/P4MHj/9/34X//7rz/3/fhbfrw4L/f9+Fh5f///9/34UDGPT75NX/v1O99PsaKv+/U730++TV/78DGPT7Gir/v/9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/////f////3////9///+stlYbrLZWG6y2VhustlYb/3/+//9//v//f/7//3////9/////f////3////9///8AAP9/AAD/fwAA/38AAP9/AAD/fwAA/3//f////3////9/////f///VptRyVabUclWm1HJVptRyRWprggVqa4IFamuCBWprgiw0W1AsNFtQLDRbUCw0W1Arojp1q6I6dauiOnWrojp1m3ATa5twE2ubcBNrm3ATa7/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/////f////3////9/////f////3////9/////f////38AAP9/AAD/fwAA/38AAP9//3//f/9//3//f/9//3////9/////f////3////9/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_art3p")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_n8msx"]
+points = PackedVector3Array(-0.17320508, -0.2, -0.10003916, -0.17320508, -0.2, 0.09996085, -0.17320508, 0.099948004, -0.10003916, -0.13422516, 0.30581635, -0.13422084, -3.3318996e-05, -0.2, -0.2, -3.3318996e-05, -0.2, 0.2, -0.13422516, 0.30581635, 0.13418166, -0.17320508, 0.099948004, 0.09996085, 0.07279973, 0.31396657, -3.916025e-05, 0.1341992, 0.30581635, -0.13422084, -3.3318996e-05, 0.099948004, -0.2, 0.17317915, -0.2, -0.10003916, 0.17317915, -0.2, 0.09996085, 0.1341992, 0.30581635, 0.13418166, -3.3318996e-05, 0.099948004, 0.2, 0.24247226, 0.2893147, -3.916025e-05, 0.17317915, 0.099948004, -0.10003916, 0.17317915, 0.099948004, 0.09996085)
+
+[node name="Alcohol" type="RigidBody3D" unique_id=1095776969]
+collision_layer = 4
+collision_mask = 7
+physics_material_override = SubResource("PhysicsMaterial_r2rjo")
+script = ExtResource("1_n8msx")
+is_pickable = true
+is_consumable = true
+metadata/_custom_type_script = "uid://dv7lhyh4wgyt7"
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=542673397]
+replication_config = SubResource("SceneReplicationConfig_w04qw")
+
+[node name="alcohol" type="MeshInstance3D" parent="." unique_id=1393865614]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0)
+mesh = SubResource("ArrayMesh_gt33d")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1660501990]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_n8msx")
