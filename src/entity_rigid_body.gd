@@ -84,6 +84,23 @@ func remote_pick_up(player_id: int):
 	if multiplayer.get_unique_id() == player_id:
 		main_game_node.get_node('players/' + str(player_id)).held_object = self
 
+# --- DESTROY LOGIC ---
+
+func destroy_synced():
+	rpc_id(1, "request_destroy")
+
+@rpc("any_peer", "call_local", "reliable")
+func request_destroy():
+	if not multiplayer.is_server(): return
+	
+	# Hand authority back to the server for world physics
+	set_multiplayer_authority(1)
+	rpc("remote_destroy")
+
+@rpc("authority", "call_local", "reliable")
+func remote_destroy():
+	queue_free()
+
 # --- DROP LOGIC ---
 
 func drop_synced():

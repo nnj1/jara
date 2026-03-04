@@ -397,6 +397,8 @@ func _physics_process(delta: float) -> void:
 				main_game_node.get_node('UI/raycast_center_message').text = 'Press C to consume'
 				if Input.is_action_just_pressed('spell_c'):
 					held_object.consume(self)
+					held_object.destroy_synced()
+					held_object = null
 			else:
 				main_game_node.get_node('UI/raycast_center_message').text = ''
 			# Drop any held object
