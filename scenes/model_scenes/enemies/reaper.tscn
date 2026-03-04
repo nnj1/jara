@@ -16,7 +16,7 @@
 [ext_resource type="Material" uid="uid://bn0mfr8nley57" path="res://assets/models/THE STRAW REAPER– Retro PSX Monster/mats/clothes 1.009.tres" id="16_cibsc"]
 [ext_resource type="Animation" uid="uid://cije86wu2oqx0" path="res://assets/models/THE STRAW REAPER– Retro PSX Monster/animation_files/all.anim" id="17_1y2yk"]
 [ext_resource type="Animation" uid="uid://dhlaxbq84q4aa" path="res://assets/models/THE STRAW REAPER– Retro PSX Monster/animation_files/idle.anim" id="17_05vil"]
-[ext_resource type="Animation" uid="uid://coyrrgdu3ml8o" path="res://assets/models/THE STRAW REAPER– Retro PSX Monster/animation_files/die.anim" id="17_cibsc"]
+[ext_resource type="Animation" uid="uid://m3qdq05at20d" path="res://assets/models/THE STRAW REAPER– Retro PSX Monster/animation_files/die.anim" id="17_cibsc"]
 [ext_resource type="Animation" uid="uid://cympkpm3rb1eq" path="res://assets/models/THE STRAW REAPER– Retro PSX Monster/animation_files/attack.anim" id="17_oc7mi"]
 [ext_resource type="Animation" uid="uid://pf4g27kx8hsh" path="res://assets/models/THE STRAW REAPER– Retro PSX Monster/animation_files/hurt.anim" id="18_cibsc"]
 [ext_resource type="Animation" uid="uid://b4wyjob21divx" path="res://assets/models/THE STRAW REAPER– Retro PSX Monster/animation_files/walk.anim" id="20_5d33r"]

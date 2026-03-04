@@ -4,11 +4,11 @@
 [ext_resource type="PackedScene" uid="uid://bhbf4qqd8vg5e" path="res://scenes/components/CreatureSoundPlayer.tscn" id="2_lvxqx"]
 [ext_resource type="PackedScene" uid="uid://ekja4d65f3rr" path="res://scenes/components/HealthComponent.tscn" id="3_nmb7v"]
 [ext_resource type="Texture2D" uid="uid://7tuyhomv7sp7" path="res://assets/models/dark_fantasy_monk__psx_style_low-poly/monk_no_sword_01_-_Default_baseColor.png" id="4_oph25"]
-[ext_resource type="Animation" uid="uid://df2sgow4ni6lt" path="res://assets/models/dark_fantasy_monk__psx_style_low-poly/animation_files/chatting.anim" id="5_j0taw"]
+[ext_resource type="Animation" uid="uid://cj2b45nvwk0ky" path="res://assets/models/dark_fantasy_monk__psx_style_low-poly/animation_files/chatting.anim" id="5_j0taw"]
 [ext_resource type="Animation" uid="uid://jtt3rx2xta0f" path="res://assets/models/dark_fantasy_monk__psx_style_low-poly/animation_files/idle.anim" id="5_lvxqx"]
-[ext_resource type="Animation" uid="uid://bajdt5uxfukf1" path="res://assets/models/dark_fantasy_monk__psx_style_low-poly/animation_files/die.anim" id="6_6g36b"]
-[ext_resource type="Animation" uid="uid://b457lea61ds86" path="res://assets/models/dark_fantasy_monk__psx_style_low-poly/animation_files/run.anim" id="8_nrb73"]
-[ext_resource type="Animation" uid="uid://c0f7ooii1mykb" path="res://assets/models/dark_fantasy_monk__psx_style_low-poly/animation_files/walk.anim" id="9_j0ux4"]
+[ext_resource type="Animation" uid="uid://dsla71vnd1vl6" path="res://assets/models/dark_fantasy_monk__psx_style_low-poly/animation_files/die.anim" id="6_6g36b"]
+[ext_resource type="Animation" uid="uid://s2u601qoscv" path="res://assets/models/dark_fantasy_monk__psx_style_low-poly/animation_files/run.anim" id="8_nrb73"]
+[ext_resource type="Animation" uid="uid://cx7jkirbi34hg" path="res://assets/models/dark_fantasy_monk__psx_style_low-poly/animation_files/walk.anim" id="9_j0ux4"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nx78w"]
 radius = 2.914

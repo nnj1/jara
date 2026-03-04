@@ -302,21 +302,17 @@ func _handle_spell_inputs():
 	# Handle spellcasting (Server-side spawn via RPC)
 	if Input.is_action_just_pressed("spell_1"):
 		rpc_id(1, "server_lob_planet")
-	if Input.is_action_just_pressed("spell_3"):
+	if Input.is_action_just_pressed("spell_2"):
 		rpc_id(1, "server_lob_fireball")
-	if Input.is_action_pressed("spell_2"):
+	if Input.is_action_pressed("spell_3"):
 		$aoe_spells/Holy.is_active = true
-	if Input.is_action_just_released("spell_2"):
+	if Input.is_action_just_released("spell_3"):
 		$aoe_spells/Holy.is_active = false
 	if Input.is_action_pressed("spell_4"):
 		var aoe_instance = preload('res://scenes/model_scenes/entities/Aoe.tscn').instantiate()
 		aoe_instance.position = $aoe_spells.global_position
 		main_game_node.get_node('entities').add_child(aoe_instance, true)
 		aoe_instance.is_active = true
-		#$aoe_spells/Aoe.is_active = true
-	if Input.is_action_just_released("spell_4"):
-		#$aoe_spells/Aoe.is_active = false
-		pass
 	if Input.is_action_pressed("spell_q"):
 		$left_arm/spells/Lightning.is_active = true
 		$left_arm/spells/Lightning.show()
@@ -338,7 +334,7 @@ func _process(delta: float) -> void:
 		_handle_view_effects(delta, input_dir)
 				
 		# Handle rotation of any held object
-		if Input.is_action_pressed('spell_r'):
+		if Input.is_action_pressed('rotate_held_object'):
 			$left_arm/hold_point.rotate_y(held_object_rotation_speed * delta)
 			
 		# Handle Attack Logic
@@ -386,11 +382,30 @@ func _physics_process(delta: float) -> void:
 				if collider.has_meta('interaction_function'):
 					collider.call(collider.get_meta('interaction_function'), self.get_path())
 	else:
-		# Drop any held object
-		if held_object and Input.is_action_just_pressed('interact'):
-			held_object.drop_synced()
-			held_object = null
-		main_game_node.get_node('UI/raycast_center_message').text = ''
+		if held_object:
+			if held_object.is_readable:
+				main_game_node.get_node('UI/raycast_center_message').text = 'Press C to read'
+				if Input.is_action_just_pressed('spell_c'):
+					var entity_data = held_object.entity_data
+					var popup_scene = preload('res://scenes/main_scenes/popup_window.tscn').instantiate()
+					# TODO: Can make this more complicated
+					popup_scene.contents_bb_code = str(entity_data)
+					popup_scene.window_title = held_object.name
+					Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+					main_game_node.get_node('UI').add_child(popup_scene)
+			elif held_object.is_consumable:
+				main_game_node.get_node('UI/raycast_center_message').text = 'Press C to consume'
+				if Input.is_action_just_pressed('spell_c'):
+					held_object.consume(self)
+			else:
+				main_game_node.get_node('UI/raycast_center_message').text = ''
+			# Drop any held object
+			if Input.is_action_just_pressed('interact'):
+				held_object.drop_synced()
+				held_object = null
+			
+		else:
+			main_game_node.get_node('UI/raycast_center_message').text = ''
 
 	# Movement logic
 	var input_dir := Vector2.ZERO

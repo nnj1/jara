@@ -69,28 +69,18 @@ func update_chat_display(message: String):
 	chat_display.append_text("\n" + message)
 	$AudioStreamPlayer.play()
 
+# Only runs on server
 func handle_command(input: String):
-	var result = regex.search(input)
+	if not multiplayer.is_server(): return
 	
+	regex.compile("^/spawn\\s+(.+)") # Note the double backslash for GDScript strings
+	var result = regex.search(input)
 	if result:
-		var type = result.get_string("type")
-		var amount = result.get_string("amount").to_int()
-		
-		apply_resource(type, amount)
-	else:
-		print("Invalid command or resource type!")
-
-func apply_resource(type: String, amount: int):
-	match type:
-		"wood":
-			main_game_node.add_wood(amount)
-			print("Added ", amount, " wood.")
-		"stone":
-			main_game_node.add_stone(amount)
-			print("Added ", amount, " stone.")
-		"gold":
-			main_game_node.add_gold(amount)
-			print("Added ", amount, " gold.")
-		"food":
-			main_game_node.add_food(amount)
-			print("Added ", amount, " food.")
+		var scene_name = result.get_string(1) # 1 is the first capture group
+		var scene = load('res://scenes/model_scenes/entities/' + scene_name + '.tscn')
+		if scene:
+			var scene_instance = scene.instantiate()
+			var raycast = main_game_node.get_node('players/' + str(multiplayer.get_unique_id()) + '/Camera3D/RayCast3D')
+			scene_instance.position = raycast.to_global(raycast.target_position)
+			main_game_node.get_node('entities').add_child(scene_instance, true)
+			

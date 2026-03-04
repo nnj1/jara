@@ -4,9 +4,14 @@ class_name EntityRigidBody
 @onready var main_game_node = get_tree().get_root().get_node('Game')
 
 @export var is_pickable: bool = false
+@export var is_consumable: bool = false
+@export var is_readable: bool = false
 @export var throw_power: float = 5.0 # How hard the object is tossed forward
 
-@export var is_held: bool = false : set = set_is_held
+# contains the data in the object
+@export var entity_data = {}
+
+var is_held: bool = false : set = set_is_held
 var _hold_target: Marker3D = null
 
 func _ready() -> void:
@@ -40,6 +45,11 @@ func _physics_process(_delta):
 
 func is_authority() -> bool:
 	return get_multiplayer_authority() == multiplayer.get_unique_id()
+
+# --- TODO: CONSUME LOGIC ---
+@warning_ignore("unused_parameter")
+func consume(player_node):
+	pass
 
 # --- PICK UP LOGIC ---
 

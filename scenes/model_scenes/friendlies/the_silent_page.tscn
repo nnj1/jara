@@ -5,10 +5,10 @@
 [ext_resource type="PackedScene" uid="uid://ekja4d65f3rr" path="res://scenes/components/HealthComponent.tscn" id="3_2efps"]
 [ext_resource type="Texture2D" uid="uid://bj42qa73oc2oc" path="res://assets/models/humanoid/chainmail_overlapping.png" id="4_i7ltr"]
 [ext_resource type="Material" uid="uid://csulonelvrx26" path="res://assets/models/humanoid/anims/mats/mat_1.tres" id="5_2efps"]
-[ext_resource type="Animation" uid="uid://cskvp1q1qnbdf" path="res://assets/models/humanoid/anims/animation_files/chatting.anim" id="6_i7ltr"]
-[ext_resource type="Animation" uid="uid://dwul4esy3nyh1" path="res://assets/models/humanoid/anims/animation_files/run.anim" id="6_ko7dm"]
+[ext_resource type="Animation" uid="uid://d38mb4gu3uj8c" path="res://assets/models/humanoid/anims/animation_files/chatting.anim" id="6_i7ltr"]
+[ext_resource type="Animation" uid="uid://s2tsgb4qytop" path="res://assets/models/humanoid/anims/animation_files/run.anim" id="6_ko7dm"]
 [ext_resource type="Animation" uid="uid://d3bj2fjhjkvqa" path="res://assets/models/humanoid/anims/animation_files/idle.anim" id="7_h6cbe"]
-[ext_resource type="Animation" uid="uid://q83dsdafeif4" path="res://assets/models/humanoid/anims/animation_files/walk.anim" id="7_o8rhd"]
+[ext_resource type="Animation" uid="uid://dqp0eokvavtri" path="res://assets/models/humanoid/anims/animation_files/walk.anim" id="7_o8rhd"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nx78w"]
 radius = 2.914

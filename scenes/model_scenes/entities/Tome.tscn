@@ -1,0 +1,62 @@
+[gd_scene format=4 uid="uid://df6nrafkog1li"]
+
+[ext_resource type="Texture2D" uid="uid://dtg05u37r3n60" path="res://assets/models/Fantasy PSX Objects/items_items.png" id="1_ng3f1"]
+[ext_resource type="Script" uid="uid://dv7lhyh4wgyt7" path="res://src/entity_rigid_body.gd" id="1_qjbm3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i0u1b"]
+resource_name = "items"
+transparency = 4
+cull_mode = 2
+albedo_texture = ExtResource("1_ng3f1")
+texture_filter = 2
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_p8akh"]
+_surfaces = [{
+"aabb": AABB(-0.14950074, -0.05267639, -0.2753549, 0.36827272, 0.10535278, 0.5507098),
+"format": 34896613377,
+"index_count": 60,
+"index_data": PackedByteArray("AAABAAIAAAADAAEAAwAEAAEAAwAFAAQABQAGAAQABQAHAAYACAAJAAoACwAKAAkACwAMAAoACAANAAkADQAIAA4ADQAOAA8AEAARABIAEQATABIAEAAUABEAEQAVABMAEAAWABQAFgATABUAEAAXABYAFgAXABMA"),
+"name": "items",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("yAPbFEUPAACI6iPrRQ8AAMgDI+tFDwAAiOrbFEUPAACI6iPrufAAAIjq2xS58AAAyAMj67nwAADIA9sUufAAAKoBMA7//wAAqgHO8QAAAACqAc7x//8AAP//zvEAAAAA///O8f//AACqATAOAAAAAP//MA7//wAA//8wDgAAAACE9QAAAmgAAIT1//8dkgAAhPX//wJoAAAAAP//AmgAAIT1AAAdkgAAAAD//x2SAAAAAAAAHZIAAAAAAAACaAAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_hiayy"]
+resource_name = "items_Cube_007"
+_surfaces = [{
+"aabb": AABB(-0.14950074, -0.05267639, -0.2753549, 0.36827272, 0.10535278, 0.5507098),
+"attribute_data": PackedByteArray("a5qQoYapm6hrmpuohqmQoYapkKEzx5uohqmbqDPHkKEzx5ChTtabqDPHm6hO1pChin54iH95P6x/eXiIin4/rIp+P6w0lHiINJQ/rIp+eIhcYz+sf3l4iH95P6xcY3iIL9Fmii7EtpUuxGaKL9G2lWfVtpX4oWaKZ9VmivihtpWC1baVEqJmioLVZooSoraVL9Fmii7EtpUuxGaKL9G2lQ=="),
+"format": 34896613399,
+"index_count": 60,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUAGAAZABoAGAAbABkAHAAdAB4AHAAfAB0AIAAhACIAIAAjACEAJAAlACYAJAAnACUA"),
+"material": SubResource("StandardMaterial3D_i0u1b"),
+"name": "items",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 40,
+"vertex_data": PackedByteArray("yAPbFEUP//+I6iPrRQ///8gDI+tFD///iOrbFEUP//+I6tsURQ///4jqI+u58P//iOoj60UP//+I6tsUufD//4jq2xS58P//yAMj67nw//+I6iPrufD//8gD2xS58P//qgEwDv//VNWqAc7xAABU1aoBzvH//1TVqgEwDgAAVNWqATAOAAD/v///MA7///+///8wDgAA/7+qATAO////v///zvEAAP//qgHO8f////+qAc7xAAD/////zvH/////hPUAAAJoVNWE9f//HZJU1YT1//8CaFTVhPUAAB2SVNWE9f//HZL/vwAA//8CaP+/hPX//wJo/78AAP//HZL/v4T1AAACaP+/AAAAAB2S/7+E9QAAHZL/vwAAAAACaP+/AAAAAB2SVNUAAP//AmhU1QAA//8dklTVAAAAAAJoVNX///9/////f////3////9//7//f/+//3//v/9//7//f/9//3//f/9//3//f/9//39UVaqqVFWqqlRVqqpUVaqqAAD/fwAA/38AAP9/AAD/f/9//7//f/+//3//v/9//7+qqlRVqqpUVaqqVFWqqlRV////f////3////9/////fwAA/38AAP9/AAD/fwAA/39UVaqqVFWqqlRVqqpUVaqq")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_p8akh")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_qjbm3"]
+points = PackedVector3Array(0.21877198, 0.04682919, 0.2753549, -0.14712153, 0.04682919, 0.2753549, 0.21877198, -0.0468395, 0.2753549, 0.21877198, 0.04682919, -0.2753549, 0.20366763, 0.05267639, 0.03892055, -0.14712153, -0.0468395, 0.2753549, -0.14950074, 0.05267639, 0.03892055, 0.20366763, -0.05267639, 0.03892055, 0.21877198, -0.0468395, -0.2753549, -0.14712153, 0.04682919, -0.2753549, 0.20366763, 0.05267639, -0.051642522, -0.14950074, -0.05267639, 0.03892055, -0.14950074, 0.05267639, -0.051642522, 0.20366763, -0.05267639, -0.051642522, -0.14712153, -0.0468395, -0.2753549, -0.14950074, -0.05267639, -0.051642522)
+
+[node name="Tome" type="RigidBody3D" unique_id=736131374]
+collision_layer = 4
+collision_mask = 7
+script = ExtResource("1_qjbm3")
+is_pickable = true
+is_readable = true
+metadata/_custom_type_script = "uid://dv7lhyh4wgyt7"
+
+[node name="tome" type="MeshInstance3D" parent="." unique_id=958349813]
+transform = Transform3D(10, 0, 0, 0, -4.371139e-07, -10, 0, 10, -4.371139e-07, 0, 0, 0)
+mesh = SubResource("ArrayMesh_hiayy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=315843593]
+transform = Transform3D(10, 0, 0, 0, -4.371139e-07, -10, 0, 10, -4.371139e-07, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_qjbm3")

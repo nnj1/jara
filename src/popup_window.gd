@@ -1,5 +1,7 @@
 extends Control
 
+@onready var main_game_node = get_tree().get_root().get_node('Game') if get_tree().get_root().get_node_or_null('Game') else null
+
 @export var contents_bb_code: String = 'Some shit would go here'
 @export var window_title: String = 'Title would go here'
 @export var contents_json: Array
@@ -31,6 +33,9 @@ func _on_header_gui_input(event: InputEvent) -> void:
 		global_position = get_global_mouse_position() - drag_offset
 
 func _on_button_pressed() -> void:
+	# if in game, return mouse to get captured
+	if main_game_node:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	queue_free()
 		
 func _input(event):
