@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://c6wy70wy2cdyc"]
 
-[ext_resource type="Script" uid="uid://dv7lhyh4wgyt7" path="res://src/entity_rigid_body.gd" id="1_n8msx"]
+[ext_resource type="Script" uid="uid://t0i02y6ke8rk" path="res://src/alcohol.gd" id="1_n8msx"]
 [ext_resource type="Texture2D" uid="uid://dtg05u37r3n60" path="res://assets/models/Fantasy PSX Objects/items_items.png" id="2_n8msx"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_r2rjo"]
