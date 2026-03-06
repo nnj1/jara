@@ -124,7 +124,7 @@ func _ready() -> void:
 		$HealthComponent.health_changed.connect(update_ui)
 		Dialogic.signal_event.connect(_on_dialogic_signal)
 		
-		# alert everyone else that you are hereUI/ChatBox
+		# alert everyone else that you are here
 		chat_box.rpc('update_chat_display', MultiplayerManager.player_name + ' has joined the game.')
 	
 func _on_dialogic_signal(argument: String):
