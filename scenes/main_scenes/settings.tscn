@@ -74,6 +74,19 @@ text = "Master Volume"
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="HBoxContainer6" type="HBoxContainer" parent="VBoxContainer" unique_id=1512386961]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer6" unique_id=1589665550]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "FPS Limit"
+
+[node name="OptionButtonFPS" type="OptionButton" parent="VBoxContainer/HBoxContainer6" unique_id=1819900169]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer" unique_id=1179572264]
 layout_mode = 2
 

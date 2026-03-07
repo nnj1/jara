@@ -5,6 +5,8 @@ extends Panel
 @onready var sfx_slider = $VBoxContainer/HBoxContainer2/HSlider
 @onready var master_slider = $VBoxContainer/HBoxContainer3/HSlider
 @onready var res_options = $VBoxContainer/HBoxContainer4/OptionButton
+@onready var fps_options = $VBoxContainer/HBoxContainer6/OptionButtonFPS
+
 @onready var fullscreen_toggle = $VBoxContainer/HBoxContainer4/CheckBox # Add this to your scene!
 @onready var main_menu_btn = $VBoxContainer/Button
 @onready var exit_desktop_btn = $VBoxContainer/Button2
@@ -23,6 +25,7 @@ var resolutions: Dictionary = {
 	"2560x1080 (Ultrawide)": Vector2i(2560, 1080),
 	"3440x1440 (Ultrawide)": Vector2i(3440, 1440)
 }
+
 
 func _ready():
 	# 1. Initialize Audio

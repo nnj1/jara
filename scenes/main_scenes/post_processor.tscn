@@ -1,15 +1,16 @@
 [gd_scene format=3 uid="uid://cidp6guyk3ufi"]
 
-[ext_resource type="Shader" uid="uid://bm4em5i1uengm" path="res://shaders/post/simple_crt.gdshader" id="1_387q4"]
+[ext_resource type="Shader" uid="uid://b8jx8vhkqg1p3" path="res://shaders/post/Phasmophobia.gdshader" id="1_387q4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_p6kf1"]
 shader = ExtResource("1_387q4")
-shader_parameter/brightnessMult = 4.0
-shader_parameter/wiggleMult = 0.001
-shader_parameter/chromaticAberrationOffset = 0.001
+shader_parameter/brightness = 4.0
+shader_parameter/contrast = 1.0
+shader_parameter/jitter_amount = 1.0
+shader_parameter/resolution_scale = 4.0
+shader_parameter/color_depth = 32
 
 [node name="PostProcessor" type="CanvasLayer" unique_id=1878421992]
-layer = 5
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1129439287]
 material = SubResource("ShaderMaterial_p6kf1")
