@@ -97,6 +97,7 @@ variables={
 [display]
 
 window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 mouse_cursor/custom_image="uid://gv1guba2563a"
 
 [editor_plugins]
