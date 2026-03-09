@@ -49,6 +49,9 @@ class_name Player
 @onready var right_arm_animation_player: AnimationPlayer = $right_arm/AnimationPlayer
 @onready var block_timer: float = 0.0 # how long block key was held
 
+# Compass UI paramters
+@onready var compass: Control = main_game_node.get_node('UI/Compass')
+
 # Internal variables
 var is_mouse_captured: bool = true
 var _bob_time: float = 0.0
@@ -157,6 +160,7 @@ func update_ui(current_health, max_health, current_mana = 100, max_mana = 100):
 		mp_label.text = 'MP: ' + str(int(current_mana)) + '/' + str(int(max_mana))
 	if hp_bar:
 		mp_bar.value = current_mana / float(max_mana)
+	
 
 # --- ANIMATION FOR SUCCESSFUL PARRY ---
 func on_successful_parry():
@@ -335,6 +339,9 @@ func _process(delta: float) -> void:
 	# Only the owner handles input and calculates movement
 	if not is_multiplayer_authority() or not is_active: 
 		return
+		
+	# update the compass direction
+	compass.facing_direction = global_transform.basis.z
 
 	if not is_chatting:
 		# 1. Input Polling (Spells & UI states)

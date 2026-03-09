@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://fkldrqw0lm67" path="res://src/multiplayer_spawner.gd" id="5_t5sjj"]
 [ext_resource type="PackedScene" uid="uid://d173umj203wf0" path="res://scenes/main_scenes/chat_box.tscn" id="6_leqql"]
 [ext_resource type="PackedScene" uid="uid://b0f7qglb0fvgu" path="res://scenes/maps/generated_dungeon.tscn" id="7_leqql"]
+[ext_resource type="PackedScene" uid="uid://ddshd2yktwrvn" path="res://scenes/components/compass.tscn" id="7_rbptj"]
 [ext_resource type="Environment" uid="uid://bsfhgu5nulsjw" path="res://resources/world_environment.tres" id="8_cfqos"]
 
 [node name="Game" type="Node3D" unique_id=390812690]
@@ -166,6 +167,8 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 90
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Compass" parent="UI" unique_id=1797734909 instance=ExtResource("7_rbptj")]
 
 [node name="players" type="Node3D" parent="." unique_id=508872652]
 
