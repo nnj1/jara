@@ -221,7 +221,7 @@ func actually_populate_hallways():
 		var below_pos = pos + Vector3i(0, -1, 0)
 		if not segment.faces.down and not is_pos_inside_any_room(below_pos) and not is_pos_hallway(below_pos):
 			if not is_any_room_connection(below_pos):
-				Placer.place_block(below_pos.x, below_pos.z, below_pos.y)
+				Placer.place_ladder_block(below_pos.x, below_pos.z, below_pos.y)
 				hallway_segments_surroundings[below_pos] = true
 				#Placer.place_roof_tile(below_pos.x, below_pos.z, below_pos.y)
 			
@@ -229,7 +229,7 @@ func actually_populate_hallways():
 		var top_pos = pos + Vector3i(0, 1, 0)
 		if not segment.faces.up and not is_pos_inside_any_room(top_pos) and not is_pos_hallway(top_pos):
 			if not is_any_room_connection(top_pos):
-				Placer.place_block(top_pos.x, top_pos.z, top_pos.y)
+				Placer.place_ladder_block(top_pos.x, top_pos.z, top_pos.y)
 				hallway_segments_surroundings[top_pos] = true
 
 		# 2. HORIZONTAL WALLS

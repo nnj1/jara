@@ -7,7 +7,8 @@ class_name Player
 
 # DEBUG Parameters
 @export_group("DEBUGGING SETTINGS")
-@export var can_fly: bool = true
+@export var CAN_FLY: bool = false
+@export var CAN_WALL_CLIMB: bool = true
 
 ## Movement parameters (Quake-style)
 @export_group("Movement Physics")
@@ -57,7 +58,7 @@ var is_attacking: bool = false # Tracked for AnimationPlayer
 var is_blocking: bool = false
 var is_moving_weapon: bool = false
 var parry_timer: float = 0.0
-var can_walk_climb: bool = false
+
 
 @export var parry_window_default: float = 1.0
 var held_object: EntityRigidBody = null
@@ -427,12 +428,13 @@ func _physics_process(delta: float) -> void:
 	var wish_dir := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
 	# --- FLYING LOGIC START ---
-	if Input.is_action_pressed("fly") and not is_typing_chat and (can_walk_climb or can_fly):
+	if Input.is_action_pressed("fly") and not is_typing_chat and CAN_FLY:
 		# Move up at jump_velocity speed (or create a new fly_speed variable)
 		velocity.y = jump_velocity 
 		# While flying, we use air physics for horizontal movement so it feels floaty
 		handle_air_physics(wish_dir, delta)
 	# --- FLYING LOGIC END ---
+	
 	
 	elif is_on_floor():
 		handle_ground_physics(wish_dir, delta)
@@ -461,7 +463,22 @@ func _physics_process(delta: float) -> void:
 	if velocity.length() > 0.5:
 		# handle any rigidbodies the player bumps into
 		handle_rigidbody_push()
-
+		
+	# handle any wall climbing
+	# --- WALK CLIMB LOGIC START ---
+	if Input.is_action_pressed("fly") and not is_typing_chat and CAN_WALL_CLIMB:
+		for i in get_slide_collision_count():
+			var collision = get_slide_collision(i)
+			var collider = collision.get_collider()
+			# check to see if collider is a ladder
+			if 'NORTH_LADDER' in collider:
+				# Move up at jump_velocity speed (or create a new fly_speed variable)
+				velocity.y = jump_velocity 
+				# While flying, we use air physics for horizontal movement so it feels floaty
+				handle_air_physics(wish_dir, delta)
+				break
+	# --- WALK CLIMB LOGIC END ---
+	
 func _handle_view_effects(delta: float, input_dir: Vector2) -> void:
 	if is_typing_chat: return
 	if is_on_floor() and velocity.length() > 0.1:
