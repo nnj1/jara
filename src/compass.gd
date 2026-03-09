@@ -14,11 +14,13 @@ func _update_label_text(given_facing_direction: Vector3):
 	var percent_deviation = angle / (PI/2)
 	var middle_char_index = int(character_width/2.0)
 	
-	# if deviation is 50%, N marker should move to the end of the string
+	# if deviation is 100%, N marker should move to the end of the string
 	var north_marker_index = middle_char_index + int((character_width - 1)/2.0 * percent_deviation)
 	var east_marker_index = north_marker_index + int((character_width - 1)/2.0)
 	var west_marker_index = north_marker_index - int((character_width - 1)/2.0)
 	var south_marker_index = north_marker_index + int((character_width - 1))
+	if percent_deviation > 0:
+		south_marker_index = north_marker_index - int((character_width - 1))
 	
 	if (north_marker_index > 0) and (north_marker_index < character_width):
 		string[north_marker_index] = 'N'
