@@ -52,7 +52,8 @@ var _current_weapon_index: int = 0 : set = change_weapon
 var is_attacking: bool = false # Tracked for AnimationPlayer
 var is_blocking: bool = false
 var is_moving_weapon: bool = false
-var parry_timer:float = 0.0
+var parry_timer: float = 0.0
+var can_walk_climb: bool = true
 @export var parry_window_default: float = 1.0
 var held_object: EntityRigidBody = null
 var held_object_rotation_speed: float = 5.0
@@ -421,7 +422,7 @@ func _physics_process(delta: float) -> void:
 	var wish_dir := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
 	# --- FLYING LOGIC START ---
-	if Input.is_action_pressed("fly") and not is_typing_chat:
+	if Input.is_action_pressed("fly") and not is_typing_chat and can_walk_climb:
 		# Move up at jump_velocity speed (or create a new fly_speed variable)
 		velocity.y = jump_velocity 
 		# While flying, we use air physics for horizontal movement so it feels floaty

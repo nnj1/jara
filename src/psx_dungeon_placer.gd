@@ -62,6 +62,7 @@ var main_game_node
 @onready var arch_fence_scene: PackedScene = preload('res://scenes/model_scenes/structures/Arch_Fence.tscn')
 @onready var block_arch_scene: PackedScene = preload('res://scenes/model_scenes/structures/Block_Arch.tscn')
 @onready var block_scene: PackedScene = preload('res://scenes/model_scenes/structures/Block.tscn')
+@onready var ladder_block_scene: PackedScene = preload('res://scenes/model_scenes/structures/LadderBlock.tscn')
 @onready var chandelier_scene: PackedScene = preload('res://scenes/model_scenes/structures/Chandelier.tscn')
 
 # STAIR THINGS
@@ -273,6 +274,13 @@ func place_z_door_frame(x_unit, z_unit, y_unit = 0.0):
 
 func place_block(x_unit, z_unit, y_unit = 2.0):
 	var block_instance = block_scene.instantiate()
+	var aabb_size = get_first_mesh_size(block_instance)
+	block_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0)
+	self.add_child(block_instance)
+	
+# TODO: make this function take arguments regarding ladder orientation
+func place_ladder_block(x_unit, z_unit, y_unit = 2.0):
+	var block_instance = ladder_block_scene.instantiate()
 	var aabb_size = get_first_mesh_size(block_instance)
 	block_instance.position = Vector3(x_unit * unit_size + aabb_size.x/2.0, y_unit * unit_size + aabb_size.y/2.0, z_unit * unit_size + aabb_size.z/2.0)
 	self.add_child(block_instance)
