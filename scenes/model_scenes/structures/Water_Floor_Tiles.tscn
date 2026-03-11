@@ -7,13 +7,21 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_diaxo"]
 size = Vector3(20, 0.001, 20)
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_tlthk"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_tlthk"]
+width = 256
+height = 256
+noise = SubResource("FastNoiseLite_tlthk")
+seamless = true
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vbkpf"]
 render_priority = 0
 shader = ExtResource("3_tlthk")
-shader_parameter/water_color = Color(0, 0.4, 0.6, 0.3)
-shader_parameter/wave_speed = 1.2
-shader_parameter/wave_freq = 8.0
-shader_parameter/distortion_strength = 0.08
+shader_parameter/water_color = Color(0.34609017, 0.7516244, 0.64049476, 1)
+shader_parameter/transparency = 0.046000002185
+shader_parameter/noise_img = SubResource("NoiseTexture2D_tlthk")
+shader_parameter/distortion_strength = 0.05000000074506
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_wielx"]
 material = SubResource("ShaderMaterial_vbkpf")
@@ -36,5 +44,5 @@ collision_mask = 0
 shape = SubResource("BoxShape3D_diaxo")
 
 [node name="water" type="MeshInstance3D" parent="." unique_id=145092892]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1692841, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.28933787, 0)
 mesh = SubResource("PlaneMesh_wielx")

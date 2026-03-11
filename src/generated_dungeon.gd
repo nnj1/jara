@@ -330,7 +330,8 @@ func generate_rooms():
 			'y_unit_bounds': Vector2(y, y + d), # Depth -> Y
 			'z_unit_bounds': Vector2(z, z + h), # Height -> Z
 			'type': ROOM_TYPES.OTHER,
-			'connections': [] 
+			'connections': [],
+			'flooded': true if rng.randf() < 0.25 else false
 		}
 		
 		# 3. Overlap check with spacing
@@ -375,8 +376,11 @@ func actually_populate_rooms():
 			for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1]):
 				# only place floor tile if there's not a block below it:
 				if not hallway_segments_surroundings.has(Vector3i(unit_x,  room_data.y_unit_bounds[0] - 1, unit_z)):
-					Placer.place_floor_tile(unit_x, unit_z, room_data.y_unit_bounds[0])
-				
+					if 'flooded' in room_data and room_data.flooded:
+						Placer.place_water_floor_tile(unit_x, unit_z, room_data.y_unit_bounds[0])
+					else:
+						Placer.place_floor_tile(unit_x, unit_z, room_data.y_unit_bounds[0])
+
 		# Add roof 
 		for unit_x in range(room_data.x_unit_bounds[0], room_data.x_unit_bounds[1]):
 			for unit_z in range(room_data.z_unit_bounds[0], room_data.z_unit_bounds[1]):
