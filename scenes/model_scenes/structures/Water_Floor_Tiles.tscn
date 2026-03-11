@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://sxe14auedg5p"]
+
+[ext_resource type="ArrayMesh" uid="uid://djhukwkwjyi03" path="res://resources/floor_mesh.tres" id="1_wielx"]
+[ext_resource type="Script" uid="uid://b5voaf5ueou2g" path="res://src/tools/show_mesh_dimensions.gd" id="2_tlthk"]
+[ext_resource type="Shader" uid="uid://qbbqiqxti5pp" path="res://shaders/Water_Floor_Tiles.gdshader" id="3_tlthk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_diaxo"]
+size = Vector3(20, 0.001, 20)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vbkpf"]
+render_priority = 0
+shader = ExtResource("3_tlthk")
+shader_parameter/water_color = Color(0, 0.4, 0.6, 0.3)
+shader_parameter/wave_speed = 1.2
+shader_parameter/wave_freq = 8.0
+shader_parameter/distortion_strength = 0.08
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wielx"]
+material = SubResource("ShaderMaterial_vbkpf")
+size = Vector2(20, 20)
+subdivide_width = 6
+subdivide_depth = 6
+
+[node name="Floor_Tiles" type="Node3D" unique_id=571386383]
+
+[node name="Plane_003" type="MeshInstance3D" parent="." unique_id=305501370]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5e-06, 0)
+mesh = ExtResource("1_wielx")
+script = ExtResource("2_tlthk")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Plane_003" unique_id=47746269]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5e-06, 0)
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Plane_003/StaticBody3D" unique_id=1059235320]
+shape = SubResource("BoxShape3D_diaxo")
+
+[node name="water" type="MeshInstance3D" parent="." unique_id=145092892]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1692841, 0)
+mesh = SubResource("PlaneMesh_wielx")

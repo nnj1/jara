@@ -9,6 +9,7 @@ var main_game_node
 
 # FLOORS
 @onready var floor_tile_scene: PackedScene = preload('res://scenes/model_scenes/structures/Floor_Tiles.tscn')
+@onready var water_floor_tile_scene: PackedScene = preload('res://scenes/model_scenes/structures/Water_Floor_Tiles.tscn')
 
 # WALLS
 @onready var wall_01_scene: PackedScene = preload('res://scenes/model_scenes/structures/Wall_01.tscn')
@@ -125,6 +126,11 @@ func place_skull(x_unit, z_unit, y_unit = 0.0):
 
 func place_floor_tile(x_unit, z_unit, y_unit = 0.0):
 	var floor_instance = floor_tile_scene.instantiate()
+	floor_instance.position = Vector3(x_unit * unit_size + 10.0, y_unit * unit_size, z_unit * unit_size + 10.0)
+	self.add_child(floor_instance)
+
+func place_water_floor_tile(x_unit, z_unit, y_unit = 0.0):
+	var floor_instance = water_floor_tile_scene.instantiate()
 	floor_instance.position = Vector3(x_unit * unit_size + 10.0, y_unit * unit_size, z_unit * unit_size + 10.0)
 	self.add_child(floor_instance)
 	
